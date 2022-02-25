@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "781834378277-85q63o3nls6i20ejgv2t9uhei1fo86qo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ke.co.rufw91.mared",
+            "certificate_hash": "18658317ffbb85a88e45e6d52d5490b368413bcd"
+          }
+        },
+        {
           "client_id": "781834378277-gbqhkdqs870cuc4usjo1b40bkpgu0f9p.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

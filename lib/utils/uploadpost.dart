@@ -9,8 +9,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/google_place.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/models/enums/post_type.dart';
 import 'package:mared_social/services/FirebaseOpertaion.dart';
 import 'package:mared_social/services/authentication.dart';
+import 'package:mared_social/utils/pick_files_helper.dart';
 import 'package:mared_social/utils/productUploadCameraScreen.dart';
 import 'package:mared_social/utils/productUploadScreen.dart';
 import 'package:nanoid/nanoid.dart';
@@ -29,35 +31,16 @@ class UploadPost with ChangeNotifier {
   List<XFile> multipleImages = [];
 
   File get getUploadPostImage => uploadPostImage;
+
   String get getUploadPostImageUrl => uploadPostImageUrl;
 
-  final picker = ImagePicker();
   late UploadTask imagePostUploadTask;
 
-  Future<List<XFile>> multiImagePicker() async {
-    List<XFile>? _images = await picker.pickMultiImage();
-    if (_images != null && _images.isNotEmpty) {
-      return _images;
-    }
-    return [];
-  }
+  //gallery or camera
+  ImageSource _selectedSource = ImageSource.gallery;
 
-  Future pickUploadPostImage(BuildContext context, ImageSource source) async {
-    final uploadPostImageVal = await picker.pickImage(source: source);
-    uploadPostImageVal == null
-        // ignore: avoid_print
-        ? print("select image")
-        : uploadPostImage = File(uploadPostImageVal.path);
-    // ignore: avoid_print
-    print(uploadPostImage.path);
-
-    // ignore: unnecessary_null_comparison
-    uploadPostImage != null
-        ? showPostCameraImage(context)
-        : print("Image upload error");
-
-    notifyListeners();
-  }
+  //post type is it a video or an image
+  PostType _postType = PostType.IMAGE;
 
   selectPostImageType(BuildContext context) {
     return showModalBottomSheet(
@@ -95,14 +78,12 @@ class UploadPost with ChangeNotifier {
                         ),
                       ),
                       onPressed: () async {
-                        multipleImages = await multiImagePicker();
+                        _selectedSource = ImageSource.gallery;
+                        multipleImages =
+                            await PickFilesHelper.multiImagePicker();
                         if (multipleImages.isNotEmpty) {
-                          showPostImage(context);
+                          showPostCameraImage(context);
                         }
-                        // pickUploadPostImage(
-                        //   context,
-                        //   ImageSource.gallery,
-                        // );
                       },
                     ),
                     MaterialButton(
@@ -116,6 +97,7 @@ class UploadPost with ChangeNotifier {
                         ),
                       ),
                       onPressed: () {
+                        _selectedSource = ImageSource.camera;
                         pickUploadPostImage(
                           context,
                           ImageSource.camera,
@@ -228,6 +210,24 @@ class UploadPost with ChangeNotifier {
     );
   }
 
+  //to pick and show the post with camera image
+  Future pickUploadPostImage(BuildContext context, ImageSource source) async {
+    final uploadPostImageVal = await PickFilesHelper.pickImage(source: source);
+    uploadPostImageVal == null
+        // ignore: avoid_print
+        ? print("select image")
+        : uploadPostImage = File(uploadPostImageVal.path);
+    // ignore: avoid_print
+    print(uploadPostImage.path);
+
+    // ignore: unnecessary_null_comparison
+    uploadPostImage != null
+        ? showPostCameraImage(context)
+        : print("Image upload error");
+
+    notifyListeners();
+  }
+
   showPostCameraImage(BuildContext context) {
     return showModalBottomSheet(
       isDismissible: false,
@@ -257,10 +257,24 @@ class UploadPost with ChangeNotifier {
                   child: SizedBox(
                     height: 200,
                     width: 200,
-                    child: Image.file(
-                      uploadPostImage,
-                      fit: BoxFit.contain,
-                    ),
+                    child: _selectedSource == ImageSource.camera
+                        ? Image.file(
+                            uploadPostImage,
+                            fit: BoxFit.contain,
+                          )
+                        : CarouselSlider(
+                            options: CarouselOptions(
+                              autoPlay: true,
+                              height: MediaQuery.of(context).size.height,
+                              viewportFraction: 2.0,
+                              enlargeCenterPage: false,
+                            ),
+                            items: multipleImages.map((e) {
+                              return Image.file(
+                                File(e.path),
+                              );
+                            }).toList(),
+                          ),
                   ),
                 ),
                 Padding(
@@ -292,16 +306,30 @@ class UploadPost with ChangeNotifier {
                           ),
                         ),
                         onPressed: () async {
-                          await uploadPostCameraImageToFirebase();
+                          if (_selectedSource == ImageSource.camera) {
+                            await uploadPostCameraImageToFirebase();
 
-                          Navigator.push(
-                              context,
-                              PageTransition(
-                                  child: PostUploadCameraScreen(
-                                    uploadPostImage: uploadPostImage,
-                                    uploadPostImageUrl: uploadPostImageUrl,
-                                  ),
-                                  type: PageTransitionType.bottomToTop));
+                            Navigator.push(
+                                context,
+                                PageTransition(
+                                    child: PostUploadCameraScreen(
+                                      uploadPostImage: uploadPostImage,
+                                      uploadPostImageUrl: uploadPostImageUrl,
+                                    ),
+                                    type: PageTransitionType.bottomToTop));
+                          } else {
+                            await uploadPostImageToFirebase();
+
+                            Navigator.push(
+                                context,
+                                PageTransition(
+                                    child: PostUploadScreen(
+                                      multipleImages: multipleImages,
+                                      imagesList: imagesList,
+                                    ),
+                                    type: PageTransitionType.bottomToTop));
+                          }
+
                           // editPostCameraSheet(context);
                           // print("image uploaded");
                         },

@@ -19,6 +19,8 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:google_maps_webservice/places.dart' as google_maps_api;
 
+
+//this is the form you fill to upload a post
 class PostUploadScreen extends StatefulWidget {
   late List<String> imagesList;
   final List<XFile> multipleImages;
@@ -380,9 +382,8 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
                       ),
                     ),
                     onPressed: () async {
-                      if (_selectedCategory != "" &&
-                          adrSelected == true &&
-                          _formKey.currentState!.validate()) {
+                      //let's comment address and category and make them optional for now
+                      if (_formKey.currentState!.validate()) {
                         String postId = nanoid(14).toString();
                         String name =
                             "${captionController.text} ${descriptionController.text}";
