@@ -1,6 +1,8 @@
 import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
+import 'package:mared_social/utils/video_thumbnail_generator.dart';
 import 'package:video_player/video_player.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 class VideoPostItem extends StatefulWidget {
   final String videoUrl;
@@ -24,7 +26,7 @@ class _VideoPostItemState extends State<VideoPostItem> {
 
     _chewieController = ChewieController(
       videoPlayerController: _videoPlayerController,
-      aspectRatio:5/8,
+      // aspectRatio:5/8,
       autoInitialize: true,
       autoPlay: false,
       looping: false,

@@ -22,6 +22,7 @@ import 'package:mared_social/services/FirebaseOpertaion.dart';
 import 'package:mared_social/services/authentication.dart';
 import 'package:mared_social/utils/postoptions.dart';
 import 'package:mared_social/utils/uploadpost.dart';
+import 'package:mared_social/widgets/profile/profile_post_item.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -1398,41 +1399,7 @@ class PostsProfile extends StatelessWidget {
                                     context: context,
                                     documentSnapshot: userPostDocSnap);
                           },
-                          child: Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: SizedBox(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(5),
-                                child: Swiper(
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return CachedNetworkImage(
-                                      fit: BoxFit.cover,
-                                      imageUrl: userPostDocSnap['imageslist']
-                                          [index],
-                                      progressIndicatorBuilder:
-                                          (context, url, downloadProgress) =>
-                                              SizedBox(
-                                        height: 50,
-                                        width: 50,
-                                        child: LoadingWidget(
-                                            constantColors: constantColors),
-                                      ),
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(Icons.error),
-                                    );
-                                  },
-                                  itemCount:
-                                      (userPostDocSnap['imageslist'] as List)
-                                          .length,
-                                  itemHeight:
-                                      MediaQuery.of(context).size.height * 0.3,
-                                  itemWidth: MediaQuery.of(context).size.width,
-                                  layout: SwiperLayout.DEFAULT,
-                                ),
-                              ),
-                            ),
-                          ),
+                          child: ProfilePostItem(urls: userPostDocSnap['imageslist'],)
                         );
                       }
                     },
