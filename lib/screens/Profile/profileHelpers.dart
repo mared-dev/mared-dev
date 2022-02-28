@@ -661,7 +661,7 @@ class ProfileHelpers with ChangeNotifier {
                       ),
                       onPressed: () {
                         Provider.of<UploadPost>(context, listen: false)
-                            .selectPostImageType(context);
+                            .selectPostType(context);
                       },
                       icon: Icon(
                         EvaIcons.plusSquareOutline,

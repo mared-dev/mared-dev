@@ -21,6 +21,7 @@ import 'package:google_maps_webservice/places.dart' as google_maps_api;
 
 
 //this is the form you fill to upload a post
+
 class PostUploadScreen extends StatefulWidget {
   late List<String> imagesList;
   final List<XFile> multipleImages;
