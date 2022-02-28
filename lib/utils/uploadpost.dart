@@ -111,14 +111,15 @@ class UploadPost with ChangeNotifier {
                                     video: _video,
                                     context: context,
                                     videoPlayerController:
-                                        _videoPlayerController,onCompleteCallback: (){
+                                        _videoPlayerController,onCompleteCallback: ({String? videoUrl}){
 
                                   Navigator.push(
                                       context,
                                       PageTransition(
                                           child: PostUploadScreen(
-                                            multipleImages: multipleImages,
-                                            imagesList: imagesList,
+                                            multipleImages: [_video!],
+                                            imagesList: [videoUrl!],
+                                            postType: PostType.VIDEO,
                                           ),
                                           type: PageTransitionType.bottomToTop));
                                 });
@@ -155,27 +156,28 @@ class UploadPost with ChangeNotifier {
                             ImageSource.camera,
                           );
                         } else {
+                          //TODO:redo this logic
                           _video = await PickFilesHelper.pickVide(source: ImageSource.camera);
                           if (_video != null) {
-                            _videoPlayerController =
-                                VideoPlayerController.file(File(_video!.path));
-
-                            _videoPlayerController
-                              ..initialize().then((value) {
-                                _videoPlayerController.play();
-                                previewStoryImage(
-                                    video: _video,
-                                    context: context,
-                                    videoPlayerController:
-                                    _videoPlayerController,onCompleteCallback: (){
-                                  Navigator.pushReplacement(
-                                      context,
-                                      PageTransition(
-                                          child: SplitPages(),
-                                          type: PageTransitionType
-                                              .rightToLeft));
-                                });
-                              });
+                            // _videoPlayerController =
+                            //     VideoPlayerController.file(File(_video!.path));
+                            //
+                            // _videoPlayerController
+                            //   ..initialize().then((value) {
+                            //     _videoPlayerController.play();
+                            //     previewStoryImage(
+                            //         video: _video,
+                            //         context: context,
+                            //         videoPlayerController:
+                            //         _videoPlayerController,onCompleteCallback: ({String? videoUrl}){
+                            //       Navigator.pushReplacement(
+                            //           context,
+                            //           PageTransition(
+                            //               child: SplitPages(),
+                            //               type: PageTransitionType
+                            //                   .rightToLeft));
+                            //     });
+                            //   });
                           }
                         }
                       },

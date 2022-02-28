@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/helpers/post_helpers.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/AltProfile/altProfileHelper.dart';
 import 'package:mared_social/screens/Stories/stories.dart';
@@ -16,8 +17,11 @@ import 'package:mared_social/services/FirebaseOpertaion.dart';
 import 'package:mared_social/services/authentication.dart';
 import 'package:mared_social/utils/postoptions.dart';
 import 'package:mared_social/utils/uploadpost.dart';
+import 'package:mared_social/widgets/posts/video_post_item.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:chewie/chewie.dart';
+import 'package:video_player/video_player.dart';
 
 class FeedHelpers with ChangeNotifier {
   ConstantColors constantColors = ConstantColors();
@@ -645,7 +649,8 @@ class FeedHelpers with ChangeNotifier {
                                   height:
                                       MediaQuery.of(context).size.height * 0.44,
                                   width: MediaQuery.of(context).size.width,
-                                  child: Swiper(
+                                  child: !PostHelpers.checkIfPostIsVideo(documentSnapshot['imageslist'])?
+                                            Swiper(
                                     itemBuilder:
                                         (BuildContext context, int index) {
                                       return CachedNetworkImage(
@@ -685,7 +690,8 @@ class FeedHelpers with ChangeNotifier {
                                         activeSize: 15,
                                       ),
                                     ),
-                                  ),
+                                  ):
+                                            VideoPostItem(videoUrl:documentSnapshot['imageslist'][0])
                                 ),
                               ),
                             ),

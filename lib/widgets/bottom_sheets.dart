@@ -96,79 +96,8 @@ previewStoryImage({required BuildContext context,
                                 "Please wait, your story is being uploaded!");
                           });
 
-                          String videoUrl=await uploadStoryVideo(context: context,video: video);
-                          try {
-                            String storyId = nanoid(14).toString();
-                            await FirebaseFirestore.instance
-                                .collection("stories")
-                                .doc(storyId)
-                                .set({
-                              'storyid': storyId,
-                              'videourl': videoUrl,
-                              'username': Provider.of<FirebaseOperations>(
-                                  context,
-                                  listen: false)
-                                  .getInitUserName,
-                              'userimage': Provider.of<FirebaseOperations>(
-                                  context,
-                                  listen: false)
-                                  .getInitUserImage,
-                              'useremail': Provider.of<FirebaseOperations>(
-                                  context,
-                                  listen: false)
-                                  .getInitUserEmail,
-                              'useruid': Provider.of<Authentication>(
-                                  context,
-                                  listen: false)
-                                  .getUserId,
-                              'time': Timestamp.now(),
-                            }).whenComplete(() async {
-                              await FirebaseFirestore.instance
-                                  .collection("users")
-                                  .doc(Provider.of<Authentication>(context,
-                                  listen: false)
-                                  .getUserId)
-                                  .collection("stories")
-                                  .doc(storyId)
-                                  .set({
-                                'storyid': storyId,
-                                'videourl': videoUrl,
-                                'username': Provider.of<FirebaseOperations>(
-                                    context,
-                                    listen: false)
-                                    .getInitUserName,
-                                'userimage':
-                                Provider.of<FirebaseOperations>(context,
-                                    listen: false)
-                                    .getInitUserImage,
-                                'useremail':
-                                Provider.of<FirebaseOperations>(context,
-                                    listen: false)
-                                    .getInitUserEmail,
-                                'useruid': Provider.of<Authentication>(
-                                    context,
-                                    listen: false)
-                                    .getUserId,
-                                'time': Timestamp.now(),
-                              }).whenComplete(() {
-                                //when complete callback
-                                onCompleteCallback();
-                                // Navigator.pushReplacement(
-                                //     context,
-                                //     PageTransition(
-                                //         child: SplitPages(),
-                                //         type: PageTransitionType
-                                //             .rightToLeft));
-                              });
-                            });
-                          } catch (e) {
-                            CoolAlert.show(
-                              context: context,
-                              type: CoolAlertType.error,
-                              title: "Error",
-                              text: e.toString(),
-                            );
-                          }
+                          String videoUrl=await uploadPostVideo(context: context,video: video);
+                          onCompleteCallback(videoUrl:videoUrl);
                         },
 
                       ),
