@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:video_player/video_player.dart';
 import 'dart:io';
 
@@ -43,7 +44,8 @@ class _VideoThumbnailWidgetState extends State<VideoThumbnailWidget> {
       height: 56.0,
       child: VideoPlayer(_controller),
     )
-        : CircularProgressIndicator();
+        : LoadingWidget(
+        constantColors: constantColors);
   }
 
 }

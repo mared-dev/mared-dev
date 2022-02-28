@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/helpers/post_helpers.dart';
+import 'package:mared_social/utils/video_thumbnail_generator.dart';
 
 class ProfilePostItem extends StatefulWidget {
   final List<dynamic>urls;
@@ -22,7 +24,9 @@ class _ProfilePostItemState extends State<ProfilePostItem> {
       child: SizedBox(
         child: ClipRRect(
           borderRadius: BorderRadius.circular(5),
-          child: Swiper(
+          child: PostHelpers.checkIfPostIsVideo(widget.urls)?
+             VideoThumbnailWidget(videoUrl: widget.urls[0],)
+              :Swiper(
             itemBuilder:
                 (BuildContext context, int index) {
               return CachedNetworkImage(
