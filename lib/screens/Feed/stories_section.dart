@@ -51,13 +51,14 @@ class _StoriesSectionState extends State<StoriesSection> {
                 bottomRight: Radius.circular(12),
               ),
             ),
-            child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
+            child: FutureBuilder<QuerySnapshot>(
+              future: FirebaseFirestore.instance
                   .collection("stories")
                   .orderBy('time', descending: true)
-                  .snapshots(),
+                  .get(),
               builder: (context, storiesSnaps) {
-                if (storiesSnaps.data!.docs.length == 0) {
+                if (storiesSnaps.hasData &&
+                    storiesSnaps.data!.docs.length == 0) {
                   return Center(
                     child: Text(
                       "No Stories Yet",
@@ -68,7 +69,10 @@ class _StoriesSectionState extends State<StoriesSection> {
                       ),
                     ),
                   );
-                } else {
+                } else if (storiesSnaps.connectionState ==
+                        ConnectionState.done &&
+                    storiesSnaps.hasData &&
+                    storiesSnaps.data != null) {
                   return ListView.builder(
                     itemCount: storiesSnaps.data!.docs.length,
                     scrollDirection: Axis.horizontal,
@@ -122,6 +126,8 @@ class _StoriesSectionState extends State<StoriesSection> {
                       );
                     },
                   );
+                } else {
+                  return Container();
                 }
               },
             ),

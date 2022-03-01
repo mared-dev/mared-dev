@@ -82,7 +82,7 @@ class FeedHelpers with ChangeNotifier {
       slivers: [
         SliverAppBar(
           automaticallyImplyLeading: false,
-          expandedHeight: MediaQuery.of(context).size.height * 0.42,
+          expandedHeight: MediaQuery.of(context).size.height * 0.45,
           flexibleSpace: FlexibleSpaceBar(
             background: Container(
               color: constantColors.blueGreyColor,

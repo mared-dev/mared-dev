@@ -21,7 +21,6 @@ import 'package:provider/provider.dart';
 import 'package:google_maps_webservice/places.dart' as google_maps_api;
 import 'package:video_player/video_player.dart';
 
-
 //this is the form you fill to upload a post
 
 class PostUploadScreen extends StatefulWidget {
@@ -30,7 +29,10 @@ class PostUploadScreen extends StatefulWidget {
   final PostType postType;
 
   PostUploadScreen(
-      {Key? key, required this.imagesList, required this.multipleImages,this.postType=PostType.IMAGE})
+      {Key? key,
+      required this.imagesList,
+      required this.multipleImages,
+      this.postType = PostType.IMAGE})
       : super(key: key);
 
   @override
@@ -38,7 +40,6 @@ class PostUploadScreen extends StatefulWidget {
 }
 
 class _PostUploadScreenState extends State<PostUploadScreen> {
-
   ConstantColors constantColors = ConstantColors();
 
   final picker = ImagePicker();
@@ -78,8 +79,6 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('@@@@@@@@@@@@@@@@@@@@');
-    print(widget.imagesList);
     List<String> catNames =
         Provider.of<FirebaseOperations>(context, listen: false).catNames;
     return Scaffold(
@@ -124,23 +123,26 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
                         Container(
                           height: 200,
                           width: 300,
-                          child: widget.postType==PostType.IMAGE?CarouselSlider(
-                            options: CarouselOptions(
-                              autoPlay: true,
-                              height: MediaQuery.of(context).size.height,
-                              viewportFraction: 2.0,
-                              enlargeCenterPage: false,
-                            ),
-                            items: widget.multipleImages.map((e) {
-                              return Image.file(
-                                File(e.path),
-                              );
-                            }).toList(),
-                          ):_videoPlayerController.value.isInitialized
-                              ? VideoPlayer(
-                            _videoPlayerController,
-                          )
-                              : LoadingWidget(constantColors: constantColors),
+                          child: widget.postType == PostType.IMAGE
+                              ? CarouselSlider(
+                                  options: CarouselOptions(
+                                    autoPlay: true,
+                                    height: MediaQuery.of(context).size.height,
+                                    viewportFraction: 2.0,
+                                    enlargeCenterPage: false,
+                                  ),
+                                  items: widget.multipleImages.map((e) {
+                                    return Image.file(
+                                      File(e.path),
+                                    );
+                                  }).toList(),
+                                )
+                              : _videoPlayerController.value.isInitialized
+                                  ? VideoPlayer(
+                                      _videoPlayerController,
+                                    )
+                                  : LoadingWidget(
+                                      constantColors: constantColors),
                         ),
                       ],
                     ),

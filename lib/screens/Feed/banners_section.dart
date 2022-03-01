@@ -17,13 +17,15 @@ class BannersSection extends StatefulWidget {
 class _BannersSectionState extends State<BannersSection> {
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
+    return FutureBuilder<QuerySnapshot>(
+      future: FirebaseFirestore.instance
           .collection("banners")
           .where("enddate", isGreaterThan: Timestamp.fromDate(DateTime.now()))
-          .snapshots(),
+          .get(),
       builder: (context, bannerSnap) {
-        if (bannerSnap.connectionState == ConnectionState.waiting) {
+        if (bannerSnap.connectionState == ConnectionState.waiting ||
+            !bannerSnap.hasData ||
+            bannerSnap.data == null) {
           return LoadingWidget(constantColors: constantColors);
         } else {
           return Padding(

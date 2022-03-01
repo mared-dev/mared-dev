@@ -54,11 +54,12 @@ class CategoryHelper with ChangeNotifier {
         color: constantColors.blueGreyColor,
         child: Stack(
           children: [
-            StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
+            //it doesn't make sense for this to change in realtime
+            FutureBuilder<QuerySnapshot>(
+              future: FirebaseFirestore.instance
                   .collection("categoryHeader")
                   .limit(1)
-                  .snapshots(),
+                  .get(),
               builder: (context, headerSnap) {
                 return Container(
                   height: MediaQuery.of(context).size.height,
@@ -215,8 +216,9 @@ class CategoryHelper with ChangeNotifier {
   }
 
   Widget middleCategory({required BuildContext context}) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection("category").snapshots(),
+    //it doens't make sense for this to change in realtime
+    return FutureBuilder<QuerySnapshot>(
+      future: FirebaseFirestore.instance.collection("category").get(),
       builder: (context, catSnaps) {
         if (catSnaps.connectionState == ConnectionState.waiting) {
           return const Center(
@@ -243,7 +245,7 @@ class CategoryHelper with ChangeNotifier {
                             .getCategoryNameVal(
                                 categoryNameVal: catDocSnap['categoryname']);
 
-                        Navigator.pushReplacement(
+                        Navigator.push(
                             context,
                             PageTransition(
                                 child: CategoryFeed(
