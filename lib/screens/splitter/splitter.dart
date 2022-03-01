@@ -53,66 +53,41 @@ class _SplitPagesState extends State<SplitPages> {
   @override
   Widget build(BuildContext context) {
     return bigError == false
-        ? Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              centerTitle: true,
-              leadingWidth: 0,
-              elevation: 0,
-              backgroundColor: constantColors.darkColor,
-              title: Provider.of<SplitPagesHelper>(context, listen: false)
-                  .topNavBar(context, pageIndex, appController),
-            ),
-            body: PageView(
-              controller: appController,
-              children: [
-                HomePage(),
-                AuctionApp(),
-              ],
-              physics: const NeverScrollableScrollPhysics(),
-              onPageChanged: (page) {
-                setState(() {
-                  pageIndex = page;
-                });
-              },
-            ),
-          )
-        : Scaffold(
-            backgroundColor: constantColors.darkColor,
-            body: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Oops, looks like there was an error authenticating you.\nPlease Log out and login again",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: constantColors.whiteColor, fontSize: 18),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20.0),
-                      child: ElevatedButton.icon(
-                          onPressed: () {
-                            Provider.of<Authentication>(context, listen: false)
-                                .signOutWithGoogle();
-                            Provider.of<Authentication>(context, listen: false)
-                                .logOutViaEmail()
-                                .whenComplete(() {
-                              Navigator.pushReplacement(
-                                context,
-                                PageTransition(
-                                    child: LandingPage(),
-                                    type: PageTransitionType.topToBottom),
-                              );
-                            });
-                          },
-                          icon: Icon(FontAwesomeIcons.signInAlt),
-                          label: Text("Logout")),
-                    )
-                  ],
-                ),
+        ? HomePage()
+        : Container(
+            color: constantColors.darkColor,
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    "Oops, looks like there was an error authenticating you.\nPlease Log out and login again",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: constantColors.whiteColor, fontSize: 18),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 20.0),
+                    child: ElevatedButton.icon(
+                        onPressed: () {
+                          Provider.of<Authentication>(context, listen: false)
+                              .signOutWithGoogle();
+                          Provider.of<Authentication>(context, listen: false)
+                              .logOutViaEmail()
+                              .whenComplete(() {
+                            Navigator.pushReplacement(
+                              context,
+                              PageTransition(
+                                  child: LandingPage(),
+                                  type: PageTransitionType.topToBottom),
+                            );
+                          });
+                        },
+                        icon: Icon(FontAwesomeIcons.signInAlt),
+                        label: Text("Logout")),
+                  )
+                ],
               ),
             ),
           );

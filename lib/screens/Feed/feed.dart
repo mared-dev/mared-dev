@@ -4,7 +4,6 @@ import 'package:mared_social/screens/Feed/feedhelpers.dart';
 import 'package:provider/provider.dart';
 
 class Feed extends StatelessWidget {
-  ConstantColors constantColors = ConstantColors();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
