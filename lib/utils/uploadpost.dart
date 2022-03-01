@@ -111,18 +111,19 @@ class UploadPost with ChangeNotifier {
                                     video: _video,
                                     context: context,
                                     videoPlayerController:
-                                        _videoPlayerController,onCompleteCallback: ({String? videoUrl}){
-
-                                  Navigator.push(
-                                      context,
-                                      PageTransition(
-                                          child: PostUploadScreen(
-                                            multipleImages: [_video!],
-                                            imagesList: [videoUrl!],
-                                            postType: PostType.VIDEO,
-                                          ),
-                                          type: PageTransitionType.bottomToTop));
-                                });
+                                        _videoPlayerController,
+                                    onCompleteCallback: ({String? videoUrl}) {
+                                      Navigator.push(
+                                          context,
+                                          PageTransition(
+                                              child: PostUploadScreen(
+                                                multipleImages: [_video!],
+                                                imagesList: [videoUrl!],
+                                                postType: PostType.VIDEO,
+                                              ),
+                                              type: PageTransitionType
+                                                  .bottomToTop));
+                                    });
                               });
                             // Navigator.push(
                             //     context,
@@ -148,7 +149,7 @@ class UploadPost with ChangeNotifier {
                           fontSize: 16,
                         ),
                       ),
-                      onPressed: () async{
+                      onPressed: () async {
                         _selectedSource = ImageSource.camera;
                         if (_postType == PostType.IMAGE) {
                           pickUploadPostImage(
@@ -157,27 +158,43 @@ class UploadPost with ChangeNotifier {
                           );
                         } else {
                           //TODO:redo this logic
-                          _video = await PickFilesHelper.pickVide(source: ImageSource.camera);
+                          _video = await PickFilesHelper.pickVide(
+                              source: ImageSource.camera);
                           if (_video != null) {
-                            // _videoPlayerController =
-                            //     VideoPlayerController.file(File(_video!.path));
-                            //
-                            // _videoPlayerController
-                            //   ..initialize().then((value) {
-                            //     _videoPlayerController.play();
-                            //     previewStoryImage(
-                            //         video: _video,
-                            //         context: context,
-                            //         videoPlayerController:
-                            //         _videoPlayerController,onCompleteCallback: ({String? videoUrl}){
-                            //       Navigator.pushReplacement(
-                            //           context,
-                            //           PageTransition(
-                            //               child: SplitPages(),
-                            //               type: PageTransitionType
-                            //                   .rightToLeft));
-                            //     });
-                            //   });
+                            _videoPlayerController =
+                                VideoPlayerController.file(File(_video!.path));
+
+                            _videoPlayerController
+                              ..initialize().then((value) {
+                                _videoPlayerController.play();
+                                previewStoryImage(
+                                    video: _video,
+                                    context: context,
+                                    videoPlayerController:
+                                        _videoPlayerController,
+                                    onCompleteCallback: ({String? videoUrl}) {
+                                      Navigator.push(
+                                          context,
+                                          PageTransition(
+                                              child: PostUploadScreen(
+                                                multipleImages: [_video!],
+                                                imagesList: [videoUrl!],
+                                                postType: PostType.VIDEO,
+                                              ),
+                                              type: PageTransitionType
+                                                  .bottomToTop));
+                                    });
+                              });
+                            // Navigator.push(
+                            //     context,
+                            //     PageTransition(
+                            //         child: PostUploadScreen(
+                            //           multipleImages: multipleImages,
+                            //           imagesList: imagesList,
+                            //         ),
+                            //         type: PageTransitionType.bottomToTop));
+
+                            // showPostCameraImage(context);
                           }
                         }
                       },
@@ -369,7 +386,6 @@ class UploadPost with ChangeNotifier {
                                     type: PageTransitionType.bottomToTop));
                           } else {
                             await uploadPostImageToFirebase();
-
 
                             Navigator.push(
                                 context,
