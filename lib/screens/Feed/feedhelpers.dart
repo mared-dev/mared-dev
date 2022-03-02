@@ -20,7 +20,6 @@ import 'package:mared_social/services/FirebaseOpertaion.dart';
 import 'package:mared_social/services/authentication.dart';
 import 'package:mared_social/utils/postoptions.dart';
 import 'package:mared_social/utils/uploadpost.dart';
-import 'package:mared_social/widgets/posts/video_post_item.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:chewie/chewie.dart';
@@ -78,71 +77,73 @@ class FeedHelpers with ChangeNotifier {
   }
 
   Widget feedBody(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverAppBar(
-          automaticallyImplyLeading: false,
-          expandedHeight: MediaQuery.of(context).size.height * 0.45,
-          flexibleSpace: FlexibleSpaceBar(
-            background: Container(
-              color: constantColors.blueGreyColor,
-              child: Column(
-                children: [
-                  InkWell(
-                    onTap: () => Navigator.push(
-                      context,
-                      PageTransition(
-                        child: SearchPage(),
-                        type: PageTransitionType.rightToLeft,
+    return NestedScrollView(
+      headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+        return <Widget>[
+          SliverAppBar(
+            automaticallyImplyLeading: false,
+            expandedHeight: MediaQuery.of(context).size.height * 0.45,
+            flexibleSpace: FlexibleSpaceBar(
+              background: Container(
+                color: constantColors.blueGreyColor,
+                child: Column(
+                  children: [
+                    InkWell(
+                      onTap: () => Navigator.push(
+                        context,
+                        PageTransition(
+                          child: SearchPage(),
+                          type: PageTransitionType.rightToLeft,
+                        ),
                       ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(8, 5, 8, 0),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10),
-                        height: MediaQuery.of(context).size.height * 0.065,
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                            color: constantColors.whiteColor,
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              color: constantColors.greenColor,
-                              width: 1,
-                            )),
-                        child: Row(
-                          children: [
-                            Padding(
-                              padding: const EdgeInsets.only(right: 8.0),
-                              child: Icon(
-                                Icons.search_outlined,
-                                size: 25,
-                                color: constantColors.darkColor,
-                              ),
-                            ),
-                            Expanded(
-                              child: Text(
-                                "Looking for something?",
-                                style: TextStyle(
-                                  color:
-                                      constantColors.darkColor.withOpacity(0.5),
-                                  fontSize: 14,
+                      child: Padding(
+                        padding: const EdgeInsets.fromLTRB(8, 5, 8, 0),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          height: MediaQuery.of(context).size.height * 0.065,
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                              color: constantColors.whiteColor,
+                              borderRadius: BorderRadius.circular(20),
+                              border: Border.all(
+                                color: constantColors.greenColor,
+                                width: 1,
+                              )),
+                          child: Row(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: Icon(
+                                  Icons.search_outlined,
+                                  size: 25,
+                                  color: constantColors.darkColor,
                                 ),
                               ),
-                            ),
-                          ],
+                              Expanded(
+                                child: Text(
+                                  "Looking for something?",
+                                  style: TextStyle(
+                                    color: constantColors.darkColor
+                                        .withOpacity(0.5),
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  BannersSection(),
-                  StoriesSection()
-                ],
+                    BannersSection(),
+                    StoriesSection()
+                  ],
+                ),
               ),
             ),
           ),
-        ),
-        PostsSection()
-      ],
+        ];
+      },
+      body: PostsSection(),
     );
   }
 

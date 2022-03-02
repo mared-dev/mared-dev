@@ -11,7 +11,9 @@ import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/isAnon/isAnon.dart';
 import 'package:mared_social/services/authentication.dart';
 import 'package:mared_social/utils/postoptions.dart';
-import 'package:mared_social/widgets/posts/video_post_item.dart';
+import 'package:mared_social/widgets/items/video_post_item.dart';
+import 'package:mared_social/widgets/reusable/paginate_firestore_edited.dart';
+import 'package:mared_social/widgets/reusable/post_item_image.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -24,148 +26,134 @@ class _PostsSectionState extends State<PostsSection> {
   @override
   Widget build(BuildContext context) {
     //temp changing StreamBuilder to FutureBuilder and .snapshot to .get
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection("posts")
-          .orderBy('time', descending: true)
-          .snapshots(),
-      builder: (context, snapshot) {
-        return SliverPadding(
-          padding: const EdgeInsets.all(4),
-          sliver: SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                if (index.toInt() < snapshot.data!.docs.length) {
-                  DocumentSnapshot documentSnapshot =
-                      snapshot.data!.docs[index];
+    return CustomPaginateFirestore(
+      //item builder type is compulsory.
 
-                  ///uncomment if you want the time to be updated in realtime
-                  // Provider.of<PostFunctions>(context, listen: false)
-                  //     .showTimeAgo(documentSnapshot['time']);
-
-                  return SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.75,
-                    width: MediaQuery.of(context).size.width,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
+      itemBuilder: (context, snapshot, index) {
+        dynamic documentSnapshot = snapshot[index].data()!;
+        return Padding(
+            padding: const EdgeInsets.all(4),
+            child: SizedBox(
+              height: MediaQuery.of(context).size.height * 0.75,
+              width: MediaQuery.of(context).size.width,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0, left: 8),
+                    child: Row(
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0, left: 8),
-                          child: Row(
-                            children: [
-                              GestureDetector(
-                                onTap: () {
-                                  if (documentSnapshot['useruid'] !=
-                                      Provider.of<Authentication>(context,
-                                              listen: false)
-                                          .getUserId) {
-                                    Navigator.push(
-                                        context,
-                                        PageTransition(
-                                            child: AltProfile(
-                                              userUid:
-                                                  documentSnapshot['useruid'],
-                                            ),
-                                            type: PageTransitionType
-                                                .bottomToTop));
-                                  }
-                                },
-                                child: SizedBox(
-                                  height: 40,
-                                  width: 40,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(20),
-                                    child: CachedNetworkImage(
-                                      fit: BoxFit.cover,
-                                      imageUrl: documentSnapshot['userimage'],
-                                      progressIndicatorBuilder: (context, url,
-                                              downloadProgress) =>
-                                          LoadingWidget(
-                                              constantColors: constantColors),
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(Icons.error),
-                                    ),
-                                  ),
-                                ),
+                        GestureDetector(
+                          onTap: () {
+                            if (documentSnapshot['useruid'] !=
+                                Provider.of<Authentication>(context,
+                                        listen: false)
+                                    .getUserId) {
+                              Navigator.push(
+                                  context,
+                                  PageTransition(
+                                      child: AltProfile(
+                                        userUid: documentSnapshot['useruid'],
+                                      ),
+                                      type: PageTransitionType.bottomToTop));
+                            }
+                          },
+                          child: SizedBox(
+                            height: 40,
+                            width: 40,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(20),
+                              child: CachedNetworkImage(
+                                fit: BoxFit.cover,
+                                imageUrl: documentSnapshot['userimage'],
+                                progressIndicatorBuilder:
+                                    (context, url, downloadProgress) =>
+                                        LoadingWidget(
+                                            constantColors: constantColors),
+                                errorWidget: (context, url, error) =>
+                                    const Icon(Icons.error),
                               ),
-                              _postHeader(
-                                userName: documentSnapshot['username'],
-                                address: documentSnapshot['address'],
-                              )
-                            ],
+                            ),
                           ),
                         ),
-                        _postBody(
-                            imageList: documentSnapshot['imageslist'],
-                            userId: documentSnapshot['useruid'],
-                            postId: documentSnapshot['postid']),
-                        ////TODO:this need to be optimized
-                        _postFooter(documentSnapshot: documentSnapshot),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            left: 16.0,
-                            top: 5,
+                        _postHeader(
+                          userName: documentSnapshot['username'],
+                          address: documentSnapshot['address'],
+                        )
+                      ],
+                    ),
+                  ),
+                  _postBody(
+                      imageList: documentSnapshot['imageslist'],
+                      userId: documentSnapshot['useruid'],
+                      postId: documentSnapshot['postid']),
+                  ////TODO:this need to be optimized
+                  // _postFooter(documentSnapshot: documentSnapshot),
+                  Padding(
+                    padding: const EdgeInsets.only(
+                      left: 16.0,
+                      top: 5,
+                    ),
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: Text(
+                            documentSnapshot['caption'],
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: constantColors.whiteColor,
+                              fontSize: 14,
+                            ),
                           ),
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                child: Text(
-                                  documentSnapshot['caption'],
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: constantColors.whiteColor,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width,
-                                child: Text(
-                                  documentSnapshot['description'],
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    color: constantColors.whiteColor,
-                                    fontSize: 14,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    TimeHelper.getElpasedTime(
-                                        documentSnapshot['time']),
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                      color: constantColors.lightColor
-                                          .withOpacity(0.8),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          child: Text(
+                            documentSnapshot['description'],
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: constantColors.whiteColor,
+                              fontSize: 14,
+                            ),
                           ),
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              TimeHelper.getElpasedTime(
+                                  documentSnapshot['time']),
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                color:
+                                    constantColors.lightColor.withOpacity(0.8),
+                              ),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  );
-                } else {
-                  //you should do some loading instre
-                  return Container();
-                }
-              },
-            ),
-          ),
-        );
+                  ),
+                ],
+              ),
+            ));
       },
+      // orderBy is compulsory to enable pagination
+      query: FirebaseFirestore.instance
+          .collection("posts")
+          .orderBy('time', descending: true),
+      //Change types accordingly
+      itemBuilderType: PaginateBuilderType.listView,
+      // to fetch real-time data
+      isLive: false,
     );
   }
 
@@ -375,18 +363,17 @@ class _PostsSectionState extends State<PostsSection> {
             width: MediaQuery.of(context).size.width,
             child: !PostHelpers.checkIfPostIsVideo(imageList)
                 ? Swiper(
+                    key: UniqueKey(),
                     itemBuilder: (BuildContext context, int index) {
-                      return CachedNetworkImage(
-                        fit: BoxFit.cover,
+                      // return Image.network(
+                      //   imageList[index],
+                      //   key: UniqueKey(),
+                      //   fit: BoxFit.cover,
+                      // );
+
+                      ///legacy code
+                      return PostItemImage(
                         imageUrl: imageList[index],
-                        progressIndicatorBuilder:
-                            (context, url, downloadProgress) => SizedBox(
-                          height: 50,
-                          width: 50,
-                          child: LoadingWidget(constantColors: constantColors),
-                        ),
-                        errorWidget: (context, url, error) =>
-                            const Icon(Icons.error),
                       );
                     },
                     itemCount: (imageList as List).length,

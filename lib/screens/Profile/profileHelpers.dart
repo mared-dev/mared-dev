@@ -22,8 +22,8 @@ import 'package:mared_social/services/FirebaseOpertaion.dart';
 import 'package:mared_social/services/authentication.dart';
 import 'package:mared_social/utils/postoptions.dart';
 import 'package:mared_social/utils/uploadpost.dart';
-import 'package:mared_social/widgets/posts/show_post_details.dart';
-import 'package:mared_social/widgets/profile/profile_post_item.dart';
+import 'package:mared_social/widgets/items/profile_post_item.dart';
+import 'package:mared_social/widgets/items/show_post_details.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
