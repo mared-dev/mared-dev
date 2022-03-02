@@ -415,16 +415,22 @@ class FirebaseOperations with ChangeNotifier {
   }) async {
     return FirebaseFirestore.instance
         .collection("users")
+        //this is the other user
         .doc(followingUid)
         .collection("followers")
+        //creating a doc with my id
         .doc(followingDocId)
+        //add my data to his followers
         .set(followingData)
         .whenComplete(() async {
       return FirebaseFirestore.instance
           .collection("users")
+          //my id we are finding the doc with my id
           .doc(followerUid)
           .collection("following")
+          //creating a document with his id
           .doc(followerDocId)
+          //the other user data
           .set(followerData);
     }).whenComplete(() async {
       await FirebaseFirestore.instance

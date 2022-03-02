@@ -61,293 +61,301 @@ class AltProfileHelper with ChangeNotifier {
       required AsyncSnapshot<DocumentSnapshot> userDocSnap,
       required String userUid}) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.34,
+      height: MediaQuery.of(context).size.height * 0.35,
       width: MediaQuery.of(context).size.width,
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              SizedBox(
-                height: 220,
-                width: 180,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 16.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 100,
-                        width: 100,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(30),
-                          child: CachedNetworkImage(
-                            fit: BoxFit.cover,
-                            imageUrl: userDocSnap.data!['userimage'],
-                            progressIndicatorBuilder:
-                                (context, url, downloadProgress) => SizedBox(
-                              height: 50,
-                              width: 50,
-                              child:
-                                  LoadingWidget(constantColors: constantColors),
-                            ),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Text(
-                          userDocSnap.data!['username'],
-                          style: TextStyle(
-                            color: constantColors.whiteColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              EvaIcons.email,
-                              color: constantColors.greenColor,
-                              size: 16,
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 8.0),
-                              child: Text(
-                                userDocSnap.data!['useremail'],
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: constantColors.whiteColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12,
-                                ),
+              Flexible(
+                flex: 3,
+                child: SizedBox(
+                  height: 220,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                          height: 100,
+                          width: 100,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(30),
+                            child: CachedNetworkImage(
+                              fit: BoxFit.cover,
+                              imageUrl: userDocSnap.data!['userimage'],
+                              progressIndicatorBuilder:
+                                  (context, url, downloadProgress) => SizedBox(
+                                height: 50,
+                                width: 50,
+                                child: LoadingWidget(
+                                    constantColors: constantColors),
                               ),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                      Visibility(
-                        visible: userDocSnap.data!['store'],
-                        child: Padding(
+                        Padding(
                           padding: const EdgeInsets.only(top: 8.0),
+                          child: Text(
+                            userDocSnap.data!['username'],
+                            style: TextStyle(
+                              color: constantColors.whiteColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20,
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0, left: 8),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
-                                FontAwesomeIcons.storeAlt,
-                                color: constantColors.blueColor,
-                                size: 12,
+                                EvaIcons.email,
+                                color: constantColors.greenColor,
+                                size: 16,
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 8.0),
+                              Expanded(
                                 child: Text(
-                                  "Store Profile",
+                                  userDocSnap.data!['useremail'],
+                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                    color: constantColors.blueColor,
-                                    fontSize: 12,
+                                    color: constantColors.whiteColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 10,
                                   ),
                                 ),
                               ),
                             ],
                           ),
                         ),
-                      )
-                    ],
+                        Visibility(
+                          visible: userDocSnap.data!['store'],
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  FontAwesomeIcons.storeAlt,
+                                  color: constantColors.blueColor,
+                                  size: 12,
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 8.0),
+                                  child: Text(
+                                    "Store Profile",
+                                    style: TextStyle(
+                                      color: constantColors.blueColor,
+                                      fontSize: 12,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
                 ),
               ),
-              SizedBox(
-                width: 190,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              checkFollowerSheet(
-                                  context: context, userDocSnap: userDocSnap);
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: constantColors.darkColor,
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              height: 70,
-                              width: 80,
-                              child: Column(
-                                children: [
-                                  StreamBuilder<QuerySnapshot>(
-                                      stream: FirebaseFirestore.instance
-                                          .collection("users")
-                                          .doc(userDocSnap.data!['useruid'])
-                                          .collection("followers")
-                                          .snapshots(),
-                                      builder: (context, followerSnap) {
-                                        if (followerSnap.hasData) {
-                                          return Text(
-                                            followerSnap.data!.docs.length
-                                                .toString(),
-                                            style: TextStyle(
-                                              color: constantColors.whiteColor,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 28,
-                                            ),
-                                          );
-                                        } else {
-                                          return Text(
-                                            "0",
-                                            style: TextStyle(
-                                              color: constantColors.whiteColor,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 28,
-                                            ),
-                                          );
-                                        }
-                                      }),
-                                  Text(
-                                    "Followers",
-                                    style: TextStyle(
-                                      color: constantColors.whiteColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
+              Flexible(
+                flex: 2,
+                child: SizedBox(
+                  width: 190,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                checkFollowerSheet(
+                                    context: context, userDocSnap: userDocSnap);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: constantColors.darkColor,
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                height: 70,
+                                width: 80,
+                                child: Column(
+                                  children: [
+                                    StreamBuilder<QuerySnapshot>(
+                                        stream: FirebaseFirestore.instance
+                                            .collection("users")
+                                            .doc(userDocSnap.data!['useruid'])
+                                            .collection("followers")
+                                            .snapshots(),
+                                        builder: (context, followerSnap) {
+                                          if (followerSnap.hasData) {
+                                            return Text(
+                                              followerSnap.data!.docs.length
+                                                  .toString(),
+                                              style: TextStyle(
+                                                color:
+                                                    constantColors.whiteColor,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 28,
+                                              ),
+                                            );
+                                          } else {
+                                            return Text(
+                                              "0",
+                                              style: TextStyle(
+                                                color:
+                                                    constantColors.whiteColor,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 28,
+                                              ),
+                                            );
+                                          }
+                                        }),
+                                    Text(
+                                      "Followers",
+                                      style: TextStyle(
+                                        color: constantColors.whiteColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              checkFollowingSheet(
-                                  context: context, userDocSnap: userDocSnap);
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: constantColors.darkColor,
-                                borderRadius: BorderRadius.circular(15),
-                              ),
-                              height: 70,
-                              width: 80,
-                              child: Column(
-                                children: [
-                                  StreamBuilder<QuerySnapshot>(
-                                      stream: FirebaseFirestore.instance
-                                          .collection("users")
-                                          .doc(userDocSnap.data!['useruid'])
-                                          .collection("following")
-                                          .snapshots(),
-                                      builder: (context, followingSnap) {
-                                        if (followingSnap.hasData) {
-                                          return Text(
-                                            followingSnap.data!.docs.length
-                                                .toString(),
-                                            style: TextStyle(
-                                              color: constantColors.whiteColor,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 28,
-                                            ),
-                                          );
-                                        } else {
-                                          return Text(
-                                            "0",
-                                            style: TextStyle(
-                                              color: constantColors.whiteColor,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 28,
-                                            ),
-                                          );
-                                        }
-                                      }),
-                                  Text(
-                                    "Following",
-                                    style: TextStyle(
-                                      color: constantColors.whiteColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 12,
+                            InkWell(
+                              onTap: () {
+                                checkFollowingSheet(
+                                    context: context, userDocSnap: userDocSnap);
+                              },
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color: constantColors.darkColor,
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                height: 70,
+                                width: 80,
+                                child: Column(
+                                  children: [
+                                    StreamBuilder<QuerySnapshot>(
+                                        stream: FirebaseFirestore.instance
+                                            .collection("users")
+                                            .doc(userDocSnap.data!['useruid'])
+                                            .collection("following")
+                                            .snapshots(),
+                                        builder: (context, followingSnap) {
+                                          if (followingSnap.hasData) {
+                                            return Text(
+                                              followingSnap.data!.docs.length
+                                                  .toString(),
+                                              style: TextStyle(
+                                                color:
+                                                    constantColors.whiteColor,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 28,
+                                              ),
+                                            );
+                                          } else {
+                                            return Text(
+                                              "0",
+                                              style: TextStyle(
+                                                color:
+                                                    constantColors.whiteColor,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 28,
+                                              ),
+                                            );
+                                          }
+                                        }),
+                                    Text(
+                                      "Following",
+                                      style: TextStyle(
+                                        color: constantColors.whiteColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 12,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16.0),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: constantColors.darkColor,
-                          borderRadius: BorderRadius.circular(15),
+                          ],
                         ),
-                        height: 70,
-                        width: 80,
-                        child: StreamBuilder<QuerySnapshot>(
-                            stream: FirebaseFirestore.instance
-                                .collection("users")
-                                .doc(userDocSnap.data!['useruid'])
-                                .collection("posts")
-                                .snapshots(),
-                            builder: (context, userPostSnaps) {
-                              if (!userPostSnaps.hasData) {
-                                return Column(
-                                  children: [
-                                    Text(
-                                      "0",
-                                      style: TextStyle(
-                                        color: constantColors.whiteColor,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 28,
-                                      ),
-                                    ),
-                                    Text(
-                                      "Posts",
-                                      style: TextStyle(
-                                        color: constantColors.whiteColor,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              } else {
-                                return Column(
-                                  children: [
-                                    Text(
-                                      userPostSnaps.data!.docs.length
-                                          .toString(),
-                                      style: TextStyle(
-                                        color: constantColors.whiteColor,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 28,
-                                      ),
-                                    ),
-                                    Text(
-                                      "Posts",
-                                      style: TextStyle(
-                                        color: constantColors.whiteColor,
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              }
-                            }),
                       ),
-                    ),
-                  ],
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: constantColors.darkColor,
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                          height: 70,
+                          width: 80,
+                          child: StreamBuilder<QuerySnapshot>(
+                              stream: FirebaseFirestore.instance
+                                  .collection("users")
+                                  .doc(userDocSnap.data!['useruid'])
+                                  .collection("posts")
+                                  .snapshots(),
+                              builder: (context, userPostSnaps) {
+                                if (!userPostSnaps.hasData) {
+                                  return Column(
+                                    children: [
+                                      Text(
+                                        "0",
+                                        style: TextStyle(
+                                          color: constantColors.whiteColor,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 28,
+                                        ),
+                                      ),
+                                      Text(
+                                        "Posts",
+                                        style: TextStyle(
+                                          color: constantColors.whiteColor,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                } else {
+                                  return Column(
+                                    children: [
+                                      Text(
+                                        userPostSnaps.data!.docs.length
+                                            .toString(),
+                                        style: TextStyle(
+                                          color: constantColors.whiteColor,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 28,
+                                        ),
+                                      ),
+                                      Text(
+                                        "Posts",
+                                        style: TextStyle(
+                                          color: constantColors.whiteColor,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
+                                  );
+                                }
+                              }),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],

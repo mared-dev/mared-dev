@@ -9,6 +9,8 @@ import 'package:mared_social/screens/AltProfile/altProfileHelper.dart';
 import 'package:mared_social/screens/Feed/feedhelpers.dart';
 import 'package:mared_social/screens/auctionFeed/auctionpage.dart';
 import 'package:mared_social/services/authentication.dart';
+import 'package:mared_social/widgets/reusable/post_result_item.dart';
+import 'package:mared_social/widgets/reusable/user_result_item.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -44,48 +46,7 @@ class UserSearch extends StatelessWidget {
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       var userData = snapshot.data!.docs[index];
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: ListTile(
-                          onTap: () {
-                            if (userData['useruid'] !=
-                                Provider.of<Authentication>(context,
-                                        listen: false)
-                                    .getUserId) {
-                              Navigator.push(
-                                  context,
-                                  PageTransition(
-                                      child: AltProfile(
-                                        userUid: userData['useruid'],
-                                      ),
-                                      type: PageTransitionType.bottomToTop));
-                            } else {
-                              Provider.of<FeedHelpers>(context, listen: false)
-                                  .IsAnonBottomSheet(context);
-                            }
-                          },
-                          leading: ClipRRect(
-                            borderRadius: BorderRadius.circular(30),
-                            child: CachedNetworkImage(
-                              fit: BoxFit.cover,
-                              imageUrl: userData['userimage'],
-                              progressIndicatorBuilder:
-                                  (context, url, downloadProgress) => SizedBox(
-                                height: 50,
-                                width: 50,
-                                child: LoadingWidget(
-                                    constantColors: constantColors),
-                              ),
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
-                            ),
-                          ),
-                          title: Text(
-                            userData['username'],
-                            style: TextStyle(color: constantColors.whiteColor),
-                          ),
-                        ),
-                      );
+                      return UserResultItem(userData: userData);
                     },
                   ),
                 );
@@ -158,54 +119,8 @@ class VendorSearch extends StatelessWidget {
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       var vendorData = snapshot.data!.docs[index];
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: ListTile(
-                          onTap: () {
-                            if (vendorData['useruid'] !=
-                                Provider.of<Authentication>(context,
-                                        listen: false)
-                                    .getUserId) {
-                              Navigator.push(
-                                  context,
-                                  PageTransition(
-                                      child: AltProfile(
-                                        userUid: vendorData['useruid'],
-                                      ),
-                                      type: PageTransitionType.bottomToTop));
-                            } else {
-                              Provider.of<FeedHelpers>(context, listen: false)
-                                  .IsAnonBottomSheet(context);
-                            }
-                          },
-                          leading: ClipRRect(
-                            borderRadius: BorderRadius.circular(30),
-                            child: CachedNetworkImage(
-                              fit: BoxFit.cover,
-                              imageUrl: vendorData['userimage'],
-                              progressIndicatorBuilder:
-                                  (context, url, downloadProgress) => SizedBox(
-                                height: 50,
-                                width: 50,
-                                child: LoadingWidget(
-                                    constantColors: constantColors),
-                              ),
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
-                            ),
-                          ),
-                          title: Text(
-                            vendorData['username'],
-                            style: TextStyle(color: constantColors.whiteColor),
-                          ),
-                          subtitle: Text(
-                            vendorData['useremail'],
-                            style: TextStyle(
-                              color: constantColors.blueColor,
-                              fontSize: 10,
-                            ),
-                          ),
-                        ),
+                      return UserResultItem(
+                        userData: vendorData,
                       );
                     },
                   ),
@@ -278,63 +193,8 @@ class PostSearch extends StatelessWidget {
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       var postData = snapshot.data!.docs[index];
-                      return Padding(
-                        padding: const EdgeInsets.only(bottom: 8.0),
-                        child: ListTile(
-                          onTap: () {
-                            Provider.of<AltProfileHelper>(context,
-                                    listen: false)
-                                .showPostDetail(
-                                    context: context,
-                                    documentSnapshot: postData);
-                          },
-                          leading: SizedBox(
-                            height: size.height * 0.2,
-                            width: size.width * 0.2,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(5),
-                              child: Swiper(
-                                itemBuilder: (BuildContext context, int index) {
-                                  return CachedNetworkImage(
-                                    fit: BoxFit.cover,
-                                    imageUrl: postData['imageslist'][index],
-                                    progressIndicatorBuilder:
-                                        (context, url, downloadProgress) =>
-                                            SizedBox(
-                                      height: 50,
-                                      width: 50,
-                                      child: LoadingWidget(
-                                          constantColors: constantColors),
-                                    ),
-                                    errorWidget: (context, url, error) =>
-                                        const Icon(Icons.error),
-                                  );
-                                },
-                                itemCount:
-                                    (postData['imageslist'] as List).length,
-                                itemHeight:
-                                    MediaQuery.of(context).size.height * 0.3,
-                                itemWidth: MediaQuery.of(context).size.width,
-                                layout: SwiperLayout.DEFAULT,
-                              ),
-                            ),
-                          ),
-                          title: Text(
-                            postData['caption'],
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: TextStyle(color: constantColors.whiteColor),
-                          ),
-                          subtitle: Text(
-                            postData['description'],
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: TextStyle(
-                              color: constantColors.blueColor,
-                              fontSize: 10,
-                            ),
-                          ),
-                        ),
+                      return PostResultData(
+                        postData: postData,
                       );
                     },
                   ),
