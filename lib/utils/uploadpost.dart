@@ -9,6 +9,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_place/google_place.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/helpers/compress_image_helper.dart';
 import 'package:mared_social/models/enums/post_type.dart';
 import 'package:mared_social/screens/splitter/splitter.dart';
 import 'package:mared_social/services/FirebaseOpertaion.dart';
@@ -104,6 +105,7 @@ class UploadPost with ChangeNotifier {
                             _videoPlayerController =
                                 VideoPlayerController.file(File(_video!.path));
 
+                            //START HERE
                             _videoPlayerController
                               ..initialize().then((value) {
                                 _videoPlayerController.play();
@@ -418,7 +420,10 @@ class UploadPost with ChangeNotifier {
           .ref()
           .child('posts/${element.path}/${TimeOfDay.now()}');
 
-      imagePostUploadTask = imageReference.putFile(File(element.path));
+      File compressedImage =
+          await CompressImageHelper.compressImageAndGetFile(File(element.path));
+
+      imagePostUploadTask = imageReference.putFile(File(compressedImage.path));
       await imagePostUploadTask.whenComplete(() {
         print("Post image uploaded to storage");
       });
@@ -434,7 +439,11 @@ class UploadPost with ChangeNotifier {
         .ref()
         .child('posts/${uploadPostImage.path}/${TimeOfDay.now()}');
 
-    imagePostUploadTask = imageReference.putFile(uploadPostImage);
+    ///compressing step
+    File compressedImage = await CompressImageHelper.compressImageAndGetFile(
+        File(uploadPostImage.path));
+
+    imagePostUploadTask = imageReference.putFile(compressedImage);
     await imagePostUploadTask.whenComplete(() {
       print("Post image uploaded to storage");
     });
