@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mared_social/screens/Chatroom/chatroom_helpers.dart';
 import 'package:mared_social/screens/Chatroom/privateChatHelpers.dart';
-import 'package:mared_social/services/authentication.dart';
+import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:provider/provider.dart';
 
 class PrivateChats extends StatelessWidget {

@@ -5,8 +5,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mared_social/screens/Stories/stories_widget.dart';
-import 'package:mared_social/services/FirebaseOpertaion.dart';
-import 'package:mared_social/services/authentication.dart';
+import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
+import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:provider/provider.dart';
 
 class StoriesHelper with ChangeNotifier {

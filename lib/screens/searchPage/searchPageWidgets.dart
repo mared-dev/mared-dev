@@ -8,7 +8,7 @@ import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/AltProfile/altProfileHelper.dart';
 import 'package:mared_social/screens/Feed/feedhelpers.dart';
 import 'package:mared_social/screens/auctionFeed/auctionpage.dart';
-import 'package:mared_social/services/authentication.dart';
+import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/widgets/reusable/post_result_item.dart';
 import 'package:mared_social/widgets/reusable/user_result_item.dart';
 import 'package:page_transition/page_transition.dart';

@@ -17,8 +17,8 @@ import 'package:mared_social/screens/LandingPage/landingpage.dart';
 import 'package:mared_social/screens/Profile/profile.dart';
 import 'package:mared_social/screens/isAnon/isAnon.dart';
 import 'package:mared_social/screens/mapscreen/mapscreen.dart';
-import 'package:mared_social/services/FirebaseOpertaion.dart';
-import 'package:mared_social/services/authentication.dart';
+import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
+import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 

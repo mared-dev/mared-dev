@@ -12,8 +12,9 @@ import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/helpers/compress_image_helper.dart';
 import 'package:mared_social/models/enums/post_type.dart';
 import 'package:mared_social/screens/splitter/splitter.dart';
-import 'package:mared_social/services/FirebaseOpertaion.dart';
-import 'package:mared_social/services/authentication.dart';
+import 'package:mared_social/services/firebase/firebase_file_upload_service.dart';
+import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
+import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/utils/pick_files_helper.dart';
 import 'package:mared_social/utils/productUploadCameraScreen.dart';
 import 'package:mared_social/utils/productUploadScreen.dart';
@@ -376,7 +377,9 @@ class UploadPost with ChangeNotifier {
                         ),
                         onPressed: () async {
                           if (_selectedSource == ImageSource.camera) {
-                            await uploadPostCameraImageToFirebase();
+                            uploadPostImageUrl = await FirebaseFileUploadService
+                                .uploadPostCameraImageToFirebase(
+                                    uploadPostImage);
 
                             Navigator.push(
                                 context,
@@ -387,7 +390,9 @@ class UploadPost with ChangeNotifier {
                                     ),
                                     type: PageTransitionType.bottomToTop));
                           } else {
-                            await uploadPostImageToFirebase();
+                            imagesList = await FirebaseFileUploadService
+                                .uploadMultipleImagesToFirebase(
+                                    multipleImages: multipleImages);
 
                             Navigator.push(
                                 context,
@@ -414,43 +419,23 @@ class UploadPost with ChangeNotifier {
     );
   }
 
-  Future uploadPostImageToFirebase() async {
-    multipleImages.forEach((element) async {
-      Reference imageReference = FirebaseStorage.instance
-          .ref()
-          .child('posts/${element.path}/${TimeOfDay.now()}');
-
-      File compressedImage =
-          await CompressImageHelper.compressImageAndGetFile(File(element.path));
-
-      imagePostUploadTask = imageReference.putFile(File(compressedImage.path));
-      await imagePostUploadTask.whenComplete(() {
-        print("Post image uploaded to storage");
-      });
-      await imageReference.getDownloadURL().then((imageUrl) {
-        imagesList.add(imageUrl);
-      });
-      notifyListeners();
-    });
-  }
-
-  Future uploadPostCameraImageToFirebase() async {
-    Reference imageReference = FirebaseStorage.instance
-        .ref()
-        .child('posts/${uploadPostImage.path}/${TimeOfDay.now()}');
-
-    ///compressing step
-    File compressedImage = await CompressImageHelper.compressImageAndGetFile(
-        File(uploadPostImage.path));
-
-    imagePostUploadTask = imageReference.putFile(compressedImage);
-    await imagePostUploadTask.whenComplete(() {
-      print("Post image uploaded to storage");
-    });
-    await imageReference.getDownloadURL().then((imageUrl) {
-      uploadPostImageUrl = imageUrl;
-      print(uploadPostImageUrl);
-    });
-    notifyListeners();
-  }
+  // Future uploadPostCameraImageToFirebase() async {
+  //   Reference imageReference = FirebaseStorage.instance
+  //       .ref()
+  //       .child('posts/${uploadPostImage.path}/${TimeOfDay.now()}');
+  //
+  //   ///compressing step
+  //   File compressedImage = await CompressImageHelper.compressImageAndGetFile(
+  //       File(uploadPostImage.path));
+  //
+  //   imagePostUploadTask = imageReference.putFile(compressedImage);
+  //   await imagePostUploadTask.whenComplete(() {
+  //     print("Post image uploaded to storage");
+  //   });
+  //   await imageReference.getDownloadURL().then((imageUrl) {
+  //     uploadPostImageUrl = imageUrl;
+  //     print(uploadPostImageUrl);
+  //   });
+  //   notifyListeners();
+  // }
 }

@@ -9,7 +9,7 @@ import 'package:mared_social/helpers/post_helpers.dart';
 import 'package:mared_social/helpers/time_helpers.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/isAnon/isAnon.dart';
-import 'package:mared_social/services/authentication.dart';
+import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/utils/postoptions.dart';
 import 'package:mared_social/widgets/items/video_post_item.dart';
 import 'package:mared_social/widgets/reusable/paginate_firestore_edited.dart';

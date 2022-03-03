@@ -2,8 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:mared_social/screens/LandingPage/landingUtils.dart';
-import 'package:mared_social/services/authentication.dart';
-import 'package:mared_social/services/fcm_notification_Service.dart';
+import 'package:mared_social/services/firebase/authentication.dart';
+import 'package:mared_social/services/firebase/fcm_notification_Service.dart';
 import 'package:provider/provider.dart';
 
 class FirebaseOperations with ChangeNotifier {

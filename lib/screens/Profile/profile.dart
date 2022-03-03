@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/screens/Profile/profileHelpers.dart';
-import 'package:mared_social/services/FirebaseOpertaion.dart';
+import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 
 import 'package:provider/provider.dart';
 

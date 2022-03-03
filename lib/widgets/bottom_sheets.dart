@@ -7,9 +7,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/screens/splitter/splitter.dart';
-import 'package:mared_social/services/FirebaseOpertaion.dart';
-import 'package:mared_social/services/authentication.dart';
-import 'package:mared_social/services/firebase_file_upload_service.dart';
+import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
+import 'package:mared_social/services/firebase/authentication.dart';
+import 'package:mared_social/services/firebase/firebase_file_upload_service.dart';
 import 'package:mared_social/utils/pick_files_helper.dart';
 import 'package:nanoid/nanoid.dart';
 import 'package:page_transition/page_transition.dart';
@@ -18,10 +18,11 @@ import 'package:video_player/video_player.dart';
 
 final ConstantColors constantColors = ConstantColors();
 
-
-previewStoryImage({required BuildContext context,
-  required XFile? video,required VideoPlayerController videoPlayerController,required onCompleteCallback}) {
-
+previewStoryImage(
+    {required BuildContext context,
+    required XFile? video,
+    required VideoPlayerController videoPlayerController,
+    required onCompleteCallback}) {
   return showModalBottomSheet(
     isScrollControlled: true,
     context: context,
@@ -51,8 +52,8 @@ previewStoryImage({required BuildContext context,
                     aspectRatio: 16 / 9,
                     child: videoPlayerController.value.isInitialized
                         ? VideoPlayer(
-                      videoPlayerController,
-                    )
+                            videoPlayerController,
+                          )
                         : LoadingWidget(constantColors: constantColors),
                   ),
                   // child: Image.file(storyImage),
@@ -76,7 +77,10 @@ previewStoryImage({required BuildContext context,
                           videoPlayerController.dispose().then((value) {
                             Navigator.pop(context);
                             Navigator.pop(context);
-                            addStory(context: context,videoPlayerController: videoPlayerController,onCompleteCallback: onCompleteCallback);
+                            addStory(
+                                context: context,
+                                videoPlayerController: videoPlayerController,
+                                onCompleteCallback: onCompleteCallback);
                           });
                         },
                       ),
@@ -93,13 +97,14 @@ previewStoryImage({required BuildContext context,
                                 context: context,
                                 type: CoolAlertType.loading,
                                 text:
-                                "Please wait, your story is being uploaded!");
+                                    "Please wait, your story is being uploaded!");
                           });
 
-                          String videoUrl=await uploadPostVideo(context: context,video: video);
-                          onCompleteCallback(videoUrl:videoUrl);
+                          String videoUrl =
+                              await FirebaseFileUploadService.uploadPostVideo(
+                                  context: context, video: video);
+                          onCompleteCallback(videoUrl: videoUrl);
                         },
-
                       ),
                     ],
                   ),
@@ -113,7 +118,10 @@ previewStoryImage({required BuildContext context,
   );
 }
 
-addStory({required BuildContext context,required VideoPlayerController videoPlayerController,required onCompleteCallback}) {
+addStory(
+    {required BuildContext context,
+    required VideoPlayerController videoPlayerController,
+    required onCompleteCallback}) {
   late XFile? _video;
   return showModalBottomSheet(
     context: context,
@@ -153,7 +161,8 @@ addStory({required BuildContext context,required VideoPlayerController videoPlay
                             color: constantColors.whiteColor,
                           ),
                           onPressed: () async {
-                            XFile? video = await PickFilesHelper.pickVide(source: ImageSource.gallery);
+                            XFile? video = await PickFilesHelper.pickVide(
+                                source: ImageSource.gallery);
 
                             innerState(() {
                               _video = video;
@@ -162,15 +171,17 @@ addStory({required BuildContext context,required VideoPlayerController videoPlay
                             print(_video!.path);
 
                             videoPlayerController =
-                                VideoPlayerController.file(
-                                    File(_video!.path));
+                                VideoPlayerController.file(File(_video!.path));
 
                             videoPlayerController
                               ..initialize().then((value) {
                                 videoPlayerController.play();
                                 previewStoryImage(
                                     context: context,
-                                    videoPlayerController: videoPlayerController,video: _video,onCompleteCallback:onCompleteCallback);
+                                    videoPlayerController:
+                                        videoPlayerController,
+                                    video: _video,
+                                    onCompleteCallback: onCompleteCallback);
                               });
                           },
                         ),
@@ -194,7 +205,8 @@ addStory({required BuildContext context,required VideoPlayerController videoPlay
                             color: constantColors.whiteColor,
                           ),
                           onPressed: () async {
-                            XFile? video = await PickFilesHelper.pickVide(source: ImageSource.camera);
+                            XFile? video = await PickFilesHelper.pickVide(
+                                source: ImageSource.camera);
 
                             innerState(() {
                               _video = video;
@@ -203,15 +215,17 @@ addStory({required BuildContext context,required VideoPlayerController videoPlay
                             print(_video!.path);
 
                             videoPlayerController =
-                                VideoPlayerController.file(
-                                    File(_video!.path));
+                                VideoPlayerController.file(File(_video!.path));
 
                             videoPlayerController
                               ..initialize().then((value) {
                                 videoPlayerController.play();
                                 previewStoryImage(
                                     context: context,
-                                    video: _video,videoPlayerController: videoPlayerController,onCompleteCallback: onCompleteCallback);
+                                    video: _video,
+                                    videoPlayerController:
+                                        videoPlayerController,
+                                    onCompleteCallback: onCompleteCallback);
                               });
                           },
                         ),

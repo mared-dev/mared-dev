@@ -13,8 +13,8 @@ import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/screens/Stories/stories_helper.dart';
 import 'package:mared_social/screens/splitter/splitter.dart';
-import 'package:mared_social/services/FirebaseOpertaion.dart';
-import 'package:mared_social/services/authentication.dart';
+import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
+import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/utils/pick_files_helper.dart';
 import 'package:nanoid/nanoid.dart';
 import 'package:page_transition/page_transition.dart';
@@ -85,7 +85,8 @@ class StoryWidgets {
                               color: constantColors.whiteColor,
                             ),
                             onPressed: () async {
-                              XFile? video = await PickFilesHelper.pickVide(source: ImageSource.gallery);
+                              XFile? video = await PickFilesHelper.pickVide(
+                                  source: ImageSource.gallery);
 
                               innerState(() {
                                 _video = video;
@@ -126,7 +127,8 @@ class StoryWidgets {
                               color: constantColors.whiteColor,
                             ),
                             onPressed: () async {
-                              XFile? video = await PickFilesHelper.pickVide(source: ImageSource.camera);
+                              XFile? video = await PickFilesHelper.pickVide(
+                                  source: ImageSource.camera);
 
                               innerState(() {
                                 _video = video;
