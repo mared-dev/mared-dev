@@ -11,7 +11,7 @@ import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/screens/Feed/feedhelpers.dart';
 import 'package:mared_social/screens/auctionFeed/auctionProductMap.dart';
 import 'package:mared_social/screens/auctionFeed/placebidscreen.dart';
-import 'package:mared_social/services/authentication.dart';
+import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/utils/auctionoptions.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';

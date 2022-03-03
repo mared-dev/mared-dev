@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
-import 'package:mared_social/services/FirebaseOpertaion.dart';
-import 'package:mared_social/services/authentication.dart';
+import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
+import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:provider/provider.dart';
 
 class HomepageHelpers with ChangeNotifier {

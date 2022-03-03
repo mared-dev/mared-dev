@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/screens/Profile/profileHelpers.dart';
-import 'package:mared_social/services/FirebaseOpertaion.dart';
+import 'package:mared_social/screens/Profile/profile_tabs.dart';
+import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 
 import 'package:provider/provider.dart';
 
@@ -43,7 +44,9 @@ class _ProfileState extends State<Profile> {
         controller: profileController,
         children: [
           PostsProfile(constantColors: constantColors, size: size),
-          AuctionsProfile(constantColors: constantColors, size: size),
+
+          ///currently commented
+          // AuctionsProfile(constantColors: constantColors, size: size),
           AmbassadorProfile(constantColors: constantColors, size: size),
           UserSubmittedWorkProfile(constantColors: constantColors, size: size),
         ],

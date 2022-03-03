@@ -12,7 +12,7 @@ import 'package:mared_social/checkout/server_stub.dart';
 import 'package:mared_social/checkout/stripe_checkout.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/screens/promotePost/promotePostHelper.dart';
-import 'package:mared_social/services/authentication.dart';
+import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:provider/provider.dart';
 import 'package:http/http.dart' as http;
 

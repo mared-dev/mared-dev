@@ -11,20 +11,28 @@ import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
 import 'package:google_place/google_place.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/models/enums/post_type.dart';
 import 'package:mared_social/screens/splitter/splitter.dart';
-import 'package:mared_social/services/FirebaseOpertaion.dart';
-import 'package:mared_social/services/authentication.dart';
+import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
+import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:nanoid/nanoid.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:google_maps_webservice/places.dart' as google_maps_api;
+import 'package:video_player/video_player.dart';
+
+//this is the form you fill to upload a post
 
 class PostUploadScreen extends StatefulWidget {
   late List<String> imagesList;
   final List<XFile> multipleImages;
+  final PostType postType;
 
   PostUploadScreen(
-      {Key? key, required this.imagesList, required this.multipleImages})
+      {Key? key,
+      required this.imagesList,
+      required this.multipleImages,
+      this.postType = PostType.IMAGE})
       : super(key: key);
 
   @override
@@ -39,9 +47,20 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
 
   PickResult? selectedPlace;
 
+  late VideoPlayerController _videoPlayerController;
+
   @override
   void dispose() {
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    _videoPlayerController =
+        VideoPlayerController.file(File(widget.multipleImages[0].path));
+
+    _videoPlayerController.initialize();
+    super.initState();
   }
 
   TextEditingController captionController = TextEditingController();
@@ -104,19 +123,26 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
                         Container(
                           height: 200,
                           width: 300,
-                          child: CarouselSlider(
-                            options: CarouselOptions(
-                              autoPlay: true,
-                              height: MediaQuery.of(context).size.height,
-                              viewportFraction: 2.0,
-                              enlargeCenterPage: false,
-                            ),
-                            items: widget.multipleImages.map((e) {
-                              return Image.file(
-                                File(e.path),
-                              );
-                            }).toList(),
-                          ),
+                          child: widget.postType == PostType.IMAGE
+                              ? CarouselSlider(
+                                  options: CarouselOptions(
+                                    autoPlay: true,
+                                    height: MediaQuery.of(context).size.height,
+                                    viewportFraction: 2.0,
+                                    enlargeCenterPage: false,
+                                  ),
+                                  items: widget.multipleImages.map((e) {
+                                    return Image.file(
+                                      File(e.path),
+                                    );
+                                  }).toList(),
+                                )
+                              : _videoPlayerController.value.isInitialized
+                                  ? VideoPlayer(
+                                      _videoPlayerController,
+                                    )
+                                  : LoadingWidget(
+                                      constantColors: constantColors),
                         ),
                       ],
                     ),
@@ -380,9 +406,8 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
                       ),
                     ),
                     onPressed: () async {
-                      if (_selectedCategory != "" &&
-                          adrSelected == true &&
-                          _formKey.currentState!.validate()) {
+                      //let's comment address and category and make them optional for now
+                      if (_formKey.currentState!.validate()) {
                         String postId = nanoid(14).toString();
                         String name =
                             "${captionController.text} ${descriptionController.text}";

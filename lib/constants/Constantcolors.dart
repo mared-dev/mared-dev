@@ -16,6 +16,8 @@ class ConstantColors {
   final Color greyColor = Colors.grey.shade600;
 }
 
+ConstantColors constantColors=ConstantColors();
+
 class ListTileOption extends StatelessWidget {
   const ListTileOption({
     Key? key,

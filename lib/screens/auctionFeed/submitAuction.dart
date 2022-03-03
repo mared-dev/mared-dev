@@ -12,8 +12,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_place/google_place.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
-import 'package:mared_social/services/FirebaseOpertaion.dart';
-import 'package:mared_social/services/authentication.dart';
+import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
+import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:nanoid/nanoid.dart';
 import 'package:provider/provider.dart';
 

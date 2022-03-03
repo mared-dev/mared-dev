@@ -10,7 +10,7 @@ import 'package:mared_social/screens/auctionMap/auctionMapScreen.dart';
 import 'package:mared_social/screens/auctions/auctionPageHelper.dart';
 import 'package:mared_social/screens/isAnon/isAnon.dart';
 import 'package:mared_social/screens/myBids/myBids.dart';
-import 'package:mared_social/services/authentication.dart';
+import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/screens/LandingPage/landingpage.dart';
 import 'package:mared_social/screens/splitter/splitter.dart';
-import 'package:mared_social/services/authentication.dart';
+import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 

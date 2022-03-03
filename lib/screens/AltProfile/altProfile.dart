@@ -4,6 +4,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/screens/AltProfile/altProfileHelper.dart';
+import 'package:mared_social/widgets/items/profile_post_item.dart';
+import 'package:mared_social/widgets/items/show_post_details.dart';
 import 'package:provider/provider.dart';
 
 class AltProfile extends StatelessWidget {
@@ -23,7 +25,7 @@ class AltProfile extends StatelessWidget {
         slivers: [
           SliverAppBar(
             automaticallyImplyLeading: false,
-            expandedHeight: size.height * 0.53,
+            expandedHeight: size.height * 0.56,
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
                 color: constantColors.blueGreyColor,
@@ -48,6 +50,8 @@ class AltProfile extends StatelessWidget {
                                   context: context,
                                   userDocSnap: userDocSnap,
                                   userUid: userUid),
+
+                          ///stories section
                           Provider.of<AltProfileHelper>(context, listen: false)
                               .divider(),
                           Provider.of<AltProfileHelper>(context, listen: false)
@@ -85,47 +89,54 @@ class AltProfile extends StatelessWidget {
                         var userPostDocSnap = userPostSnap.data!.docs[index];
                         return InkWell(
                           onTap: () {
-                            Provider.of<AltProfileHelper>(context,
-                                    listen: false)
-                                .showPostDetail(
-                                    context: context,
-                                    documentSnapshot: userPostDocSnap);
+                            // Provider.of<AltProfileHelper>(context,
+                            //         listen: false)
+                            //     .showPostDetail(
+                            //         context: context,
+                            //         documentSnapshot: userPostDocSnap);
+                            showPostDetail(
+                              documentSnapshot: userPostDocSnap,
+                              context: context,
+                            );
                           },
                           child: Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: SizedBox(
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(5),
-                                child: Swiper(
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return CachedNetworkImage(
-                                      fit: BoxFit.cover,
-                                      imageUrl: userPostDocSnap['imageslist']
-                                          [index],
-                                      progressIndicatorBuilder:
-                                          (context, url, downloadProgress) =>
-                                              SizedBox(
-                                        height: 50,
-                                        width: 50,
-                                        child: LoadingWidget(
-                                            constantColors: constantColors),
-                                      ),
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(Icons.error),
-                                    );
-                                  },
-                                  itemCount:
-                                      (userPostDocSnap['imageslist'] as List)
-                                          .length,
-                                  itemHeight:
-                                      MediaQuery.of(context).size.height * 0.3,
-                                  itemWidth: MediaQuery.of(context).size.width,
-                                  layout: SwiperLayout.DEFAULT,
-                                ),
+                              padding: const EdgeInsets.all(2.0),
+                              child: ProfilePostItem(
+                                urls: userPostDocSnap['imageslist'],
+                              )
+                              // child: SizedBox(
+                              //   child: ClipRRect(
+                              //     borderRadius: BorderRadius.circular(5),
+                              //     child: Swiper(
+                              //       itemBuilder:
+                              //           (BuildContext context, int index) {
+                              //         return CachedNetworkImage(
+                              //           fit: BoxFit.cover,
+                              //           imageUrl: userPostDocSnap['imageslist']
+                              //               [index],
+                              //           progressIndicatorBuilder:
+                              //               (context, url, downloadProgress) =>
+                              //                   SizedBox(
+                              //             height: 50,
+                              //             width: 50,
+                              //             child: LoadingWidget(
+                              //                 constantColors: constantColors),
+                              //           ),
+                              //           errorWidget: (context, url, error) =>
+                              //               const Icon(Icons.error),
+                              //         );
+                              //       },
+                              //       itemCount:
+                              //           (userPostDocSnap['imageslist'] as List)
+                              //               .length,
+                              //       itemHeight:
+                              //           MediaQuery.of(context).size.height * 0.3,
+                              //       itemWidth: MediaQuery.of(context).size.width,
+                              //       layout: SwiperLayout.DEFAULT,
+                              //     ),
+                              //   ),
+                              // ),
                               ),
-                            ),
-                          ),
                         );
                       }
                     },

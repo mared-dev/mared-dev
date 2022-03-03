@@ -16,6 +16,7 @@ class CompaniesScreen extends StatefulWidget {
 
 class _CompaniesScreenState extends State<CompaniesScreen> {
   ConstantColors constantColors = ConstantColors();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   late File uploadVideo;
 
@@ -52,6 +53,7 @@ class _CompaniesScreenState extends State<CompaniesScreen> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
+      key: _scaffoldKey,
       backgroundColor: constantColors.blueGreyColor,
       appBar: AppBar(
         backgroundColor: constantColors.blueGreyColor,
@@ -79,7 +81,7 @@ class _CompaniesScreenState extends State<CompaniesScreen> {
               } else {
                 return ListView.builder(
                   itemCount: storeSnaps.data!.docs.length,
-                  itemBuilder: (context, index) {
+                  itemBuilder: (_, index) {
                     DocumentSnapshot storeData = storeSnaps.data!.docs[index];
                     return Padding(
                       padding: const EdgeInsets.symmetric(vertical: 5),
@@ -116,7 +118,7 @@ class _CompaniesScreenState extends State<CompaniesScreen> {
                               fit: BoxFit.cover,
                               imageUrl: storeData['userimage'],
                               progressIndicatorBuilder:
-                                  (context, url, downloadProgress) => SizedBox(
+                                  (_, url, downloadProgress) => SizedBox(
                                 height: 50,
                                 width: 50,
                                 child: LoadingWidget(

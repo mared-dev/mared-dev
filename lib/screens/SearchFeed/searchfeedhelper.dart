@@ -10,7 +10,7 @@ import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/Feed/feedhelpers.dart';
 import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/screens/splitter/splitter.dart';
-import 'package:mared_social/services/authentication.dart';
+import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/utils/postoptions.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
