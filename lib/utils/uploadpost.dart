@@ -1,20 +1,12 @@
 import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:cool_alert/cool_alert.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:google_place/google_place.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
-import 'package:mared_social/helpers/compress_image_helper.dart';
 import 'package:mared_social/models/enums/post_type.dart';
 import 'package:mared_social/screens/splitter/splitter.dart';
 import 'package:mared_social/services/firebase/firebase_file_upload_service.dart';
-import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
-import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/utils/pick_files_helper.dart';
 import 'package:mared_social/utils/productUploadCameraScreen.dart';
 import 'package:mared_social/utils/productUploadScreen.dart';
@@ -418,24 +410,4 @@ class UploadPost with ChangeNotifier {
       },
     );
   }
-
-  // Future uploadPostCameraImageToFirebase() async {
-  //   Reference imageReference = FirebaseStorage.instance
-  //       .ref()
-  //       .child('posts/${uploadPostImage.path}/${TimeOfDay.now()}');
-  //
-  //   ///compressing step
-  //   File compressedImage = await CompressImageHelper.compressImageAndGetFile(
-  //       File(uploadPostImage.path));
-  //
-  //   imagePostUploadTask = imageReference.putFile(compressedImage);
-  //   await imagePostUploadTask.whenComplete(() {
-  //     print("Post image uploaded to storage");
-  //   });
-  //   await imageReference.getDownloadURL().then((imageUrl) {
-  //     uploadPostImageUrl = imageUrl;
-  //     print(uploadPostImageUrl);
-  //   });
-  //   notifyListeners();
-  // }
 }
