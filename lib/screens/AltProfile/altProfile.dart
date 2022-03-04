@@ -103,40 +103,7 @@ class AltProfile extends StatelessWidget {
                               padding: const EdgeInsets.all(2.0),
                               child: ProfilePostItem(
                                 urls: userPostDocSnap['imageslist'],
-                              )
-                              // child: SizedBox(
-                              //   child: ClipRRect(
-                              //     borderRadius: BorderRadius.circular(5),
-                              //     child: Swiper(
-                              //       itemBuilder:
-                              //           (BuildContext context, int index) {
-                              //         return CachedNetworkImage(
-                              //           fit: BoxFit.cover,
-                              //           imageUrl: userPostDocSnap['imageslist']
-                              //               [index],
-                              //           progressIndicatorBuilder:
-                              //               (context, url, downloadProgress) =>
-                              //                   SizedBox(
-                              //             height: 50,
-                              //             width: 50,
-                              //             child: LoadingWidget(
-                              //                 constantColors: constantColors),
-                              //           ),
-                              //           errorWidget: (context, url, error) =>
-                              //               const Icon(Icons.error),
-                              //         );
-                              //       },
-                              //       itemCount:
-                              //           (userPostDocSnap['imageslist'] as List)
-                              //               .length,
-                              //       itemHeight:
-                              //           MediaQuery.of(context).size.height * 0.3,
-                              //       itemWidth: MediaQuery.of(context).size.width,
-                              //       layout: SwiperLayout.DEFAULT,
-                              //     ),
-                              //   ),
-                              // ),
-                              ),
+                              )),
                         );
                       }
                     },

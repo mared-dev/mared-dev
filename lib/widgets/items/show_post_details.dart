@@ -284,6 +284,8 @@ class _PostDetailsState extends State<PostDetails> {
                         ),
                       ),
                       const Spacer(),
+
+                      ///change here if you want the posts to be deleted by anyone
                       Provider.of<Authentication>(context, listen: false)
                                   .getUserId ==
                               widget.documentSnapshot['useruid']
