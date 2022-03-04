@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:mared_social/screens/mapscreen/mapscreenhelper.dart';
+import 'package:mared_social/widgets/items/show_post_details.dart';
 import 'package:provider/provider.dart';
 
 class MapScreen extends StatefulWidget {
@@ -24,8 +24,7 @@ class _MapScreenState extends State<MapScreen> {
       infoWindow: InfoWindow(
         title: specify['caption'],
         onTap: () {
-          Provider.of<MapScreenHelper>(context, listen: false)
-              .showDetails(context: context, documentSnapshot: specify);
+          showPostDetail(context: context, documentSnapshot: specify);
         },
         snippet: specify['description'],
       ),

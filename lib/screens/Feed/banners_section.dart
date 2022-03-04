@@ -6,6 +6,7 @@ import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/AltProfile/altProfileHelper.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
+import 'package:mared_social/widgets/items/show_post_details.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -78,11 +79,9 @@ class _BannersSectionState extends State<BannersSection> {
                                           ['postid'])
                                       .get()
                                       .then((value) {
-                                    Provider.of<AltProfileHelper>(context,
-                                            listen: false)
-                                        .showPostDetail(
-                                            context: context,
-                                            documentSnapshot: value);
+                                    showPostDetail(
+                                        context: context,
+                                        documentSnapshot: value);
                                   });
                                 },
                                 child: Container(

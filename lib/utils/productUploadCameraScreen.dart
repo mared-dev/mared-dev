@@ -384,6 +384,7 @@ class _PostUploadCameraScreenState extends State<PostUploadCameraScreen> {
                         Provider.of<FirebaseOperations>(context, listen: false)
                             .uploadPostData(postId, {
                           'postid': postId,
+                          'likes': [],
                           'searchindex': indexList,
                           'postcategory': _selectedCategory,
                           'caption': captionController.text,
@@ -416,6 +417,7 @@ class _PostUploadCameraScreenState extends State<PostUploadCameraScreen> {
                               .doc(postId)
                               .set({
                             'postid': postId,
+                            'likes': [],
                             'searchindex': indexList,
                             'postcategory': _selectedCategory,
                             'caption': captionController.text,

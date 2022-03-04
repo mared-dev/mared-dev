@@ -10,6 +10,7 @@ import 'package:mared_social/screens/Feed/feedhelpers.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/utils/postoptions.dart';
 import 'package:mared_social/widgets/items/video_post_item.dart';
+import 'package:mared_social/widgets/reusable/post_likes_part.dart';
 import 'package:provider/provider.dart';
 
 showPostDetail(
@@ -141,50 +142,10 @@ class _PostDetailsState extends State<PostDetails> {
                                   context: context,
                                   postId: widget.documentSnapshot['postid']);
                         },
-                        child: StreamBuilder<QuerySnapshot>(
-                            stream: FirebaseFirestore.instance
-                                .collection("posts")
-                                .doc(widget.documentSnapshot['postid'])
-                                .collection('likes')
-                                .snapshots(),
-                            builder: (context, likeSnap) {
-                              return SizedBox(
-                                width: 60,
-                                height: 50,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 8.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Icon(
-                                        likeSnap.data!.docs.any((element) =>
-                                                element.id ==
-                                                Provider.of<Authentication>(
-                                                        context,
-                                                        listen: false)
-                                                    .getUserId)
-                                            ? EvaIcons.heart
-                                            : EvaIcons.heartOutline,
-                                        color: constantColors.redColor,
-                                        size: 18,
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 8.0),
-                                        child: Text(
-                                          likeSnap.data!.docs.length.toString(),
-                                          style: TextStyle(
-                                            color: constantColors.whiteColor,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            }),
+                        child: PostLikesPart(
+                          postId: widget.documentSnapshot['postid'],
+                          likes: widget.documentSnapshot['likes'],
+                        ),
                       ),
                       InkWell(
                         onTap: () {
@@ -227,56 +188,6 @@ class _PostDetailsState extends State<PostDetails> {
                                       ),
                                     );
                                   },
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Provider.of<PostFunctions>(context, listen: false)
-                              .showRewards(
-                                  context: context,
-                                  postId: widget.documentSnapshot['postid']);
-                        },
-                        child: SizedBox(
-                          width: 60,
-                          height: 50,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Icon(
-                                  FontAwesomeIcons.award,
-                                  color: constantColors.yellowColor,
-                                  size: 16,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8.0),
-                                  child: StreamBuilder<QuerySnapshot>(
-                                    stream: FirebaseFirestore.instance
-                                        .collection("posts")
-                                        .doc(widget.documentSnapshot['postid'])
-                                        .collection('awards')
-                                        .snapshots(),
-                                    builder: (context, awardSnap) {
-                                      return Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 8.0),
-                                        child: Text(
-                                          awardSnap.data!.docs.length
-                                              .toString(),
-                                          style: TextStyle(
-                                            color: constantColors.whiteColor,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
                                 ),
                               ],
                             ),

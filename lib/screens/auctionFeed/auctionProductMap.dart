@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
-import 'package:mared_social/screens/mapscreen/mapscreenhelper.dart';
 import 'package:provider/provider.dart';
 
 class AuctionProductMapScreen extends StatefulWidget {

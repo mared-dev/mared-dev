@@ -269,40 +269,45 @@ class PostFunctions with ChangeNotifier {
     required String subDocId,
     required String userUid,
   }) async {
-    return FirebaseFirestore.instance
-        .collection('posts')
-        .doc(postID)
-        .collection('likes')
-        .doc(subDocId)
-        .set({
-      'likes': FieldValue.increment(1),
-      'username': Provider.of<FirebaseOperations>(context, listen: false)
-          .getInitUserName,
-      'useruid': Provider.of<Authentication>(context, listen: false).getUserId,
-      'userimage': Provider.of<FirebaseOperations>(context, listen: false)
-          .getInitUserImage,
-      'useremail': Provider.of<FirebaseOperations>(context, listen: false)
-          .getInitUserEmail,
-      'time': Timestamp.now(),
+    var post =
+        await FirebaseFirestore.instance.collection('posts').doc(postID).get();
+
+    return FirebaseFirestore.instance.collection('posts').doc(postID).update({
+      'likes': [
+        ...post.data()!['likes'],
+        {
+          'username': Provider.of<FirebaseOperations>(context, listen: false)
+              .getInitUserName,
+          'useruid':
+              Provider.of<Authentication>(context, listen: false).getUserId,
+          'userimage': Provider.of<FirebaseOperations>(context, listen: false)
+              .getInitUserImage,
+          'useremail': Provider.of<FirebaseOperations>(context, listen: false)
+              .getInitUserEmail,
+          'time': Timestamp.now(),
+        }
+      ]
     }).whenComplete(() async {
       await FirebaseFirestore.instance
           .collection("users")
           .doc(userUid)
           .collection('posts')
           .doc(postID)
-          .collection('likes')
-          .doc(subDocId)
-          .set({
-        'likes': FieldValue.increment(1),
-        'username': Provider.of<FirebaseOperations>(context, listen: false)
-            .getInitUserName,
-        'useruid':
-            Provider.of<Authentication>(context, listen: false).getUserId,
-        'userimage': Provider.of<FirebaseOperations>(context, listen: false)
-            .getInitUserImage,
-        'useremail': Provider.of<FirebaseOperations>(context, listen: false)
-            .getInitUserEmail,
-        'time': Timestamp.now(),
+          .update({
+        'likes': [
+          ...post.data()!['likes'],
+          {
+            'username': Provider.of<FirebaseOperations>(context, listen: false)
+                .getInitUserName,
+            'useruid':
+                Provider.of<Authentication>(context, listen: false).getUserId,
+            'userimage': Provider.of<FirebaseOperations>(context, listen: false)
+                .getInitUserImage,
+            'useremail': Provider.of<FirebaseOperations>(context, listen: false)
+                .getInitUserEmail,
+            'time': Timestamp.now(),
+          }
+        ]
       }).whenComplete(() async {
         await FirebaseFirestore.instance
             .collection("users")
