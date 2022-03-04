@@ -78,9 +78,9 @@ class _PostsSectionState extends State<PostsSection> {
                           ),
                         ),
                         _postHeader(
-                          userName: documentSnapshot['username'],
-                          address: documentSnapshot['address'],
-                        )
+                            userName: documentSnapshot['username'],
+                            address: documentSnapshot['address'],
+                            userId: documentSnapshot['useruid'])
                       ],
                     ),
                   ),
@@ -396,10 +396,8 @@ class _PostsSectionState extends State<PostsSection> {
     );
   }
 
-  Widget _postHeader({
-    required String userName,
-    required String address,
-  }) {
+  Widget _postHeader(
+      {required String userName, required String address, required userId}) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0),
       child: SizedBox(
@@ -408,14 +406,29 @@ class _PostsSectionState extends State<PostsSection> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(
-              child: RichText(
-                text: TextSpan(
-                  text: userName,
-                  style: TextStyle(
-                    color: constantColors.blueColor,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
+            GestureDetector(
+              onTap: () {
+                if (userId !=
+                    Provider.of<Authentication>(context, listen: false)
+                        .getUserId) {
+                  Navigator.push(
+                      context,
+                      PageTransition(
+                          child: AltProfile(
+                            userUid: userId,
+                          ),
+                          type: PageTransitionType.bottomToTop));
+                }
+              },
+              child: SizedBox(
+                child: RichText(
+                  text: TextSpan(
+                    text: userName,
+                    style: TextStyle(
+                      color: constantColors.blueColor,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ),
