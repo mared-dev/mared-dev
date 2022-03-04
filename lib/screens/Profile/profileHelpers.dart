@@ -609,10 +609,11 @@ class ProfileHelpers with ChangeNotifier {
         Provider.of<Authentication>(context, listen: false)
             .logOutViaEmail()
             .whenComplete(() {
-          Navigator.pushReplacement(
+          Navigator.pushAndRemoveUntil(
             context,
             PageTransition(
                 child: LandingPage(), type: PageTransitionType.topToBottom),
+            (Route<dynamic> route) => false,
           );
         });
       },

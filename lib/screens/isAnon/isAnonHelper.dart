@@ -73,7 +73,7 @@ class IsAnonHelper with ChangeNotifier {
           await Provider.of<Authentication>(context, listen: false)
               .logOutViaEmail()
               .whenComplete(() {
-            Navigator.pushReplacement(
+            Navigator.push(
                 context,
                 PageTransition(
                     child: LandingPage(),

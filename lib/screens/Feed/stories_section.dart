@@ -1,9 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
-import 'package:mared_social/screens/Stories/stories.dart';
-import 'package:page_transition/page_transition.dart';
+import 'package:mared_social/widgets/items/feed_story_item.dart';
 
 class StoriesSection extends StatefulWidget {
   @override
@@ -77,52 +75,9 @@ class _StoriesSectionState extends State<StoriesSection> {
                     itemCount: storiesSnaps.data!.docs.length,
                     scrollDirection: Axis.horizontal,
                     itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            PageTransition(
-                                child: Stories(
-                                  querySnapshot: storiesSnaps,
-                                  snapIndex: index,
-                                ),
-                                type: PageTransitionType.bottomToTop),
-                          );
-                        },
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Stack(
-                            children: [
-                              Container(
-                                height: 80,
-                                width: 80,
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  color: constantColors.blueColor,
-                                  borderRadius: BorderRadius.circular(20),
-                                ),
-                                child: SizedBox(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(20),
-                                    child: CachedNetworkImage(
-                                      fit: BoxFit.cover,
-                                      imageUrl: storiesSnaps.data!.docs[index]
-                                          ['userimage'],
-                                      progressIndicatorBuilder: (context, url,
-                                              downloadProgress) =>
-                                          LoadingWidget(
-                                              constantColors: constantColors),
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(Icons.error),
-                                    ),
-                                  ),
-                                  height: 80,
-                                  width: 80,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                      return FeedStoryItem(
+                        index: index,
+                        storiesSnaps: storiesSnaps,
                       );
                     },
                   );

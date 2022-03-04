@@ -34,7 +34,7 @@ class _PostsSectionState extends State<PostsSection> {
         return Padding(
             padding: const EdgeInsets.all(4),
             child: SizedBox(
-              height: MediaQuery.of(context).size.height * 0.75,
+              height: MediaQuery.of(context).size.height * 0.68,
               width: MediaQuery.of(context).size.width,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,

@@ -12,6 +12,7 @@ import 'package:mared_social/screens/LandingPage/landingUtils.dart';
 import 'package:mared_social/screens/splitter/splitter.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
+import 'package:mared_social/widgets/items/login_icon.dart';
 import 'package:nanoid/nanoid.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -93,62 +94,7 @@ class LandingHelpers with ChangeNotifier {
                   LoginIcon(
                     icon: EvaIcons.google,
                     color: constantColors.greenColor,
-                    onTap: () async {
-                      try {
-                        await Provider.of<Authentication>(context,
-                                listen: false)
-                            .signInWithgoogle();
-
-                        String name =
-                            "${Provider.of<Authentication>(context, listen: false).getgoogleUsername} ";
-
-                        List<String> splitList = name.split(" ");
-                        List<String> indexList = [];
-
-                        for (int i = 0; i < splitList.length; i++) {
-                          for (int j = 0; j < splitList[i].length; j++) {
-                            indexList.add(
-                                splitList[i].substring(0, j + 1).toLowerCase());
-                          }
-                        }
-
-                        await Provider.of<FirebaseOperations>(context,
-                                listen: false)
-                            .createUserCollection(context, {
-                          'usercontactnumber': Provider.of<Authentication>(
-                                  context,
-                                  listen: false)
-                              .getgooglePhoneNo,
-                          'usersearchindex': indexList,
-                          'store': false,
-                          'useruid': Provider.of<Authentication>(context,
-                                  listen: false)
-                              .getUserId,
-                          'useremail': Provider.of<Authentication>(context,
-                                  listen: false)
-                              .getgoogleUseremail,
-                          'username': Provider.of<Authentication>(context,
-                                  listen: false)
-                              .getgoogleUsername,
-                          'userimage': Provider.of<Authentication>(context,
-                                  listen: false)
-                              .getgoogleUserImage,
-                        });
-
-                        Navigator.pushReplacement(
-                            context,
-                            PageTransition(
-                                child: SplitPages(),
-                                type: PageTransitionType.rightToLeft));
-                      } catch (e) {
-                        CoolAlert.show(
-                          context: context,
-                          type: CoolAlertType.error,
-                          title: "Sign In Failed",
-                          text: e.toString(),
-                        );
-                      }
-                    },
+                    onTap: () => _loginWithGoogle(context),
                   ),
                   // LoginIcon(
                   //   icon: EvaIcons.facebook,
@@ -156,61 +102,7 @@ class LandingHelpers with ChangeNotifier {
                   // ),
                   LoginIcon(
                       icon: FontAwesomeIcons.apple,
-                      onTap: () async {
-                        try {
-                          await Provider.of<Authentication>(context,
-                                  listen: false)
-                              .signInWithApple(context)
-                              .whenComplete(() async {
-                            String name =
-                                "${Provider.of<Authentication>(context, listen: false).getappleUsername} ";
-
-                            List<String> splitList = name.split(" ");
-                            List<String> indexList = [];
-
-                            for (int i = 0; i < splitList.length; i++) {
-                              for (int j = 0; j < splitList[i].length; j++) {
-                                indexList.add(splitList[i]
-                                    .substring(0, j + 1)
-                                    .toLowerCase());
-                              }
-                            }
-
-                            await Provider.of<FirebaseOperations>(context,
-                                    listen: false)
-                                .createUserCollection(context, {
-                              'usercontactnumber': "No Number",
-                              'store': false,
-                              'useruid': Provider.of<Authentication>(context,
-                                      listen: false)
-                                  .getUserId,
-                              'usersearchindex': indexList,
-                              'useremail': Provider.of<Authentication>(context,
-                                      listen: false)
-                                  .getappleUseremail,
-                              'username': Provider.of<Authentication>(context,
-                                      listen: false)
-                                  .getappleUsername,
-                              'userimage': Provider.of<Authentication>(context,
-                                      listen: false)
-                                  .getappleUserImage,
-                            });
-
-                            Navigator.pushReplacement(
-                                context,
-                                PageTransition(
-                                    child: SplitPages(),
-                                    type: PageTransitionType.rightToLeft));
-                          });
-                        } catch (e) {
-                          CoolAlert.show(
-                            context: context,
-                            type: CoolAlertType.error,
-                            title: "Sign In Failed",
-                            text: e.toString(),
-                          );
-                        }
-                      },
+                      onTap: () => _loginWithEmail(context),
                       color: constantColors.whiteColor)
                 ],
               ),
@@ -293,6 +185,100 @@ class LandingHelpers with ChangeNotifier {
               ),
             ),
     );
+  }
+
+  _loginWithEmail(context) async {
+    try {
+      await Provider.of<Authentication>(context, listen: false)
+          .signInWithApple(context)
+          .whenComplete(() async {
+        String name =
+            "${Provider.of<Authentication>(context, listen: false).getappleUsername} ";
+
+        List<String> splitList = name.split(" ");
+        List<String> indexList = [];
+
+        for (int i = 0; i < splitList.length; i++) {
+          for (int j = 0; j < splitList[i].length; j++) {
+            indexList.add(splitList[i].substring(0, j + 1).toLowerCase());
+          }
+        }
+
+        await Provider.of<FirebaseOperations>(context, listen: false)
+            .createUserCollection(context, {
+          'usercontactnumber': "No Number",
+          'store': false,
+          'useruid':
+              Provider.of<Authentication>(context, listen: false).getUserId,
+          'usersearchindex': indexList,
+          'useremail': Provider.of<Authentication>(context, listen: false)
+              .getappleUseremail,
+          'username': Provider.of<Authentication>(context, listen: false)
+              .getappleUsername,
+          'userimage': Provider.of<Authentication>(context, listen: false)
+              .getappleUserImage,
+        });
+
+        Navigator.pushReplacement(
+            context,
+            PageTransition(
+                child: SplitPages(), type: PageTransitionType.rightToLeft));
+      });
+    } catch (e) {
+      CoolAlert.show(
+        context: context,
+        type: CoolAlertType.error,
+        title: "Sign In Failed",
+        text: e.toString(),
+      );
+    }
+  }
+
+  _loginWithGoogle(BuildContext context) async {
+    try {
+      await Provider.of<Authentication>(context, listen: false)
+          .signInWithgoogle();
+
+      String name =
+          "${Provider.of<Authentication>(context, listen: false).getgoogleUsername} ";
+
+      List<String> splitList = name.split(" ");
+      List<String> indexList = [];
+
+      for (int i = 0; i < splitList.length; i++) {
+        for (int j = 0; j < splitList[i].length; j++) {
+          indexList.add(splitList[i].substring(0, j + 1).toLowerCase());
+        }
+      }
+
+      await Provider.of<FirebaseOperations>(context, listen: false)
+          .createUserCollection(context, {
+        'usercontactnumber': Provider.of<Authentication>(context, listen: false)
+            .getgooglePhoneNo,
+        'usersearchindex': indexList,
+        'store': false,
+        'useruid':
+            Provider.of<Authentication>(context, listen: false).getUserId,
+        'useremail': Provider.of<Authentication>(context, listen: false)
+            .getgoogleUseremail,
+        'username': Provider.of<Authentication>(context, listen: false)
+            .getgoogleUsername,
+        'userimage': Provider.of<Authentication>(context, listen: false)
+            .getgoogleUserImage,
+      });
+
+      Navigator.pushReplacement(
+          context,
+          PageTransition(
+              child: SplitPages(), type: PageTransitionType.rightToLeft));
+    } catch (e) {
+      CoolAlert.show(
+        context: context,
+        type: CoolAlertType.error,
+        title: "Sign In Failed",
+        text: e.toString(),
+      );
+    }
   }
 
   Widget exploreApp(BuildContext context) {
@@ -468,37 +454,6 @@ class LandingHelpers with ChangeNotifier {
           ),
         );
       },
-    );
-  }
-}
-
-class LoginIcon extends StatelessWidget {
-  const LoginIcon({
-    Key? key,
-    required this.color,
-    required this.icon,
-    this.onTap,
-  }) : super(key: key);
-
-  final Color color;
-  final IconData icon;
-  final Function()? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        child: Icon(icon, color: color),
-        width: 80,
-        height: 40,
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: color,
-          ),
-          borderRadius: BorderRadius.circular(10),
-        ),
-      ),
     );
   }
 }

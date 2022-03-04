@@ -77,6 +77,8 @@ class FeedHelpers with ChangeNotifier {
   }
 
   Widget feedBody(BuildContext context) {
+    ///START HERE
+    ///there is something wrong with the rebuilds
     return NestedScrollView(
       headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
         return <Widget>[
@@ -86,7 +88,8 @@ class FeedHelpers with ChangeNotifier {
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
                 color: constantColors.blueGreyColor,
-                child: Column(
+                child: ListView(
+                  physics: const NeverScrollableScrollPhysics(),
                   children: [
                     InkWell(
                       onTap: () => Navigator.push(
