@@ -426,6 +426,8 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
                             .uploadPostData(postId, {
                           'postid': postId,
                           'searchindex': indexList,
+                          'likes': [],
+                          'comments': [],
                           'postcategory': _selectedCategory,
                           'caption': captionController.text,
                           'username': Provider.of<FirebaseOperations>(context,
