@@ -385,6 +385,7 @@ class _PostUploadCameraScreenState extends State<PostUploadCameraScreen> {
                             .uploadPostData(postId, {
                           'postid': postId,
                           'likes': [],
+                          'comments': [],
                           'searchindex': indexList,
                           'postcategory': _selectedCategory,
                           'caption': captionController.text,
@@ -418,6 +419,7 @@ class _PostUploadCameraScreenState extends State<PostUploadCameraScreen> {
                               .set({
                             'postid': postId,
                             'likes': [],
+                            'comments': [],
                             'searchindex': indexList,
                             'postcategory': _selectedCategory,
                             'caption': captionController.text,

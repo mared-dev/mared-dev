@@ -483,14 +483,14 @@ class AmbassadorProfile extends StatelessWidget {
       ),
       body: SingleChildScrollView(
         ///no need for realtime data for now
-        child: FutureBuilder<QuerySnapshot>(
-          future: FirebaseFirestore.instance
+        child: StreamBuilder<QuerySnapshot>(
+          stream: FirebaseFirestore.instance
               .collection("users")
               .doc(
                   Provider.of<Authentication>(context, listen: false).getUserId)
               .collection("ambassadorWork")
               .orderBy("time", descending: true)
-              .get(),
+              .snapshots(),
           builder: (context, userWorkSnap) {
             return Padding(
               padding: const EdgeInsets.all(8.0),

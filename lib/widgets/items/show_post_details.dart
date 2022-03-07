@@ -9,7 +9,9 @@ import 'package:mared_social/helpers/post_helpers.dart';
 import 'package:mared_social/screens/Feed/feedhelpers.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/utils/postoptions.dart';
+import 'package:mared_social/widgets/bottom_sheets/show_comments_section.dart';
 import 'package:mared_social/widgets/items/video_post_item.dart';
+import 'package:mared_social/widgets/reusable/post_comments_part.dart';
 import 'package:mared_social/widgets/reusable/post_likes_part.dart';
 import 'package:provider/provider.dart';
 
@@ -148,52 +150,15 @@ class _PostDetailsState extends State<PostDetails> {
                         ),
                       ),
                       InkWell(
-                        onTap: () {
-                          Provider.of<PostFunctions>(context, listen: false)
-                              .showCommentsSheet(
-                                  snapshot: widget.documentSnapshot,
-                                  context: context,
-                                  postId: widget.documentSnapshot['postid']);
-                        },
-                        child: SizedBox(
-                          width: 60,
-                          height: 50,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Icon(
-                                  FontAwesomeIcons.comment,
-                                  color: constantColors.blueColor,
-                                  size: 16,
-                                ),
-                                StreamBuilder<QuerySnapshot>(
-                                  stream: FirebaseFirestore.instance
-                                      .collection("posts")
-                                      .doc(widget.documentSnapshot['postid'])
-                                      .collection('comments')
-                                      .snapshots(),
-                                  builder: (context, commentSnap) {
-                                    return Padding(
-                                      padding: const EdgeInsets.only(left: 8.0),
-                                      child: Text(
-                                        commentSnap.data!.docs.length
-                                            .toString(),
-                                        style: TextStyle(
-                                          color: constantColors.whiteColor,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
+                          onTap: () {
+                            showCommentsSheet(
+                                snapshot: widget.documentSnapshot,
+                                context: context,
+                                postId: widget.documentSnapshot['postid']);
+                          },
+                          child: PostCommentsPart(
+                            documentSnapshot: widget.documentSnapshot,
+                          )),
                       const Spacer(),
 
                       ///change here if you want the posts to be deleted by anyone

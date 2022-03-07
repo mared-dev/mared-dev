@@ -12,8 +12,10 @@ import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/isAnon/isAnon.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/utils/postoptions.dart';
+import 'package:mared_social/widgets/bottom_sheets/show_comments_section.dart';
 import 'package:mared_social/widgets/items/video_post_item.dart';
 import 'package:mared_social/widgets/reusable/paginate_firestore_edited.dart';
+import 'package:mared_social/widgets/reusable/post_comments_part.dart';
 import 'package:mared_social/widgets/reusable/post_item_image.dart';
 import 'package:mared_social/widgets/reusable/post_likes_part.dart';
 import 'package:page_transition/page_transition.dart';
@@ -149,6 +151,9 @@ class _FeedPostItemState extends State<FeedPostItem> {
   Widget _postFooter({
     required documentSnapshot,
   }) {
+    print('******************');
+    print(documentSnapshot['postid']);
+
     return Padding(
       padding: const EdgeInsets.only(top: 0.0),
       child: Padding(
@@ -160,52 +165,7 @@ class _FeedPostItemState extends State<FeedPostItem> {
               postId: documentSnapshot['postid'],
               likes: documentSnapshot['likes'],
             ),
-            InkWell(
-              onTap: () {
-                Provider.of<PostFunctions>(context, listen: false)
-                    .showCommentsSheet(
-                        snapshot: documentSnapshot,
-                        context: context,
-                        postId: documentSnapshot['postid']);
-              },
-              child: SizedBox(
-                width: 60,
-                height: 50,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 8.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Icon(
-                        FontAwesomeIcons.comment,
-                        color: constantColors.blueColor,
-                        size: 16,
-                      ),
-                      StreamBuilder<QuerySnapshot>(
-                        stream: FirebaseFirestore.instance
-                            .collection("posts")
-                            .doc(documentSnapshot['postid'])
-                            .collection('comments')
-                            .snapshots(),
-                        builder: (context, commentSnap) {
-                          return Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Text(
-                              commentSnap.data!.docs.length.toString(),
-                              style: TextStyle(
-                                color: constantColors.whiteColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            PostCommentsPart(documentSnapshot: documentSnapshot),
             const Spacer(),
             Provider.of<Authentication>(context, listen: false).getUserId ==
                     documentSnapshot['useruid']
