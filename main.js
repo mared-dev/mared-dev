@@ -75,6 +75,6 @@ app.get("/asset", async (req, res) => {
   }
 });
 
-app.listen(port, () => {
+app.listen(process.env.PORT || 5000, () => {
   console.log(`Mux API listening on port ${port}`);
 });
