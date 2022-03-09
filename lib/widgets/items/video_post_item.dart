@@ -13,16 +13,13 @@ class VideoPostItem extends StatefulWidget {
 }
 
 class _VideoPostItemState extends State<VideoPostItem> {
-
   late ChewieController _chewieController;
   late VideoPlayerController _videoPlayerController;
   @override
   void initState() {
     super.initState();
 
-    _videoPlayerController=VideoPlayerController.network(
-        widget.videoUrl
-    );
+    _videoPlayerController = VideoPlayerController.network(widget.videoUrl);
 
     _chewieController = ChewieController(
       videoPlayerController: _videoPlayerController,
@@ -41,10 +38,10 @@ class _VideoPostItemState extends State<VideoPostItem> {
     );
   }
 
-
-
   @override
   Widget build(BuildContext context) {
+    print('!!!!!!!!!!!!');
+    print(widget.videoUrl);
     return Chewie(
       controller: _chewieController,
     );

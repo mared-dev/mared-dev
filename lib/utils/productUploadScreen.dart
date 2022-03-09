@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
+import 'package:dio/dio.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,11 +11,13 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
 import 'package:google_place/google_place.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:mared_social/config.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/models/enums/post_type.dart';
 import 'package:mared_social/screens/splitter/splitter.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
+import 'package:mared_social/services/mux/mux_video_stream.dart';
 import 'package:nanoid/nanoid.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -407,50 +410,69 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
                     ),
                     onPressed: () async {
                       //let's comment address and category and make them optional for now
+
                       if (_formKey.currentState!.validate()) {
-                        String postId = nanoid(14).toString();
-                        String name =
-                            "${captionController.text} ${descriptionController.text}";
+                        try {
+                          String postId = nanoid(14).toString();
+                          String name =
+                              "${captionController.text} ${descriptionController.text}";
 
-                        List<String> splitList = name.split(" ");
-                        List<String> indexList = [];
+                          List<String> splitList = name.split(" ");
+                          List<String> indexList = [];
 
-                        for (int i = 0; i < splitList.length; i++) {
-                          for (int j = 0; j < splitList[i].length; j++) {
-                            indexList.add(
-                                splitList[i].substring(0, j + 1).toLowerCase());
+                          for (int i = 0; i < splitList.length; i++) {
+                            for (int j = 0; j < splitList[i].length; j++) {
+                              indexList.add(splitList[i]
+                                  .substring(0, j + 1)
+                                  .toLowerCase());
+                            }
                           }
-                        }
 
-                        Provider.of<FirebaseOperations>(context, listen: false)
-                            .uploadPostData(postId, {
-                          'postid': postId,
-                          'searchindex': indexList,
-                          'likes': [],
-                          'comments': [],
-                          'postcategory': _selectedCategory,
-                          'caption': captionController.text,
-                          'username': Provider.of<FirebaseOperations>(context,
+                          String videoStreamUrl = "";
+                          if (widget.postType == PostType.VIDEO) {
+                            videoStreamUrl =
+                                await uploadVideoToMux(widget.imagesList[0]);
+                          }
+
+                          if (widget.postType == PostType.VIDEO &&
+                              videoStreamUrl.isEmpty) {
+                            throw Exception();
+                          }
+
+                          await Provider.of<FirebaseOperations>(context,
                                   listen: false)
-                              .getInitUserName,
-                          'userimage': Provider.of<FirebaseOperations>(context,
-                                  listen: false)
-                              .getInitUserImage,
-                          'useruid': Provider.of<Authentication>(context,
-                                  listen: false)
-                              .getUserId,
-                          'time': Timestamp.now(),
-                          'useremail': Provider.of<FirebaseOperations>(context,
-                                  listen: false)
-                              .getInitUserEmail,
-                          'description': descriptionController.text,
-                          'imageslist': widget.imagesList,
-                          'address': address,
-                          'lat': lat,
-                          'lng': lng,
-                        }).whenComplete(() async {
-                          // Add data under user profile
-                          return FirebaseFirestore.instance
+                              .uploadPostData(postId, {
+                            'postid': postId,
+                            'searchindex': indexList,
+                            'likes': [],
+                            'comments': [],
+                            'postcategory': _selectedCategory,
+                            'caption': captionController.text,
+                            'username': Provider.of<FirebaseOperations>(context,
+                                    listen: false)
+                                .getInitUserName,
+                            'userimage': Provider.of<FirebaseOperations>(
+                                    context,
+                                    listen: false)
+                                .getInitUserImage,
+                            'useruid': Provider.of<Authentication>(context,
+                                    listen: false)
+                                .getUserId,
+                            'time': Timestamp.now(),
+                            'useremail': Provider.of<FirebaseOperations>(
+                                    context,
+                                    listen: false)
+                                .getInitUserEmail,
+                            'description': descriptionController.text,
+                            'imageslist': (widget.postType == PostType.VIDEO)
+                                ? [videoStreamUrl]
+                                : widget.imagesList,
+                            'address': address,
+                            'lat': lat,
+                            'lng': lng,
+                          });
+
+                          FirebaseFirestore.instance
                               .collection("users")
                               .doc(Provider.of<Authentication>(context,
                                       listen: false)
@@ -459,6 +481,8 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
                               .doc(postId)
                               .set({
                             'postid': postId,
+                            'likes': [],
+                            'comments': [],
                             'searchindex': indexList,
                             'postcategory': _selectedCategory,
                             'caption': captionController.text,
@@ -478,12 +502,14 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
                                     listen: false)
                                 .getInitUserEmail,
                             'description': descriptionController.text,
-                            'imageslist': widget.imagesList,
+                            'imageslist': (widget.postType == PostType.VIDEO)
+                                ? [videoStreamUrl]
+                                : widget.imagesList,
                             'address': address,
                             'lat': lat,
                             'lng': lng,
                           });
-                        }).whenComplete(() {
+
                           setState(() {
                             widget.imagesList.clear();
                             widget.multipleImages.clear();
@@ -493,7 +519,16 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
                               PageTransition(
                                   child: SplitPages(),
                                   type: PageTransitionType.bottomToTop));
-                        });
+                        } catch (e) {
+                          print('@@@@@@@@@@@@@@error@@@@@@@@@@@@@@@@@@@');
+                          print(e);
+                          CoolAlert.show(
+                            context: context,
+                            type: CoolAlertType.error,
+                            title: "Error",
+                            text: "Please Check all fields",
+                          );
+                        }
                       } else {
                         CoolAlert.show(
                           context: context,

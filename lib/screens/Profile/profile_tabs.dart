@@ -158,6 +158,9 @@ class PostsProfile extends StatelessWidget {
                     (BuildContext context, int index) {
                       if (index.toInt() < userPostSnap.data!.docs.length) {
                         var userPostDocSnap = userPostSnap.data!.docs[index];
+                        // print('############');
+                        // print(userPostSnap.data!.docs.toString());
+                        // print(userPostDocSnap['imageslist']);
                         return InkWell(
                             onTap: () {
                               showPostDetail(

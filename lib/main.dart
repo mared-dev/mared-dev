@@ -38,38 +38,10 @@ import 'package:mared_social/utils/postoptions.dart';
 import 'package:mared_social/utils/uploadpost.dart';
 import 'package:provider/provider.dart';
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print("Handling a background message: ${message.messageId}");
-}
+import 'config.dart';
 
 void main() async {
-  SystemChrome.setEnabledSystemUIOverlays([]);
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  const AndroidNotificationChannel channel = AndroidNotificationChannel(
-    'high_importance_channel', // id
-    'High Importance Notifications', // title
-
-    importance: Importance.max,
-  );
-
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
-  final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-
-  await flutterLocalNotificationsPlugin
-      .resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>()
-      ?.createNotificationChannel(channel);
-
-  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-    alert: true, // Required to display a heads up notification
-    badge: true,
-    sound: true,
-  );
-  final appleSignInAvailable = await AppleSignInAvailable.check();
-
+  await config();
   runApp(Provider<AppleSignInAvailable>.value(
     value: appleSignInAvailable,
     child: const MyApp(),
