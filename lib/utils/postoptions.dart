@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
+import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/promotePost/promotePostHelper.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
@@ -118,7 +120,6 @@ class PostFunctions with ChangeNotifier {
                                         showCancelBtn: true,
                                         title: "Delete this post?",
                                         onConfirmBtnTap: () async {
-                                          Navigator.pop(context);
                                           Navigator.pop(context);
                                           Navigator.pop(context);
                                           await Provider.of<FirebaseOperations>(
@@ -272,22 +273,46 @@ class PostFunctions with ChangeNotifier {
     var post =
         await FirebaseFirestore.instance.collection('posts').doc(postID).get();
 
-    return FirebaseFirestore.instance.collection('posts').doc(postID).update({
-      'likes': [
-        ...post.data()!['likes'],
-        {
-          'username': Provider.of<FirebaseOperations>(context, listen: false)
-              .getInitUserName,
-          'useruid':
-              Provider.of<Authentication>(context, listen: false).getUserId,
-          'userimage': Provider.of<FirebaseOperations>(context, listen: false)
-              .getInitUserImage,
-          'useremail': Provider.of<FirebaseOperations>(context, listen: false)
-              .getInitUserEmail,
-          'time': Timestamp.now(),
+    //fix this
+    UserModel userModel = UserInfoManger.getUserInfo();
+
+    if (post
+        .data()!['likes']
+        .any((element) => element['useruid'] == userModel.uid)) {
+      var newLikesList = [];
+      var likesList = post.data()!['likes'];
+      for (var i = 0; i < likesList.length; i++) {
+        if (likesList[i]['useruid'] != userModel.uid) {
+          newLikesList.add(likesList[i]);
         }
-      ]
-    }).whenComplete(() async {
+      }
+
+      await FirebaseFirestore.instance
+          .collection('posts')
+          .doc(postID)
+          .update({'likes': newLikesList});
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(userUid)
+          .collection('posts')
+          .doc(postID)
+          .update({'likes': newLikesList});
+    } else {
+      print('11111111111111111');
+      await FirebaseFirestore.instance.collection('posts').doc(postID).update({
+        'likes': [
+          ...post.data()!['likes'],
+          {
+            'username': userModel.userName,
+            'useruid': userModel.uid,
+            'userimage': userModel.photoUrl,
+            'useremail': userModel.email,
+            'time': Timestamp.now(),
+          }
+        ]
+      });
+      print('22222222222222222');
+
       await FirebaseFirestore.instance
           .collection("users")
           .doc(userUid)
@@ -297,36 +322,33 @@ class PostFunctions with ChangeNotifier {
         'likes': [
           ...post.data()!['likes'],
           {
-            'username': Provider.of<FirebaseOperations>(context, listen: false)
-                .getInitUserName,
-            'useruid':
-                Provider.of<Authentication>(context, listen: false).getUserId,
-            'userimage': Provider.of<FirebaseOperations>(context, listen: false)
-                .getInitUserImage,
-            'useremail': Provider.of<FirebaseOperations>(context, listen: false)
-                .getInitUserEmail,
+            'username': userModel.userName,
+            'useruid': userModel.uid,
+            'userimage': userModel.photoUrl,
+            'useremail': userModel.email,
             'time': Timestamp.now(),
           }
         ]
-      }).whenComplete(() async {
+      });
+      print('333333333333333333');
+
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(userUid)
+          .get()
+          .then((postUser) async {
         await FirebaseFirestore.instance
             .collection("users")
-            .doc(userUid)
+            .doc(subDocId)
             .get()
-            .then((postUser) async {
-          await FirebaseFirestore.instance
-              .collection("users")
-              .doc(subDocId)
-              .get()
-              .then((likingUser) async {
-            await _fcmNotificationService.sendNotificationToUser(
-                to: postUser['fcmToken']!, //To change once set up
-                title: "${likingUser['username']} liked your post",
-                body: "");
-          });
+            .then((likingUser) async {
+          await _fcmNotificationService.sendNotificationToUser(
+              to: postUser['fcmToken']!, //To change once set up
+              title: "${likingUser['username']} liked your post",
+              body: "");
         });
       });
-    });
+    }
   }
 
   showAwardsPresenter({required BuildContext context, required String postId}) {

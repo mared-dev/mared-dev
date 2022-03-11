@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
+import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/screens/Messaging/privateMessage.dart';
@@ -61,6 +63,8 @@ class AltProfileHelper with ChangeNotifier {
       {required BuildContext context,
       required AsyncSnapshot<DocumentSnapshot> userDocSnap,
       required String userUid}) {
+    UserModel userModel = UserInfoManger.getUserInfo();
+
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.35,
       width: MediaQuery.of(context).size.width,
@@ -396,27 +400,12 @@ class AltProfileHelper with ChangeNotifier {
                                       listen: false)
                                   .followUser(
                                 followingUid: userUid,
-                                followingDocId: Provider.of<Authentication>(
-                                        context,
-                                        listen: false)
-                                    .getUserId,
+                                followingDocId: userModel.uid,
                                 followingData: {
-                                  'username': Provider.of<FirebaseOperations>(
-                                          context,
-                                          listen: false)
-                                      .getInitUserName,
-                                  'userimage': Provider.of<FirebaseOperations>(
-                                          context,
-                                          listen: false)
-                                      .getInitUserImage,
-                                  'useremail': Provider.of<FirebaseOperations>(
-                                          context,
-                                          listen: false)
-                                      .getInitUserEmail,
-                                  'useruid': Provider.of<Authentication>(
-                                          context,
-                                          listen: false)
-                                      .getUserId,
+                                  'username': userModel.userName,
+                                  'userimage': userModel.photoUrl,
+                                  'useremail': userModel.email,
+                                  'useruid': userModel.uid,
                                   'time': Timestamp.now(),
                                 },
                                 followerUid: Provider.of<Authentication>(

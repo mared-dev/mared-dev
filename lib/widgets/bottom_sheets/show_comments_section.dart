@@ -3,6 +3,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
+import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/fcm_notification_Service.dart';
@@ -319,6 +321,8 @@ Future addComment({
   var post =
       await FirebaseFirestore.instance.collection('posts').doc(postId).get();
 
+  ///change this somewhere else
+  UserModel userModel = UserInfoManger.getUserInfo();
   //add comment to posts collection
   await FirebaseFirestore.instance.collection('posts').doc(postId).update({
     'comments': [
@@ -326,14 +330,10 @@ Future addComment({
       {
         'commentid': commentId,
         'comment': comment,
-        'username': Provider.of<FirebaseOperations>(context, listen: false)
-            .getInitUserName,
-        'useruid':
-            Provider.of<Authentication>(context, listen: false).getUserId,
-        'userimage': Provider.of<FirebaseOperations>(context, listen: false)
-            .getInitUserImage,
-        'useremail': Provider.of<FirebaseOperations>(context, listen: false)
-            .getInitUserEmail,
+        'username': userModel.userName,
+        'useruid': userModel.uid,
+        'userimage': userModel.photoUrl,
+        'useremail': userModel.email,
         'time': Timestamp.now(),
       }
     ]
