@@ -1,67 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/screens/Feed/banners_section.dart';
 import 'package:mared_social/screens/Feed/posts_section.dart';
 import 'package:mared_social/screens/Feed/stories_section.dart';
-import 'package:mared_social/screens/isAnon/isAnon.dart';
 import 'package:mared_social/screens/searchPage/searchPage.dart';
-import 'package:mared_social/services/firebase/authentication.dart';
-import 'package:mared_social/utils/uploadpost.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
 
-class FeedHelpers with ChangeNotifier {
-  ConstantColors constantColors = ConstantColors();
+import '../bottom_sheets.dart';
 
-  PreferredSizeWidget appBar(BuildContext context) {
-    return AppBar(
-      leading: const SizedBox(
-        height: 0,
-        width: 0,
-      ),
-      backgroundColor: constantColors.darkColor.withOpacity(0.8),
-      centerTitle: true,
-      actions: [
-        IconButton(
-          onPressed: () {
-            if (Provider.of<Authentication>(context, listen: false).getIsAnon ==
-                false) {
-              Provider.of<UploadPost>(context, listen: false)
-                  .selectPostImageType(context);
-            } else {
-              IsAnonBottomSheet(context);
-            }
-          },
-          icon: Icon(
-            Icons.camera_enhance_rounded,
-            color: constantColors.greenColor,
-          ),
-        ),
-      ],
-      title: RichText(
-        text: TextSpan(
-          text: "Mared ",
-          style: TextStyle(
-            color: constantColors.whiteColor,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
-          children: <TextSpan>[
-            TextSpan(
-              text: "Feed",
-              style: TextStyle(
-                color: constantColors.blueColor,
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget feedBody(BuildContext context) {
+class FeedBody extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     ///START HERE
     ///there is something wrong with the rebuilds
     return NestedScrollView(
@@ -132,22 +80,6 @@ class FeedHelpers with ChangeNotifier {
         ];
       },
       body: PostsSection(),
-    );
-  }
-
-  IsAnonBottomSheet(BuildContext context) {
-    return showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (context) {
-        return SafeArea(
-          bottom: true,
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height * 0.9,
-            child: IsAnonMsg(),
-          ),
-        );
-      },
     );
   }
 }

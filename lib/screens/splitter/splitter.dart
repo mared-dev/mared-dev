@@ -18,41 +18,11 @@ class SplitPages extends StatefulWidget {
 }
 
 class _SplitPagesState extends State<SplitPages> {
-  ConstantColors constantColors = ConstantColors();
-  final PageController appController = PageController();
-  int pageIndex = 0;
-
-  bool bigError = false;
-
-  // Future checkUserDoc() async {
-  //   await FirebaseFirestore.instance
-  //       .collection("users")
-  //       .doc(FirebaseAuth.instance.currentUser!.uid)
-  //       .get()
-  //       .then((value) {
-  //     if (!value.exists) {
-  //       setState(() {
-  //         bigError = true;
-  //       });
-  //     } else {
-  //       setState(() {
-  //         bigError = false;
-  //       });
-  //     }
-  //   });
-  // }
-
-  @override
-  void initState() {
-    // Future.delayed(Duration.zero, () async {
-    //   await checkUserDoc();
-    // });
-
-    super.initState();
-  }
+  bool isAnon = false;
 
   @override
   Widget build(BuildContext context) {
-    return HomePage();
+    isAnon = Provider.of<Authentication>(context, listen: false).getIsAnon;
+    return HomePage(isAnon: isAnon);
   }
 }

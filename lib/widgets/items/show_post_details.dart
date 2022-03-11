@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/helpers/post_helpers.dart';
-import 'package:mared_social/screens/Feed/feedhelpers.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/utils/postoptions.dart';
+import 'package:mared_social/widgets/bottom_sheets/is_anon_bottom_sheet.dart';
 import 'package:mared_social/widgets/bottom_sheets/show_comments_section.dart';
 import 'package:mared_social/widgets/items/video_post_item.dart';
 import 'package:mared_social/widgets/reusable/post_comments_part.dart';
@@ -72,8 +72,7 @@ class _PostDetailsState extends State<PostDetails> {
                             .getUserId,
                   );
                 } else {
-                  Provider.of<FeedHelpers>(context, listen: false)
-                      .IsAnonBottomSheet(context);
+                  IsAnonBottomSheet(context);
                 }
               },
               child: SizedBox(

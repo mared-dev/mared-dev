@@ -11,7 +11,6 @@ import 'package:mared_social/screens/Categories/categoryHelpers.dart';
 import 'package:mared_social/screens/CategoryFeed/categoryfeedhelper.dart';
 import 'package:mared_social/screens/Chatroom/chatroom_helpers.dart';
 import 'package:mared_social/screens/Chatroom/privateChatHelpers.dart';
-import 'package:mared_social/screens/Feed/feedhelpers.dart';
 import 'package:mared_social/screens/HomePage/homepageHelpers.dart';
 import 'package:mared_social/screens/LandingPage/landingHelpers.dart';
 import 'package:mared_social/screens/LandingPage/landingServices.dart';
@@ -85,7 +84,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => LandingService()),
         ChangeNotifierProvider(create: (_) => ProfileHelpers()),
         ChangeNotifierProvider(create: (_) => UploadPost()),
-        ChangeNotifierProvider(create: (_) => FeedHelpers()),
         ChangeNotifierProvider(create: (_) => PostFunctions()),
         ChangeNotifierProvider(create: (_) => AltProfileHelper()),
         ChangeNotifierProvider(create: (_) => ChatroomHelpers()),

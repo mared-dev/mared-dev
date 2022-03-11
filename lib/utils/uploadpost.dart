@@ -108,6 +108,8 @@ class UploadPost with ChangeNotifier {
                                     videoPlayerController:
                                         _videoPlayerController,
                                     onCompleteCallback: ({String? videoUrl}) {
+                                      print('@@@@@@@@@@@@');
+                                      print(videoUrl);
                                       Navigator.push(
                                           context,
                                           PageTransition(

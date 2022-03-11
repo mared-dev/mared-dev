@@ -6,11 +6,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
-import 'package:mared_social/screens/Feed/feedhelpers.dart';
 import 'package:mared_social/screens/promotePost/promotePostHelper.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/fcm_notification_Service.dart';
+import 'package:mared_social/widgets/bottom_sheets/is_anon_bottom_sheet.dart';
 import 'package:nanoid/nanoid.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -118,6 +118,7 @@ class PostFunctions with ChangeNotifier {
                                         showCancelBtn: true,
                                         title: "Delete this post?",
                                         onConfirmBtnTap: () async {
+                                          Navigator.pop(context);
                                           Navigator.pop(context);
                                           Navigator.pop(context);
                                           await Provider.of<FirebaseOperations>(
@@ -688,9 +689,7 @@ class PostFunctions with ChangeNotifier {
                                         'award': awardDocSnap['image'],
                                       });
                                     } else {
-                                      Provider.of<FeedHelpers>(context,
-                                              listen: false)
-                                          .IsAnonBottomSheet(context);
+                                      IsAnonBottomSheet(context);
                                     }
                                   },
                                   child: Padding(

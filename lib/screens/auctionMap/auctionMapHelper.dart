@@ -8,10 +8,10 @@ import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
-import 'package:mared_social/screens/Feed/feedhelpers.dart';
 import 'package:mared_social/screens/auctionFeed/auctionpage.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/utils/auctionoptions.dart';
+import 'package:mared_social/widgets/bottom_sheets/is_anon_bottom_sheet.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -276,8 +276,7 @@ class AuctionMapHelper with ChangeNotifier {
                                     .getUserId,
                               );
                             } else {
-                              Provider.of<FeedHelpers>(context, listen: false)
-                                  .IsAnonBottomSheet(context);
+                              IsAnonBottomSheet(context);
                             }
                           },
                           onLongPress: () {

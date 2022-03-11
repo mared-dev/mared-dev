@@ -8,13 +8,13 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
-import 'package:mared_social/screens/Feed/feedhelpers.dart';
 import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/screens/Messaging/privateMessage.dart';
 import 'package:mared_social/screens/ambassaborsScreens/seeVideo.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/utils/postoptions.dart';
+import 'package:mared_social/widgets/bottom_sheets/is_anon_bottom_sheet.dart';
 import 'package:mared_social/widgets/items/show_post_details.dart';
 import 'package:nanoid/nanoid.dart';
 import 'package:page_transition/page_transition.dart';
@@ -438,8 +438,7 @@ class AltProfileHelper with ChangeNotifier {
                                     name: userDocSnap.data!['username']);
                               });
                             } else {
-                              Provider.of<FeedHelpers>(context, listen: false)
-                                  .IsAnonBottomSheet(context);
+                              IsAnonBottomSheet(context);
                             }
                           },
                         ),
@@ -515,8 +514,7 @@ class AltProfileHelper with ChangeNotifier {
                                 );
                               });
                             } else {
-                              Provider.of<FeedHelpers>(context, listen: false)
-                                  .IsAnonBottomSheet(context);
+                              IsAnonBottomSheet(context);
                             }
                           },
                         ),
@@ -632,8 +630,7 @@ class AltProfileHelper with ChangeNotifier {
                                         type: PageTransitionType.leftToRight));
                               });
                             } else {
-                              Provider.of<FeedHelpers>(context, listen: false)
-                                  .IsAnonBottomSheet(context);
+                              IsAnonBottomSheet(context);
                             }
                           },
                         ),

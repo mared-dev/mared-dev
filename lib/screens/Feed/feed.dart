@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
-import 'package:mared_social/screens/Feed/feedhelpers.dart';
+import 'package:mared_social/widgets/items/feed_body.dart';
+import 'package:mared_social/widgets/reusable/home_app_bar.dart';
 import 'package:provider/provider.dart';
 
 class Feed extends StatelessWidget {
@@ -9,8 +10,8 @@ class Feed extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: constantColors.blueGreyColor,
-      appBar: Provider.of<FeedHelpers>(context, listen: false).appBar(context),
-      body: Provider.of<FeedHelpers>(context, listen: false).feedBody(context),
+      appBar: homeAppBar(context),
+      body: FeedBody(),
     );
   }
 }

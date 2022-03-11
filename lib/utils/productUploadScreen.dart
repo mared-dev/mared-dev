@@ -13,7 +13,9 @@ import 'package:google_place/google_place.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mared_social/config.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/enums/post_type.dart';
+import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/splitter/splitter.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
@@ -80,10 +82,13 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
   final _formKey = GlobalKey<FormState>();
   String? _selectedCategory;
 
+  late UserModel userModel;
+
   @override
   Widget build(BuildContext context) {
     List<String> catNames =
         Provider.of<FirebaseOperations>(context, listen: false).catNames;
+    userModel = UserInfoManger.getUserInfo();
     return Scaffold(
       body: SafeArea(
         bottom: true,
@@ -448,21 +453,11 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
                             'comments': [],
                             'postcategory': _selectedCategory,
                             'caption': captionController.text,
-                            'username': Provider.of<FirebaseOperations>(context,
-                                    listen: false)
-                                .getInitUserName,
-                            'userimage': Provider.of<FirebaseOperations>(
-                                    context,
-                                    listen: false)
-                                .getInitUserImage,
-                            'useruid': Provider.of<Authentication>(context,
-                                    listen: false)
-                                .getUserId,
+                            'username': userModel.userName,
+                            'userimage': userModel.photoUrl,
+                            'useruid': userModel.uid,
                             'time': Timestamp.now(),
-                            'useremail': Provider.of<FirebaseOperations>(
-                                    context,
-                                    listen: false)
-                                .getInitUserEmail,
+                            'useremail': userModel.email,
                             'description': descriptionController.text,
                             'imageslist': (widget.postType == PostType.VIDEO)
                                 ? [videoStreamUrl]
@@ -486,21 +481,11 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
                             'searchindex': indexList,
                             'postcategory': _selectedCategory,
                             'caption': captionController.text,
-                            'username': Provider.of<FirebaseOperations>(context,
-                                    listen: false)
-                                .getInitUserName,
-                            'userimage': Provider.of<FirebaseOperations>(
-                                    context,
-                                    listen: false)
-                                .getInitUserImage,
-                            'useruid': Provider.of<Authentication>(context,
-                                    listen: false)
-                                .getUserId,
+                            'username': userModel.userName,
+                            'userimage': userModel.photoUrl,
+                            'useruid': userModel.uid,
                             'time': Timestamp.now(),
-                            'useremail': Provider.of<FirebaseOperations>(
-                                    context,
-                                    listen: false)
-                                .getInitUserEmail,
+                            'useremail': userModel.email,
                             'description': descriptionController.text,
                             'imageslist': (widget.postType == PostType.VIDEO)
                                 ? [videoStreamUrl]

@@ -12,7 +12,6 @@ import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
-import 'package:mared_social/screens/Feed/feedhelpers.dart';
 import 'package:mared_social/screens/LandingPage/landingpage.dart';
 import 'package:mared_social/screens/Stories/stories_widget.dart';
 import 'package:mared_social/screens/ambassaborsScreens/companiesScreen.dart';
@@ -35,7 +34,7 @@ class ProfileHelpers with ChangeNotifier {
 
   Widget headerProfile(BuildContext context, UserModel userModel) {
     return SizedBox(
-      height: MediaQuery.of(context).size.height * 0.25,
+      height: MediaQuery.of(context).size.height * 0.255,
       width: MediaQuery.of(context).size.width,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,

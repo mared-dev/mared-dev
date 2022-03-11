@@ -23,7 +23,9 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
+  final bool isAnon;
   const HomePage({
+    required this.isAnon,
     Key? key,
   }) : super(key: key);
 
@@ -87,6 +89,18 @@ class _HomePageState extends State<HomePage> {
       'fcmToken': token,
     });
   }
+
+  // final _screens = [
+  //   Feed(),
+  //   CategoryScreen(),
+  //   Provider.of<Authentication>(context, listen: false).getIsAnon == false
+  //       ? Chatroom()
+  //       : IsAnonMsg(),
+  //   MapScreen(),
+  //   Provider.of<Authentication>(context, listen: false).getIsAnon == false
+  //       ? Profile()
+  //       : IsAnonMsg(),
+  // ];
 
   @override
   Widget build(BuildContext context) {

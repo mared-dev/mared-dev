@@ -37,7 +37,7 @@ class _FeedPostItemState extends State<FeedPostItem> {
     return Padding(
         padding: const EdgeInsets.all(4),
         child: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.68,
+          height: MediaQuery.of(context).size.height * 0.70,
           width: MediaQuery.of(context).size.width,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
