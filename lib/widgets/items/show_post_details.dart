@@ -137,17 +137,9 @@ class _PostDetailsState extends State<PostDetails> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      InkWell(
-                        onTap: () {
-                          Provider.of<PostFunctions>(context, listen: false)
-                              .showLikes(
-                                  context: context,
-                                  postId: widget.documentSnapshot['postid']);
-                        },
-                        child: PostLikesPart(
-                          postId: widget.documentSnapshot['postid'],
-                          likes: widget.documentSnapshot['likes'],
-                        ),
+                      PostLikesPart(
+                        postId: widget.documentSnapshot['postid'],
+                        likes: widget.documentSnapshot['likes'],
                       ),
                       InkWell(
                           onTap: () {

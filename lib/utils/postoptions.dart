@@ -463,7 +463,7 @@ class PostFunctions with ChangeNotifier {
     );
   }
 
-  showLikes({required BuildContext context, required String postId}) {
+  showLikes({required BuildContext context, required likes}) {
     return showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -507,100 +507,83 @@ class PostFunctions with ChangeNotifier {
                     ),
                   ),
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.5,
-                  width: MediaQuery.of(context).size.width,
-                  child: StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection("posts")
-                        .doc(postId)
-                        .collection("likes")
-                        .snapshots(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      } else {
-                        return ListView(
-                          children: snapshot.data!.docs
-                              .map((DocumentSnapshot documentSnapshot) {
-                            return ListTile(
-                              leading: InkWell(
-                                onTap: () {
-                                  if (documentSnapshot['useruid'] !=
-                                      Provider.of<Authentication>(context,
-                                              listen: false)
-                                          .getUserId) {
-                                    Navigator.pushReplacement(
-                                        context,
-                                        PageTransition(
-                                            child: AltProfile(
-                                              userUid:
-                                                  documentSnapshot['useruid'],
-                                            ),
-                                            type: PageTransitionType
-                                                .bottomToTop));
-                                  }
-                                },
-                                child: SizedBox(
-                                  height: 40,
-                                  width: 40,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(20),
-                                    child: CachedNetworkImage(
-                                      fit: BoxFit.cover,
-                                      imageUrl: documentSnapshot['userimage'],
-                                      progressIndicatorBuilder: (context, url,
-                                              downloadProgress) =>
-                                          LoadingWidget(
-                                              constantColors: constantColors),
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(Icons.error),
-                                    ),
+                Expanded(
+                  child: SizedBox(
+                      width: MediaQuery.of(context).size.width,
+                      child: ListView(
+                        children: likes.map<Widget>((likesItem) {
+                          return ListTile(
+                            leading: InkWell(
+                              onTap: () {
+                                if (likesItem['useruid'] !=
+                                    Provider.of<Authentication>(context,
+                                            listen: false)
+                                        .getUserId) {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      PageTransition(
+                                          child: AltProfile(
+                                            userUid: likesItem['useruid'],
+                                          ),
+                                          type:
+                                              PageTransitionType.bottomToTop));
+                                }
+                              },
+                              child: SizedBox(
+                                height: 40,
+                                width: 40,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: CachedNetworkImage(
+                                    fit: BoxFit.cover,
+                                    imageUrl: likesItem['userimage'],
+                                    progressIndicatorBuilder:
+                                        (context, url, downloadProgress) =>
+                                            LoadingWidget(
+                                                constantColors: constantColors),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error),
                                   ),
                                 ),
                               ),
-                              title: Text(
-                                documentSnapshot['username'],
-                                style: TextStyle(
-                                  color: constantColors.blueColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
-                                ),
+                            ),
+                            title: Text(
+                              likesItem['username'],
+                              style: TextStyle(
+                                color: constantColors.blueColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16,
                               ),
-                              subtitle: Text(
-                                documentSnapshot['useremail'],
-                                style: TextStyle(
-                                  color: constantColors.whiteColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 12,
-                                ),
+                            ),
+                            subtitle: Text(
+                              likesItem['useremail'],
+                              style: TextStyle(
+                                color: constantColors.whiteColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
                               ),
-                              trailing: Provider.of<Authentication>(context,
-                                              listen: false)
-                                          .getUserId ==
-                                      documentSnapshot['useruid']
-                                  ? const SizedBox(
-                                      height: 0,
-                                      width: 0,
-                                    )
-                                  : MaterialButton(
-                                      child: Text("Follow",
-                                          style: TextStyle(
-                                            color: constantColors.whiteColor,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14,
-                                          )),
-                                      onPressed: () {},
-                                      color: constantColors.blueColor,
-                                    ),
-                            );
-                          }).toList(),
-                        );
-                      }
-                    },
-                  ),
+                            ),
+                            trailing: Provider.of<Authentication>(context,
+                                            listen: false)
+                                        .getUserId ==
+                                    likesItem['useruid']
+                                ? const SizedBox(
+                                    height: 0,
+                                    width: 0,
+                                  )
+                                : MaterialButton(
+                                    child: Text("Follow",
+                                        style: TextStyle(
+                                          color: constantColors.whiteColor,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14,
+                                        )),
+                                    onPressed: () {},
+                                    color: constantColors.blueColor,
+                                  ),
+                          );
+                        }).toList(),
+                      )),
                 ),
               ],
             ),
@@ -676,7 +659,7 @@ class PostFunctions with ChangeNotifier {
                           return ListView(
                               scrollDirection: Axis.horizontal,
                               children: awardSnap.data!.docs
-                                  .map((DocumentSnapshot awardDocSnap) {
+                                  .map<Widget>((DocumentSnapshot awardDocSnap) {
                                 return InkWell(
                                   onTap: () async {
                                     if (Provider.of<Authentication>(context,

@@ -17,7 +17,7 @@ class PostLikesPart extends StatelessWidget {
     return InkWell(
       onTap: () {
         Provider.of<PostFunctions>(context, listen: false)
-            .showLikes(context: context, postId: postId);
+            .showLikes(context: context, likes: likes);
       },
       child: SizedBox(
         width: 60,
