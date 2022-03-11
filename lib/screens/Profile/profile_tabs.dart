@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
+import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/Profile/profileHelpers.dart';
 import 'package:mared_social/screens/ambassaborsScreens/companiesScreen.dart';
 import 'package:mared_social/screens/ambassaborsScreens/seeVideo.dart';
@@ -32,6 +34,7 @@ class PostsProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UserModel _userInfo = UserInfoManger.getUserInfo();
     return Scaffold(
       backgroundColor: constantColors.blueGreyColor,
       appBar: AppBar(
@@ -108,33 +111,17 @@ class PostsProfile extends StatelessWidget {
             expandedHeight: size.height * 0.43,
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
-                color: constantColors.blueGreyColor,
-                child: StreamBuilder<DocumentSnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection("users")
-                      .doc(Provider.of<Authentication>(context, listen: false)
-                          .getUserId)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else {
-                      return Column(
-                        children: [
-                          Provider.of<ProfileHelpers>(context, listen: false)
-                              .headerProfile(context, snapshot),
-                          Provider.of<ProfileHelpers>(context, listen: false)
-                              .divider(),
-                          Provider.of<ProfileHelpers>(context, listen: false)
-                              .middleProfile(context, snapshot),
-                        ],
-                      );
-                    }
-                  },
-                ),
-              ),
+                  color: constantColors.blueGreyColor,
+                  child: Column(
+                    children: [
+                      Provider.of<ProfileHelpers>(context, listen: false)
+                          .headerProfile(context, _userInfo),
+                      Provider.of<ProfileHelpers>(context, listen: false)
+                          .divider(),
+                      Provider.of<ProfileHelpers>(context, listen: false)
+                          .middleProfile(context, _userInfo),
+                    ],
+                  )),
             ),
           ),
           StreamBuilder<QuerySnapshot>(
@@ -183,237 +170,237 @@ class PostsProfile extends StatelessWidget {
   }
 }
 
-class AuctionsProfile extends StatelessWidget {
-  const AuctionsProfile({
-    Key? key,
-    required this.constantColors,
-    required this.size,
-  }) : super(key: key);
-
-  final ConstantColors constantColors;
-  final Size size;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: constantColors.blueGreyColor,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () {
-              Provider.of<ProfileHelpers>(context, listen: false)
-                  .logOutDialog(context);
-            },
-            icon: Icon(
-              EvaIcons.logOutOutline,
-              color: constantColors.greenColor,
-            ),
-          ),
-        ],
-        backgroundColor: constantColors.blueGreyColor.withOpacity(0.4),
-        title: RichText(
-          text: TextSpan(
-            text: "My ",
-            style: TextStyle(
-              color: constantColors.whiteColor,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-            children: <TextSpan>[
-              TextSpan(
-                text: "Auctions",
-                style: TextStyle(
-                  color: constantColors.blueColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: constantColors.darkColor,
-        onPressed: () {
-          Navigator.push(
-              context,
-              PageTransition(
-                  child: CreateAuctionScreen(),
-                  type: PageTransitionType.rightToLeft));
-        },
-        label: Text(
-          "Post Auction",
-          style: TextStyle(
-            color: constantColors.whiteColor,
-            fontWeight: FontWeight.bold,
-            fontSize: 12,
-          ),
-        ),
-        icon: Lottie.asset(
-          "assets/animations/gavel.json",
-          height: 20,
-        ),
-      ),
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            automaticallyImplyLeading: false,
-            expandedHeight: size.height * 0.43,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                color: constantColors.blueGreyColor,
-                child: StreamBuilder<DocumentSnapshot>(
-                  stream: FirebaseFirestore.instance
-                      .collection("users")
-                      .doc(Provider.of<Authentication>(context, listen: false)
-                          .getUserId)
-                      .snapshots(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else {
-                      return Column(
-                        children: [
-                          Provider.of<ProfileHelpers>(context, listen: false)
-                              .headerProfile(context, snapshot),
-                          Provider.of<ProfileHelpers>(context, listen: false)
-                              .divider(),
-                          Provider.of<ProfileHelpers>(context, listen: false)
-                              .middleProfile(context, snapshot),
-                        ],
-                      );
-                    }
-                  },
-                ),
-              ),
-            ),
-          ),
-          StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection("users")
-                .doc(Provider.of<Authentication>(context, listen: false)
-                    .getUserId)
-                .collection("auctions")
-                .orderBy("time", descending: true)
-                .snapshots(),
-            builder: (context, userAuctionSnap) {
-              return SliverPadding(
-                padding: const EdgeInsets.all(4),
-                sliver: SliverGrid(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 5,
-                    mainAxisSpacing: 5,
-                  ),
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      if (index.toInt() < userAuctionSnap.data!.docs.length) {
-                        var userAuctionDocSnap =
-                            userAuctionSnap.data!.docs[index];
-
-                        bool dateCheck = DateTime.now().isBefore(
-                            (userAuctionDocSnap['enddate'] as Timestamp)
-                                .toDate());
-                        return InkWell(
-                          onTap: () {
-                            Provider.of<AuctionMapHelper>(context,
-                                    listen: false)
-                                .showAuctionDetails(
-                                    context: context,
-                                    documentSnapshot: userAuctionDocSnap);
-                          },
-                          child: Stack(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(2.0),
-                                child: SizedBox(
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(5),
-                                    child: Swiper(
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        return CachedNetworkImage(
-                                          fit: BoxFit.cover,
-                                          imageUrl:
-                                              userAuctionDocSnap['imageslist']
-                                                  [index],
-                                          progressIndicatorBuilder: (context,
-                                                  url, downloadProgress) =>
-                                              SizedBox(
-                                            height: 50,
-                                            width: 50,
-                                            child: LoadingWidget(
-                                                constantColors: constantColors),
-                                          ),
-                                          errorWidget: (context, url, error) =>
-                                              const Icon(Icons.error),
-                                        );
-                                      },
-                                      itemCount:
-                                          (userAuctionDocSnap['imageslist']
-                                                  as List)
-                                              .length,
-                                      itemHeight:
-                                          MediaQuery.of(context).size.height *
-                                              0.3,
-                                      itemWidth:
-                                          MediaQuery.of(context).size.width,
-                                      layout: SwiperLayout.DEFAULT,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Visibility(
-                                visible: dateCheck,
-                                replacement: Container(
-                                  height: size.height,
-                                  width: size.width,
-                                  decoration: BoxDecoration(
-                                    color: constantColors.greyColor
-                                        .withOpacity(0.9),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                  child: Center(
-                                    child: Text(
-                                      "Auction Over",
-                                      style: TextStyle(
-                                        color: constantColors.whiteColor,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                child: Positioned(
-                                  top: 5,
-                                  right: 5,
-                                  child: SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: Lottie.asset(
-                                      "assets/animations/gavel.json",
-                                      height: 20,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-    );
-  }
-}
+// class AuctionsProfile extends StatelessWidget {
+//   const AuctionsProfile({
+//     Key? key,
+//     required this.constantColors,
+//     required this.size,
+//   }) : super(key: key);
+//
+//   final ConstantColors constantColors;
+//   final Size size;
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       backgroundColor: constantColors.blueGreyColor,
+//       appBar: AppBar(
+//         automaticallyImplyLeading: false,
+//         centerTitle: true,
+//         actions: [
+//           IconButton(
+//             onPressed: () {
+//               Provider.of<ProfileHelpers>(context, listen: false)
+//                   .logOutDialog(context);
+//             },
+//             icon: Icon(
+//               EvaIcons.logOutOutline,
+//               color: constantColors.greenColor,
+//             ),
+//           ),
+//         ],
+//         backgroundColor: constantColors.blueGreyColor.withOpacity(0.4),
+//         title: RichText(
+//           text: TextSpan(
+//             text: "My ",
+//             style: TextStyle(
+//               color: constantColors.whiteColor,
+//               fontWeight: FontWeight.bold,
+//               fontSize: 20,
+//             ),
+//             children: <TextSpan>[
+//               TextSpan(
+//                 text: "Auctions",
+//                 style: TextStyle(
+//                   color: constantColors.blueColor,
+//                   fontWeight: FontWeight.bold,
+//                   fontSize: 20,
+//                 ),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//       floatingActionButton: FloatingActionButton.extended(
+//         backgroundColor: constantColors.darkColor,
+//         onPressed: () {
+//           Navigator.push(
+//               context,
+//               PageTransition(
+//                   child: CreateAuctionScreen(),
+//                   type: PageTransitionType.rightToLeft));
+//         },
+//         label: Text(
+//           "Post Auction",
+//           style: TextStyle(
+//             color: constantColors.whiteColor,
+//             fontWeight: FontWeight.bold,
+//             fontSize: 12,
+//           ),
+//         ),
+//         icon: Lottie.asset(
+//           "assets/animations/gavel.json",
+//           height: 20,
+//         ),
+//       ),
+//       body: CustomScrollView(
+//         slivers: [
+//           SliverAppBar(
+//             automaticallyImplyLeading: false,
+//             expandedHeight: size.height * 0.43,
+//             flexibleSpace: FlexibleSpaceBar(
+//               background: Container(
+//                 color: constantColors.blueGreyColor,
+//                 child: StreamBuilder<DocumentSnapshot>(
+//                   stream: FirebaseFirestore.instance
+//                       .collection("users")
+//                       .doc(Provider.of<Authentication>(context, listen: false)
+//                           .getUserId)
+//                       .snapshots(),
+//                   builder: (context, snapshot) {
+//                     if (snapshot.connectionState == ConnectionState.waiting) {
+//                       return const Center(
+//                         child: CircularProgressIndicator(),
+//                       );
+//                     } else {
+//                       return Column(
+//                         children: [
+//                           Provider.of<ProfileHelpers>(context, listen: false)
+//                               .headerProfile(context, snapshot),
+//                           Provider.of<ProfileHelpers>(context, listen: false)
+//                               .divider(),
+//                           Provider.of<ProfileHelpers>(context, listen: false)
+//                               .middleProfile(context, snapshot),
+//                         ],
+//                       );
+//                     }
+//                   },
+//                 ),
+//               ),
+//             ),
+//           ),
+//           StreamBuilder<QuerySnapshot>(
+//             stream: FirebaseFirestore.instance
+//                 .collection("users")
+//                 .doc(Provider.of<Authentication>(context, listen: false)
+//                     .getUserId)
+//                 .collection("auctions")
+//                 .orderBy("time", descending: true)
+//                 .snapshots(),
+//             builder: (context, userAuctionSnap) {
+//               return SliverPadding(
+//                 padding: const EdgeInsets.all(4),
+//                 sliver: SliverGrid(
+//                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+//                     crossAxisCount: 3,
+//                     crossAxisSpacing: 5,
+//                     mainAxisSpacing: 5,
+//                   ),
+//                   delegate: SliverChildBuilderDelegate(
+//                     (BuildContext context, int index) {
+//                       if (index.toInt() < userAuctionSnap.data!.docs.length) {
+//                         var userAuctionDocSnap =
+//                             userAuctionSnap.data!.docs[index];
+//
+//                         bool dateCheck = DateTime.now().isBefore(
+//                             (userAuctionDocSnap['enddate'] as Timestamp)
+//                                 .toDate());
+//                         return InkWell(
+//                           onTap: () {
+//                             Provider.of<AuctionMapHelper>(context,
+//                                     listen: false)
+//                                 .showAuctionDetails(
+//                                     context: context,
+//                                     documentSnapshot: userAuctionDocSnap);
+//                           },
+//                           child: Stack(
+//                             children: [
+//                               Padding(
+//                                 padding: const EdgeInsets.all(2.0),
+//                                 child: SizedBox(
+//                                   child: ClipRRect(
+//                                     borderRadius: BorderRadius.circular(5),
+//                                     child: Swiper(
+//                                       itemBuilder:
+//                                           (BuildContext context, int index) {
+//                                         return CachedNetworkImage(
+//                                           fit: BoxFit.cover,
+//                                           imageUrl:
+//                                               userAuctionDocSnap['imageslist']
+//                                                   [index],
+//                                           progressIndicatorBuilder: (context,
+//                                                   url, downloadProgress) =>
+//                                               SizedBox(
+//                                             height: 50,
+//                                             width: 50,
+//                                             child: LoadingWidget(
+//                                                 constantColors: constantColors),
+//                                           ),
+//                                           errorWidget: (context, url, error) =>
+//                                               const Icon(Icons.error),
+//                                         );
+//                                       },
+//                                       itemCount:
+//                                           (userAuctionDocSnap['imageslist']
+//                                                   as List)
+//                                               .length,
+//                                       itemHeight:
+//                                           MediaQuery.of(context).size.height *
+//                                               0.3,
+//                                       itemWidth:
+//                                           MediaQuery.of(context).size.width,
+//                                       layout: SwiperLayout.DEFAULT,
+//                                     ),
+//                                   ),
+//                                 ),
+//                               ),
+//                               Visibility(
+//                                 visible: dateCheck,
+//                                 replacement: Container(
+//                                   height: size.height,
+//                                   width: size.width,
+//                                   decoration: BoxDecoration(
+//                                     color: constantColors.greyColor
+//                                         .withOpacity(0.9),
+//                                     borderRadius: BorderRadius.circular(10),
+//                                   ),
+//                                   child: Center(
+//                                     child: Text(
+//                                       "Auction Over",
+//                                       style: TextStyle(
+//                                         color: constantColors.whiteColor,
+//                                       ),
+//                                     ),
+//                                   ),
+//                                 ),
+//                                 child: Positioned(
+//                                   top: 5,
+//                                   right: 5,
+//                                   child: SizedBox(
+//                                     height: 20,
+//                                     width: 20,
+//                                     child: Lottie.asset(
+//                                       "assets/animations/gavel.json",
+//                                       height: 20,
+//                                     ),
+//                                   ),
+//                                 ),
+//                               ),
+//                             ],
+//                           ),
+//                         );
+//                       }
+//                     },
+//                   ),
+//                 ),
+//               );
+//             },
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 class AmbassadorProfile extends StatelessWidget {
   const AmbassadorProfile({

@@ -7,7 +7,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:form_field_validator/form_field_validator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/sharedPrefUser.dart';
+import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/screens/LandingPage/landingUtils.dart';
 import 'package:mared_social/screens/splitter/splitter.dart';
@@ -228,6 +230,7 @@ class LandingService with ChangeNotifier {
   }
 
   loginSheet(BuildContext context) {
+    GlobalKey<FormState> _formKey = GlobalKey<FormState>();
     return showModalBottomSheet(
         isScrollControlled: true,
         context: context,
@@ -299,6 +302,7 @@ class LandingService with ChangeNotifier {
                               color: constantColors.whiteColor,
                             ),
                             onPressed: () async {
+                              print('(((((((((((((((((');
                               if (_formKey.currentState!.validate()) {
                                 try {
                                   await Provider.of<Authentication>(context,
@@ -306,6 +310,31 @@ class LandingService with ChangeNotifier {
                                       .loginIntoAccount(
                                           userEmailController.text,
                                           userPasswordController.text);
+
+                                  await UserInfoManger.setUserId(
+                                    Provider.of<Authentication>(context,
+                                            listen: false)
+                                        .getUserId,
+                                  );
+
+                                  var userSnapShot = await FirebaseFirestore
+                                      .instance
+                                      .collection("users")
+                                      .doc(Provider.of<Authentication>(context,
+                                              listen: false)
+                                          .getUserId)
+                                      .get();
+
+                                  await UserInfoManger.saveUserInfo(UserModel(
+                                      uid: Provider.of<Authentication>(context,
+                                              listen: false)
+                                          .getUserId,
+                                      store: store,
+                                      email: userEmailController.text,
+                                      userName: userNameController.text,
+                                      photoUrl:
+                                          userSnapShot.data()!['userimage'],
+                                      fcmToken: ''));
 
                                   Navigator.pushReplacement(
                                     context,
@@ -510,11 +539,10 @@ class LandingService with ChangeNotifier {
                                   .createAccount(userEmailController.text,
                                       userPasswordController.text);
 
+                              ///remove this section later
                               SharedPreferences.setMockInitialValues({});
-
                               SharedPreferences prefs =
                                   await SharedPreferences.getInstance();
-
                               await prefs.setString(
                                   'mydata',
                                   json.encode({
@@ -533,6 +561,25 @@ class LandingService with ChangeNotifier {
                                             listen: false)
                                         .getUserAvatarUrl,
                                   }));
+
+                              ///
+
+                              await UserInfoManger.setUserId(
+                                Provider.of<Authentication>(context,
+                                        listen: false)
+                                    .getUserId,
+                              );
+                              await UserInfoManger.saveUserInfo(UserModel(
+                                  uid: Provider.of<Authentication>(context,
+                                          listen: false)
+                                      .getUserId,
+                                  store: store,
+                                  email: userEmailController.text,
+                                  userName: userNameController.text,
+                                  photoUrl: Provider.of<LandingUtils>(context,
+                                          listen: false)
+                                      .getUserAvatarUrl,
+                                  fcmToken: ''));
 
                               String name = "${userNameController.text} ";
 

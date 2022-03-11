@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
+import 'package:mared_social/models/user_model.dart';
 import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 
 class Authentication with ChangeNotifier {
@@ -85,6 +87,7 @@ class Authentication with ChangeNotifier {
     googleUserImage = user.photoURL!;
     googlePhoneNo = user.phoneNumber ?? "No Number";
     print("Google sign in => ${userUid} || ${user.email}");
+    await saveLocalCredentials(userUid);
 
     notifyListeners();
   }
@@ -151,6 +154,7 @@ class Authentication with ChangeNotifier {
 
       print("appleUsername == ${appleUsername}");
 
+      await saveLocalCredentials(userUid);
       notifyListeners();
     } catch (e) {
       // TODO: Show alert here
@@ -167,12 +171,18 @@ class Authentication with ChangeNotifier {
       var userCredential = await firebaseAuth.signInAnonymously();
 
       User? user = userCredential.user;
+
       userUid = user!.uid;
       isAnon = true;
       print("logged in " + userUid);
       notifyListeners();
+      await saveLocalCredentials(userUid);
     } catch (e) {
       print("FAILED === ${e.toString()}");
     }
+  }
+
+  Future<void> saveLocalCredentials(String newUserId) async {
+    UserInfoManger.setUserId(newUserId);
   }
 }

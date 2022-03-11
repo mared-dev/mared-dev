@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
+import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/LandingPage/landingUtils.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/fcm_notification_Service.dart';
@@ -154,7 +156,7 @@ class FirebaseOperations with ChangeNotifier {
         .collection("users")
         .doc(Provider.of<Authentication>(context, listen: false).getUserId)
         .get()
-        .then((doc) {
+        .then((doc) async {
       print("fetching user data");
       initUserName = doc['username'];
       initUserEmail = doc['useremail'];
@@ -162,8 +164,15 @@ class FirebaseOperations with ChangeNotifier {
       store = doc['store'];
       fcmToken = doc['fcmToken'];
 
-      print(fcmToken);
-      print(initUserName);
+      await UserInfoManger.setUserId(
+          Provider.of<Authentication>(context, listen: false).getUserId);
+      await UserInfoManger.saveUserInfo(UserModel(
+          email: initUserEmail,
+          userName: initUserName,
+          photoUrl: initUserImage,
+          store: store,
+          uid: Provider.of<Authentication>(context, listen: false).getUserId,
+          fcmToken: fcmToken));
       notifyListeners();
     });
   }

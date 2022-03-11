@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/screens/Profile/profileHelpers.dart';
 import 'package:mared_social/screens/Profile/profile_tabs.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
@@ -27,19 +28,17 @@ class _ProfileState extends State<Profile> {
           decoration: BoxDecoration(
             color: constantColors.darkColor,
           ),
-          child:
-              Provider.of<FirebaseOperations>(context, listen: false).store ==
-                      false
-                  ? Provider.of<ProfileHelpers>(context, listen: false)
-                      .profileNavBar(
-                          context: context,
-                          index: pageIndex,
-                          pageController: profileController)
-                  : Provider.of<ProfileHelpers>(context, listen: false)
-                      .storeProfileNavBar(
-                          context: context,
-                          index: pageIndex,
-                          pageController: profileController)),
+          child: UserInfoManger.getUserInfo().store
+              ? Provider.of<ProfileHelpers>(context, listen: false)
+                  .profileNavBar(
+                      context: context,
+                      index: pageIndex,
+                      pageController: profileController)
+              : Provider.of<ProfileHelpers>(context, listen: false)
+                  .storeProfileNavBar(
+                      context: context,
+                      index: pageIndex,
+                      pageController: profileController)),
       body: PageView(
         controller: profileController,
         children: [

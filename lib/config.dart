@@ -7,6 +7,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mared_social/constants/appleSignInCheck.dart';
 import 'package:mared_social/services/get_http_client.dart';
+import 'package:mared_social/services/shared_preferences_helper.dart';
 
 late final appleSignInAvailable;
 final getIt = GetIt.instance;
@@ -39,6 +40,7 @@ config() async {
   );
   appleSignInAvailable = await AppleSignInAvailable.check();
   getIt.registerSingleton<Dio>(getHttpClient());
+  SharedPreferencesHelper.initSharedPrefs();
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {

@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
+import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/Feed/feedhelpers.dart';
 import 'package:mared_social/screens/LandingPage/landingpage.dart';
@@ -31,8 +33,7 @@ class ProfileHelpers with ChangeNotifier {
   ConstantColors constantColors = ConstantColors();
   final StoryWidgets storyWidgets = StoryWidgets();
 
-  Widget headerProfile(
-      BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+  Widget headerProfile(BuildContext context, UserModel userModel) {
     return SizedBox(
       height: MediaQuery.of(context).size.height * 0.25,
       width: MediaQuery.of(context).size.width,
@@ -60,7 +61,7 @@ class ProfileHelpers with ChangeNotifier {
                             borderRadius: BorderRadius.circular(30),
                             child: CachedNetworkImage(
                               fit: BoxFit.cover,
-                              imageUrl: snapshot.data!['userimage'],
+                              imageUrl: userModel.photoUrl,
                               progressIndicatorBuilder: (context, url,
                                       downloadProgress) =>
                                   LoadingWidget(constantColors: constantColors),
@@ -83,7 +84,7 @@ class ProfileHelpers with ChangeNotifier {
                   Padding(
                     padding: const EdgeInsets.only(top: 8.0),
                     child: Text(
-                      snapshot.data!['username'],
+                      userModel.userName,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: TextStyle(
@@ -107,7 +108,7 @@ class ProfileHelpers with ChangeNotifier {
                           child: Container(
                             padding: const EdgeInsets.only(left: 8.0),
                             child: Text(
-                              snapshot.data!['useremail'],
+                              userModel.email,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
                                 color: constantColors.whiteColor,
@@ -121,9 +122,7 @@ class ProfileHelpers with ChangeNotifier {
                     ),
                   ),
                   Visibility(
-                    visible:
-                        Provider.of<FirebaseOperations>(context, listen: false)
-                            .store,
+                    visible: UserInfoManger.getUserInfo().store,
                     child: Padding(
                       padding: const EdgeInsets.only(top: 8.0),
                       child: Row(
@@ -166,9 +165,7 @@ class ProfileHelpers with ChangeNotifier {
                       InkWell(
                         onTap: () {
                           checkFollowerSheet(
-                            context: context,
-                            userDocSnap: snapshot,
-                          );
+                              context: context, userId: userModel.uid);
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -182,7 +179,7 @@ class ProfileHelpers with ChangeNotifier {
                               StreamBuilder<QuerySnapshot>(
                                   stream: FirebaseFirestore.instance
                                       .collection("users")
-                                      .doc(snapshot.data!['useruid'])
+                                      .doc(userModel.uid)
                                       .collection("followers")
                                       .snapshots(),
                                   builder: (context, followerSnap) {
@@ -222,9 +219,7 @@ class ProfileHelpers with ChangeNotifier {
                       InkWell(
                         onTap: () {
                           checkFollowingSheet(
-                            context: context,
-                            userDocSnap: snapshot,
-                          );
+                              context: context, userId: userModel.uid);
                         },
                         child: Container(
                           decoration: BoxDecoration(
@@ -238,7 +233,7 @@ class ProfileHelpers with ChangeNotifier {
                               StreamBuilder<QuerySnapshot>(
                                   stream: FirebaseFirestore.instance
                                       .collection("users")
-                                      .doc(snapshot.data!['useruid'])
+                                      .doc(userModel.uid)
                                       .collection("following")
                                       .snapshots(),
                                   builder: (context, followingSnap) {
@@ -290,7 +285,7 @@ class ProfileHelpers with ChangeNotifier {
                     child: StreamBuilder<QuerySnapshot>(
                         stream: FirebaseFirestore.instance
                             .collection("users")
-                            .doc(snapshot.data!['useruid'])
+                            .doc(userModel.uid)
                             .collection("posts")
                             .snapshots(),
                         builder: (context, userPostSnaps) {
@@ -422,7 +417,7 @@ class ProfileHelpers with ChangeNotifier {
     );
   }
 
-  Widget middleProfile(BuildContext context, dynamic snapshot) {
+  Widget middleProfile(BuildContext context, UserModel userModel) {
     return Padding(
       padding: const EdgeInsets.only(top: 3.0, left: 0),
       child: Column(
@@ -448,9 +443,7 @@ class ProfileHelpers with ChangeNotifier {
                   ),
                   Expanded(
                     child: Text(
-                      Provider.of<FirebaseOperations>(context, listen: false)
-                                  .store ==
-                              false
+                      UserInfoManger.getUserInfo().store == false
                           ? "Recently Added"
                           : "Mared Ambassador Promotions",
                       style: TextStyle(
@@ -471,13 +464,11 @@ class ProfileHelpers with ChangeNotifier {
               color: constantColors.darkColor.withOpacity(0.4),
               borderRadius: BorderRadius.circular(15),
             ),
-            child: Provider.of<FirebaseOperations>(context, listen: false)
-                        .store ==
-                    false
+            child: UserInfoManger.getUserInfo().store == false
                 ? StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection("users")
-                        .doc(snapshot.data!['useruid'])
+                        .doc(userModel.uid)
                         .collection("following")
                         .snapshots(),
                     builder: (context, followingSnap) {
@@ -524,7 +515,7 @@ class ProfileHelpers with ChangeNotifier {
                 : StreamBuilder<QuerySnapshot>(
                     stream: FirebaseFirestore.instance
                         .collection("users")
-                        .doc(snapshot.data!['useruid'])
+                        .doc(userModel.uid)
                         .collection("submittedWork")
                         .orderBy("time", descending: true)
                         .snapshots(),
@@ -713,7 +704,7 @@ class ProfileHelpers with ChangeNotifier {
   }
 
   checkFollowingSheet(
-      {required BuildContext context, required dynamic userDocSnap}) {
+      {required BuildContext context, required dynamic userId}) {
     return showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -729,7 +720,7 @@ class ProfileHelpers with ChangeNotifier {
             child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection("users")
-                    .doc(userDocSnap.data!['useruid'])
+                    .doc(userId)
                     .collection("following")
                     .snapshots(),
                 builder: (context, followingSnap) {
@@ -832,7 +823,7 @@ class ProfileHelpers with ChangeNotifier {
                     );
                   } else {
                     return Text(
-                      "${userDocSnap.data!['useruid']} is not following anyone",
+                      "${userId.toString()} is not following anyone",
                       style: TextStyle(
                         color: constantColors.whiteColor,
                         fontWeight: FontWeight.bold,
@@ -847,8 +838,7 @@ class ProfileHelpers with ChangeNotifier {
     );
   }
 
-  checkFollowerSheet(
-      {required BuildContext context, required dynamic userDocSnap}) {
+  checkFollowerSheet({required BuildContext context, required dynamic userId}) {
     return showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -864,7 +854,7 @@ class ProfileHelpers with ChangeNotifier {
             child: StreamBuilder<QuerySnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection("users")
-                    .doc(userDocSnap.data!['useruid'])
+                    .doc(userId)
                     .collection("followers")
                     .snapshots(),
                 builder: (context, followerSnap) {
@@ -954,7 +944,7 @@ class ProfileHelpers with ChangeNotifier {
                     );
                   } else {
                     return Text(
-                      "${userDocSnap.data!['useruid']} is not following anyone",
+                      "${userId.toString()} is not following anyone",
                       style: TextStyle(
                         color: constantColors.whiteColor,
                         fontWeight: FontWeight.bold,

@@ -151,9 +151,6 @@ class _FeedPostItemState extends State<FeedPostItem> {
   Widget _postFooter({
     required documentSnapshot,
   }) {
-    print('******************');
-    print(documentSnapshot['postid']);
-
     return Padding(
       padding: const EdgeInsets.only(top: 0.0),
       child: Padding(

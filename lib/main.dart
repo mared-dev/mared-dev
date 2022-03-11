@@ -83,7 +83,6 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => FirebaseOperations()),
         ChangeNotifierProvider(create: (_) => Authentication()),
         ChangeNotifierProvider(create: (_) => LandingService()),
-        ChangeNotifierProvider(create: (_) => HomepageHelpers()),
         ChangeNotifierProvider(create: (_) => ProfileHelpers()),
         ChangeNotifierProvider(create: (_) => UploadPost()),
         ChangeNotifierProvider(create: (_) => FeedHelpers()),

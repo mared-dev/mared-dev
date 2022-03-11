@@ -6,6 +6,8 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
+import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/screens/LandingPage/landingServices.dart';
 import 'package:mared_social/screens/LandingPage/landingUtils.dart';
@@ -139,6 +141,25 @@ class LandingHelpers with ChangeNotifier {
                           }
                         }
 
+                        await UserInfoManger.setUserId(
+                            Provider.of<Authentication>(context, listen: false)
+                                .getUserId);
+                        await UserInfoManger.saveUserInfo(UserModel(
+                            uid: Provider.of<Authentication>(context,
+                                    listen: false)
+                                .getUserId,
+                            store: false,
+                            email: Provider.of<Authentication>(context,
+                                    listen: false)
+                                .getgoogleUseremail,
+                            userName: Provider.of<Authentication>(context,
+                                    listen: false)
+                                .getgoogleUsername,
+                            photoUrl: Provider.of<Authentication>(context,
+                                    listen: false)
+                                .getgoogleUserImage,
+                            fcmToken: ''));
+
                         await Provider.of<FirebaseOperations>(context,
                                 listen: false)
                             .createUserCollection(context, {
@@ -219,6 +240,19 @@ class LandingHelpers with ChangeNotifier {
               .getappleUserImage,
         });
 
+        await UserInfoManger.setUserId(
+            Provider.of<Authentication>(context, listen: false).getUserId);
+        await UserInfoManger.saveUserInfo(UserModel(
+            uid: Provider.of<Authentication>(context, listen: false).getUserId,
+            store: false,
+            email: Provider.of<Authentication>(context, listen: false)
+                .getappleUseremail,
+            userName: Provider.of<Authentication>(context, listen: false)
+                .getappleUsername,
+            photoUrl: Provider.of<Authentication>(context, listen: false)
+                .getappleUserImage,
+            fcmToken: ''));
+
         Navigator.pushReplacement(
             context,
             PageTransition(
@@ -250,6 +284,19 @@ class LandingHelpers with ChangeNotifier {
           indexList.add(splitList[i].substring(0, j + 1).toLowerCase());
         }
       }
+
+      await UserInfoManger.setUserId(
+          Provider.of<Authentication>(context, listen: false).getUserId);
+      await UserInfoManger.saveUserInfo(UserModel(
+          uid: Provider.of<Authentication>(context, listen: false).getUserId,
+          store: false,
+          email: Provider.of<Authentication>(context, listen: false)
+              .getgoogleUseremail,
+          userName: Provider.of<Authentication>(context, listen: false)
+              .getgoogleUsername,
+          photoUrl: Provider.of<Authentication>(context, listen: false)
+              .getgoogleUserImage,
+          fcmToken: ''));
 
       await Provider.of<FirebaseOperations>(context, listen: false)
           .createUserCollection(context, {
@@ -316,6 +363,21 @@ class LandingHelpers with ChangeNotifier {
               'userimage':
                   "https://firebasestorage.googleapis.com/v0/b/maredsocial-79a7b.appspot.com/o/userProfileAvatar%2Fprivate%2Fvar%2Fmobile%2FContainers%2FData%2FApplication%2Ficon-mared.png?alt=media&token=eec2b470-f32e-4449-874a-e6929e210c6c",
             });
+
+            ///setting local data to use it later
+            await UserInfoManger.setUserId(
+              Provider.of<Authentication>(context, listen: false).getUserId,
+            );
+
+            await UserInfoManger.saveUserInfo(UserModel(
+                uid: Provider.of<Authentication>(context, listen: false)
+                    .getUserId,
+                email: "$anonUsername@mared.ae",
+                userName: "@$anonUsername",
+                photoUrl:
+                    "https://firebasestorage.googleapis.com/v0/b/maredsocial-79a7b.appspot.com/o/userProfileAvatar%2Fprivate%2Fvar%2Fmobile%2FContainers%2FData%2FApplication%2Ficon-mared.png?alt=media&token=eec2b470-f32e-4449-874a-e6929e210c6c",
+                fcmToken: '',
+                store: false));
 
             Navigator.pushReplacement(
                 context,

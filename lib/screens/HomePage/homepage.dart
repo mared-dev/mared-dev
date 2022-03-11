@@ -38,41 +38,13 @@ class _HomePageState extends State<HomePage> {
 
   int pageIndex = 0;
   bool loading = true;
-  bool bigError = false;
-
-  Future checkUserDoc() async {
-    await FirebaseFirestore.instance
-        .collection("users")
-        .doc(FirebaseAuth.instance.currentUser!.uid)
-        .get()
-        .then((value) {
-      if (!value.exists) {
-        setState(() {
-          bigError = true;
-        });
-      } else {
-        setState(() {
-          bigError = false;
-        });
-      }
-    });
-  }
 
   @override
   void initState() {
     Future.delayed(Duration.zero, () async {
-      await checkUserDoc();
-
-      if (bigError == false) {
-        await load();
-        await Provider.of<FirebaseOperations>(context, listen: false)
-            .initUserData(context)
-            .whenComplete(() {
-          setState(() {
-            loading = false;
-          });
-        });
-      }
+      await load();
+      // await Provider.of<FirebaseOperations>(context, listen: false)
+      //     .initUserData(context);
     });
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -118,77 +90,30 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return bigError == false
-        ? Scaffold(
-            backgroundColor: constantColors.darkColor,
-            body: loading
-                ? LoadingWidget(constantColors: constantColors)
-                : PageView(
-                    controller: homepageController,
-                    children: [
-                      Feed(),
-                      CategoryScreen(),
-                      Provider.of<Authentication>(context, listen: false)
-                                  .getIsAnon ==
-                              false
-                          ? Chatroom()
-                          : IsAnonMsg(),
-                      MapScreen(),
-                      Provider.of<Authentication>(context, listen: false)
-                                  .getIsAnon ==
-                              false
-                          ? Profile()
-                          : IsAnonMsg(),
-                    ],
-                    physics: const NeverScrollableScrollPhysics(),
-                    onPageChanged: (page) {
-                      setState(() {
-                        pageIndex = page;
-                      });
-                    },
-                  ),
-            bottomNavigationBar:
-                Provider.of<HomepageHelpers>(context, listen: false)
-                    .bottomNavBar(context, pageIndex, homepageController),
-          )
-        : Scaffold(
-            backgroundColor: constantColors.darkColor,
-            body: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Oops, looks like there was an error authenticating you.\nPlease Log out and login again",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          color: constantColors.whiteColor, fontSize: 18),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(top: 20.0),
-                      child: ElevatedButton.icon(
-                          onPressed: () {
-                            Provider.of<Authentication>(context, listen: false)
-                                .signOutWithGoogle();
-                            Provider.of<Authentication>(context, listen: false)
-                                .logOutViaEmail()
-                                .whenComplete(() {
-                              Navigator.pushReplacement(
-                                context,
-                                PageTransition(
-                                    child: LandingPage(),
-                                    type: PageTransitionType.topToBottom),
-                              );
-                            });
-                          },
-                          icon: Icon(FontAwesomeIcons.signInAlt),
-                          label: Text("Logout")),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          );
+    return Scaffold(
+      backgroundColor: constantColors.darkColor,
+      body: PageView(
+        controller: homepageController,
+        children: [
+          Feed(),
+          CategoryScreen(),
+          Provider.of<Authentication>(context, listen: false).getIsAnon == false
+              ? Chatroom()
+              : IsAnonMsg(),
+          MapScreen(),
+          Provider.of<Authentication>(context, listen: false).getIsAnon == false
+              ? Profile()
+              : IsAnonMsg(),
+        ],
+        physics: const NeverScrollableScrollPhysics(),
+        onPageChanged: (page) {
+          setState(() {
+            pageIndex = page;
+          });
+        },
+      ),
+      bottomNavigationBar:
+          homePageBottomNavbar(context, pageIndex, homepageController),
+    );
   }
 }
