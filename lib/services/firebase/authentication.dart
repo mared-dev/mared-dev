@@ -49,6 +49,10 @@ class Authentication with ChangeNotifier {
     notifyListeners();
   }
 
+  Future resetPassword(String email) async {
+    return firebaseAuth.sendPasswordResetEmail(email: email);
+  }
+
   Future createAccount(String email, String password) async {
     UserCredential userCredential = await firebaseAuth
         .createUserWithEmailAndPassword(email: email, password: password);

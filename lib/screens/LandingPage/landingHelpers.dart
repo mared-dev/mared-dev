@@ -14,6 +14,7 @@ import 'package:mared_social/screens/LandingPage/landingUtils.dart';
 import 'package:mared_social/screens/splitter/splitter.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
+import 'package:mared_social/widgets/bottom_sheets/auth_sheets/login_sheet.dart';
 import 'package:mared_social/widgets/items/login_icon.dart';
 import 'package:nanoid/nanoid.dart';
 import 'package:page_transition/page_transition.dart';
@@ -472,8 +473,7 @@ class LandingHelpers with ChangeNotifier {
                       color: constantColors.blueColor,
                       onPressed: () {
                         Navigator.pop(context);
-                        Provider.of<LandingService>(context, listen: false)
-                            .loginSheet(context);
+                        LoginSheet(context);
                       },
                       child: Text(
                         "Log In",
