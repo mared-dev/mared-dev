@@ -48,8 +48,8 @@ class _PostUploadCameraScreenState extends State<PostUploadCameraScreen> {
   GooglePlace googlePlace =
       GooglePlace("AIzaSyCHjJlqqJ-eLChGmUX0RH2iJH5TtdU3RrI");
 
-  late String lat;
-  late String lng;
+  String lat = "0";
+  String lng = "0";
   String address = "";
   bool adrSelected = false;
 
@@ -369,9 +369,7 @@ class _PostUploadCameraScreenState extends State<PostUploadCameraScreen> {
                       ),
                     ),
                     onPressed: () async {
-                      if (_selectedCategory != "" &&
-                          adrSelected == true &&
-                          _formKey.currentState!.validate()) {
+                      if (_formKey.currentState!.validate()) {
                         String postId = nanoid(14).toString();
                         String name =
                             "${captionController.text} ${descriptionController.text}";
@@ -408,9 +406,7 @@ class _PostUploadCameraScreenState extends State<PostUploadCameraScreen> {
                           // Add data under user profile
                           return FirebaseFirestore.instance
                               .collection("users")
-                              .doc(Provider.of<Authentication>(context,
-                                      listen: false)
-                                  .getUserId)
+                              .doc(UserInfoManger.getUserId())
                               .collection("posts")
                               .doc(postId)
                               .set({

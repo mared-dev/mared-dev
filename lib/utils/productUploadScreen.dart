@@ -74,8 +74,8 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
   GooglePlace googlePlace =
       GooglePlace("AIzaSyCHjJlqqJ-eLChGmUX0RH2iJH5TtdU3RrI");
 
-  late String lat;
-  late String lng;
+  String lat = "";
+  String lng = "";
   String address = "";
   bool adrSelected = false;
 

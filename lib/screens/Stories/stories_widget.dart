@@ -10,11 +10,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
+import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/screens/Stories/stories_helper.dart';
 import 'package:mared_social/screens/splitter/splitter.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
+import 'package:mared_social/services/mux/mux_video_stream.dart';
 import 'package:mared_social/utils/pick_files_helper.dart';
 import 'package:nanoid/nanoid.dart';
 import 'package:page_transition/page_transition.dart';
@@ -171,6 +174,7 @@ class StoryWidgets {
   }
 
   previewStoryImage({required BuildContext context, required File storyImage}) {
+    UserModel userModel = UserInfoManger.getUserInfo();
     return showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -248,6 +252,8 @@ class StoryWidgets {
                             await uploadStoryVideo(context: context)
                                 .whenComplete(() async {
                               try {
+                                videoUrl = await uploadVideoToMux(videoUrl);
+
                                 String storyId = nanoid(14).toString();
                                 await FirebaseFirestore.instance
                                     .collection("stories")
@@ -255,22 +261,10 @@ class StoryWidgets {
                                     .set({
                                   'storyid': storyId,
                                   'videourl': videoUrl,
-                                  'username': Provider.of<FirebaseOperations>(
-                                          context,
-                                          listen: false)
-                                      .getInitUserName,
-                                  'userimage': Provider.of<FirebaseOperations>(
-                                          context,
-                                          listen: false)
-                                      .getInitUserImage,
-                                  'useremail': Provider.of<FirebaseOperations>(
-                                          context,
-                                          listen: false)
-                                      .getInitUserEmail,
-                                  'useruid': Provider.of<Authentication>(
-                                          context,
-                                          listen: false)
-                                      .getUserId,
+                                  'username': userModel.userName,
+                                  'userimage': userModel.photoUrl,
+                                  'useremail': userModel.email,
+                                  'useruid': userModel.uid,
                                   'time': Timestamp.now(),
                                 }).whenComplete(() async {
                                   await FirebaseFirestore.instance
