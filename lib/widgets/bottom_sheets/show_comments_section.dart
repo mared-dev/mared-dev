@@ -279,13 +279,12 @@ class _CommentsSectionState extends State<CommentsSection> {
                                 .getIsAnon ==
                             false) {
                           addComment(
-                                  userUid: widget.snapshot['useruid'],
-                                  postId: widget.snapshot['postid'],
-                                  comment: commentController.text,
-                                  context: context)
-                              .whenComplete(() {
-                            commentController.clear();
-                          });
+                              userUid: widget.snapshot['useruid'],
+                              postId: widget.snapshot['postid'],
+                              comment: commentController.text,
+                              context: context);
+                          commentController.clear();
+                          Navigator.of(context).pop();
                         } else {
                           IsAnonBottomSheet(context);
                         }
@@ -351,14 +350,10 @@ Future addComment({
       {
         'commentid': commentId,
         'comment': comment,
-        'username': Provider.of<FirebaseOperations>(context, listen: false)
-            .getInitUserName,
-        'useruid':
-            Provider.of<Authentication>(context, listen: false).getUserId,
-        'userimage': Provider.of<FirebaseOperations>(context, listen: false)
-            .getInitUserImage,
-        'useremail': Provider.of<FirebaseOperations>(context, listen: false)
-            .getInitUserEmail,
+        'username': userModel.userName,
+        'useruid': userModel.uid,
+        'userimage': userModel.photoUrl,
+        'useremail': userModel.email,
         'time': Timestamp.now(),
       }
     ]
@@ -371,7 +366,7 @@ Future addComment({
       .then((postUser) async {
     await FirebaseFirestore.instance
         .collection("users")
-        .doc(Provider.of<Authentication>(context, listen: false).getUserId)
+        .doc(UserInfoManger.getUserId())
         .get()
         .then((commentingUser) async {
       await _fcmNotificationService.sendNotificationToUser(
