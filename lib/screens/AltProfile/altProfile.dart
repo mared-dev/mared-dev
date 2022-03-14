@@ -3,6 +3,7 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/helpers/post_helpers.dart';
 import 'package:mared_social/screens/AltProfile/altProfileHelper.dart';
 import 'package:mared_social/widgets/items/profile_post_item.dart';
 import 'package:mared_social/widgets/items/show_post_details.dart';
@@ -102,7 +103,10 @@ class AltProfile extends StatelessWidget {
                           child: Padding(
                               padding: const EdgeInsets.all(2.0),
                               child: ProfilePostItem(
-                                urls: userPostDocSnap['imageslist'],
+                                urls: PostHelpers.checkIfPostIsVideo(
+                                        userPostDocSnap['imageslist'])
+                                    ? [userPostDocSnap['thumbnail']]
+                                    : userPostDocSnap['imageslist'],
                               )),
                         );
                       }

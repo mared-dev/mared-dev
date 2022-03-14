@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/helpers/post_helpers.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/Profile/profileHelpers.dart';
@@ -155,7 +156,10 @@ class PostsProfile extends StatelessWidget {
                                   documentSnapshot: userPostDocSnap);
                             },
                             child: ProfilePostItem(
-                              urls: userPostDocSnap['imageslist'],
+                              urls: PostHelpers.checkIfPostIsVideo(
+                                      userPostDocSnap['imageslist'])
+                                  ? [userPostDocSnap['thumbnail']]
+                                  : userPostDocSnap['imageslist'],
                             ));
                       }
                     },

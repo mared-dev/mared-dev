@@ -252,7 +252,9 @@ class StoryWidgets {
                             await uploadStoryVideo(context: context)
                                 .whenComplete(() async {
                               try {
-                                videoUrl = await uploadVideoToMux(videoUrl);
+                                String playBackId =
+                                    await getPlayBackId(videoUrl);
+                                videoUrl = getMuxVideoUrl(playBackId);
 
                                 String storyId = nanoid(14).toString();
                                 await FirebaseFirestore.instance
@@ -261,6 +263,7 @@ class StoryWidgets {
                                     .set({
                                   'storyid': storyId,
                                   'videourl': videoUrl,
+                                  'thumbnail': getMuxThumbnailImage(playBackId),
                                   'username': userModel.userName,
                                   'userimage': userModel.photoUrl,
                                   'useremail': userModel.email,
@@ -277,22 +280,12 @@ class StoryWidgets {
                                       .set({
                                     'storyid': storyId,
                                     'videourl': videoUrl,
-                                    'username': Provider.of<FirebaseOperations>(
-                                            context,
-                                            listen: false)
-                                        .getInitUserName,
-                                    'userimage':
-                                        Provider.of<FirebaseOperations>(context,
-                                                listen: false)
-                                            .getInitUserImage,
-                                    'useremail':
-                                        Provider.of<FirebaseOperations>(context,
-                                                listen: false)
-                                            .getInitUserEmail,
-                                    'useruid': Provider.of<Authentication>(
-                                            context,
-                                            listen: false)
-                                        .getUserId,
+                                    'thumbnail':
+                                        getMuxThumbnailImage(playBackId),
+                                    'username': userModel.userName,
+                                    'userimage': userModel.photoUrl,
+                                    'useremail': userModel.email,
+                                    'useruid': userModel.uid,
                                     'time': Timestamp.now(),
                                   }).whenComplete(() {
                                     Navigator.pushReplacement(

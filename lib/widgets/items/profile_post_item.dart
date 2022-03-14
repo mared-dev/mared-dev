@@ -14,8 +14,6 @@ class ProfilePostItem extends StatefulWidget {
 }
 
 class _ProfilePostItemState extends State<ProfilePostItem> {
-  ConstantColors constantColors = ConstantColors();
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -24,8 +22,16 @@ class _ProfilePostItemState extends State<ProfilePostItem> {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(5),
           child: PostHelpers.checkIfPostIsVideo(widget.urls)
-              ? VideoThumbnailWidget(
-                  videoUrl: widget.urls[0],
+              ? CachedNetworkImage(
+                  fit: BoxFit.cover,
+                  imageUrl: widget.urls[0],
+                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                      SizedBox(
+                    height: 50,
+                    width: 50,
+                    child: LoadingWidget(constantColors: constantColors),
+                  ),
+                  errorWidget: (context, url, error) => const Icon(Icons.error),
                 )
               : Swiper(
                   itemBuilder: (BuildContext context, int index) {

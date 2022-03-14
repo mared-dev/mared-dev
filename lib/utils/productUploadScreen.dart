@@ -434,9 +434,11 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
                           }
 
                           String videoStreamUrl = "";
+                          String playBackId = "";
                           if (widget.postType == PostType.VIDEO) {
-                            videoStreamUrl =
-                                await uploadVideoToMux(widget.imagesList[0]);
+                            playBackId =
+                                await getPlayBackId(widget.imagesList[0]);
+                            videoStreamUrl = getMuxVideoUrl(playBackId);
                           }
 
                           if (widget.postType == PostType.VIDEO &&
@@ -459,6 +461,9 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
                             'time': Timestamp.now(),
                             'useremail': userModel.email,
                             'description': descriptionController.text,
+                            'thumbnail': widget.postType == PostType.VIDEO
+                                ? getMuxThumbnailImage(playBackId)
+                                : "",
                             'imageslist': (widget.postType == PostType.VIDEO)
                                 ? [videoStreamUrl]
                                 : widget.imagesList,
@@ -490,6 +495,9 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
                             'imageslist': (widget.postType == PostType.VIDEO)
                                 ? [videoStreamUrl]
                                 : widget.imagesList,
+                            'thumbnail': widget.postType == PostType.VIDEO
+                                ? getMuxThumbnailImage(playBackId)
+                                : "",
                             'address': address,
                             'lat': lat,
                             'lng': lng,
