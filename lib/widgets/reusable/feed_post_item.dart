@@ -14,6 +14,7 @@ import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/utils/postoptions.dart';
 import 'package:mared_social/widgets/bottom_sheets/show_comments_section.dart';
 import 'package:mared_social/widgets/items/video_post_item.dart';
+import 'package:mared_social/widgets/reusable/feed_item_body_with_like.dart';
 import 'package:mared_social/widgets/reusable/feed_post_item_body.dart';
 import 'package:mared_social/widgets/reusable/paginate_firestore_edited.dart';
 import 'package:mared_social/widgets/reusable/post_comments_part.dart';
@@ -86,10 +87,11 @@ class _FeedPostItemState extends State<FeedPostItem> {
                   ],
                 ),
               ),
-              FeedPostItemBody(
+              FeedItemBodyWithLike(
                 imageList: widget.documentSnapshot['imageslist'],
                 userId: widget.documentSnapshot['useruid'],
                 postId: widget.documentSnapshot['postid'],
+                likes: widget.documentSnapshot['likes'],
               ),
               ////TODO:this need to be optimized
               _postFooter(documentSnapshot: widget.documentSnapshot),

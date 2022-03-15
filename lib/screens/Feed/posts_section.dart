@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:mared_social/widgets/reusable/feed_item_body_with_like.dart';
 import 'package:mared_social/widgets/reusable/feed_post_item.dart';
 import 'package:mared_social/widgets/reusable/paginate_firestore_edited.dart';
 
