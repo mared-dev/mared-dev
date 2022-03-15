@@ -16,8 +16,6 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  ConstantColors constantColors = ConstantColors();
-
   @override
   void initState() {
     // WidgetsBinding.instance!.addPostFrameCallback((_) async {

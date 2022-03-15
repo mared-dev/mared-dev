@@ -52,7 +52,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ConstantColors constantColors = ConstantColors();
     return MultiProvider(
       child: MaterialApp(
         home: WillPopScope(

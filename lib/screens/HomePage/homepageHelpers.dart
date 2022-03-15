@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
@@ -18,6 +20,7 @@ Widget homePageBottomNavbar(
     BuildContext context, int index, PageController pageController) {
   UserModel _userInfo = UserInfoManger.getUserInfo();
   return CustomNavigationBar(
+    isFloating: Platform.isAndroid ? true : false,
     currentIndex: index,
     bubbleCurve: Curves.bounceIn,
     scaleCurve: Curves.decelerate,
