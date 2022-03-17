@@ -5,9 +5,14 @@ import 'package:mared_social/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mared_social/constants/general_styles.dart';
 import 'package:mared_social/constants/text_styles.dart';
+import 'package:mared_social/screens/LandingPage/landingServices.dart';
+import 'package:mared_social/screens/LandingPage/landingUtils.dart';
+import 'package:mared_social/widgets/bottom_sheets/auth_sheets/select_avatar_options_sheet.dart';
+import 'package:mared_social/widgets/bottom_sheets/confirm_profile_pic_sheet.dart';
 import 'package:mared_social/widgets/items/pick_image_avatar.dart';
 import 'package:mared_social/widgets/reusable/auth_checkbox_group.dart';
 import 'package:mared_social/widgets/reusable/auth_checkbox_item.dart';
+import 'package:provider/provider.dart';
 
 class SignUpScreen extends StatefulWidget {
   @override
@@ -57,7 +62,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         padding: EdgeInsets.symmetric(vertical: 21.h),
                         child: PickImageAvatar(
                           callback: () {
-                            print('pick image!!!!!!!!!');
+                            // selectAvatarOptionsSheet(context);
+                            confirmProfilePicSheet(context);
                           },
                         )),
                     TextField(
