@@ -23,8 +23,7 @@ class PickImageAvatar extends StatelessWidget {
             foregroundColor: Colors.transparent,
             radius: 51.h,
             backgroundImage: selectedFile == null
-                ? const AssetImage(
-                        'assets/images/profile_placeholder_image.png')
+                ? const AssetImage('assets/images/empty_profile_pic.png')
                     as ImageProvider
                 : FileImage(selectedFile!),
           ),

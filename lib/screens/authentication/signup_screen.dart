@@ -14,6 +14,7 @@ import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/LandingPage/landingServices.dart';
 import 'package:mared_social/screens/LandingPage/landingUtils.dart';
+import 'package:mared_social/screens/authentication/login_screen.dart';
 import 'package:mared_social/screens/splitter/splitter.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
@@ -328,7 +329,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   Navigator.pushReplacement(
                                       context,
                                       PageTransition(
-                                          child: SignUpScreen(),
+                                          child: LoginScreen(),
                                           type:
                                               PageTransitionType.rightToLeft));
                                 }),
