@@ -7,8 +7,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
-import 'package:mared_social/screens/LandingPage/landingHelpers.dart';
+import 'package:mared_social/screens/LandingPage/landing_helpers.dart';
+import 'package:mared_social/screens/authentication/login_screen.dart';
 import 'package:mared_social/widgets/reusable/landing_auth_button.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class LandingPage extends StatefulWidget {
@@ -21,6 +23,8 @@ class LandingPage extends StatefulWidget {
 class _LandingPageState extends State<LandingPage> {
   final ConstantColors constantColors = ConstantColors();
   String _authStatus = 'Unknown';
+  late TextEditingController _emailController;
+  late TextEditingController _passwordController;
 
   @override
   void initState() {
@@ -93,7 +97,7 @@ class _LandingPageState extends State<LandingPage> {
                 child: Container(
                   width: screenSize.width,
                   child: Image.asset(
-                    'assets/images/Dubai_1.png',
+                    'assets/images/landing_logo.png',
                     fit: BoxFit.fill,
                   ),
                 )),
@@ -137,7 +141,11 @@ class _LandingPageState extends State<LandingPage> {
                       LandingAuthButton(
                           buttonText: 'Sign in',
                           callback: () {
-                            print('LOOOGIN');
+                            Navigator.push(
+                                context,
+                                PageTransition(
+                                    child: LoginScreen(),
+                                    type: PageTransitionType.rightToLeft));
                           }),
                       SizedBox(
                         width: screenUtilObject.setWidth(23),
@@ -146,7 +154,11 @@ class _LandingPageState extends State<LandingPage> {
                       SizedBox(
                         width: screenUtilObject.setWidth(23),
                       ),
-                      LandingAuthButton(buttonText: 'Guest', callback: () {}),
+                      LandingAuthButton(
+                          buttonText: 'Guest',
+                          callback: () {
+                            // LandingHelpers.loginAsGuest(context: context);
+                          }),
                     ],
                   ),
                   Container(
@@ -188,11 +200,31 @@ class _LandingPageState extends State<LandingPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SvgPicture.asset('assets/icons/apple_icon.svg'),
+                      GestureDetector(
+                        onTap: () {
+                          LandingHelpers.loginWithGoogle(context);
+                        },
+                        child: Image.asset(
+                          'assets/icons/gmail_icon.png',
+                          fit: BoxFit.fill,
+                          width: 26.w,
+                          height: 26.h,
+                        ),
+                      ),
                       SizedBox(
                         width: 25.w,
                       ),
-                      SvgPicture.asset('assets/icons/apple_icon.svg')
+                      GestureDetector(
+                        onTap: () {
+                          LandingHelpers.loginWithApple(context);
+                        },
+                        child: SvgPicture.asset(
+                          'assets/icons/apple_icon.svg',
+                          fit: BoxFit.fill,
+                          width: 24.w,
+                          height: 26.h,
+                        ),
+                      )
                     ],
                   ),
 

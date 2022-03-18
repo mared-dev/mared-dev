@@ -16,6 +16,7 @@ import 'package:mared_social/screens/HomePage/homepageHelpers.dart';
 import 'package:mared_social/screens/LandingPage/landingHelpers.dart';
 import 'package:mared_social/screens/LandingPage/landingServices.dart';
 import 'package:mared_social/screens/LandingPage/landingUtils.dart';
+import 'package:mared_social/screens/LandingPage/landingpage.dart';
 import 'package:mared_social/screens/Messaging/groupmessagehelper.dart';
 import 'package:mared_social/screens/Messaging/privateMessageHelper.dart';
 import 'package:mared_social/screens/Profile/profileHelpers.dart';
@@ -26,6 +27,7 @@ import 'package:mared_social/screens/auctionFeed/auctionfeedHelper.dart';
 import 'package:mared_social/screens/auctionFeed/placebidhelper.dart';
 import 'package:mared_social/screens/auctionMap/auctionMapHelper.dart';
 import 'package:mared_social/screens/auctions/auctionPageHelper.dart';
+import 'package:mared_social/screens/authentication/forgot_password_screen.dart';
 import 'package:mared_social/screens/authentication/login_screen.dart';
 import 'package:mared_social/screens/authentication/signup_screen.dart';
 import 'package:mared_social/screens/isAnon/isAnonHelper.dart';
@@ -64,7 +66,7 @@ class MyApp extends StatelessWidget {
           home: WillPopScope(
             onWillPop: () async => false,
             // child: SplashScreen(),
-            child: SignUpScreen(),
+            child: LandingPage(),
           ),
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
