@@ -23,7 +23,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // });
     Timer(
         const Duration(
-          seconds: 2,
+          milliseconds: 3500,
         ), () async {
       if (FirebaseAuth.instance.currentUser != null) {
         Provider.of<Authentication>(context, listen: false)
@@ -53,9 +53,10 @@ class _SplashScreenState extends State<SplashScreen> {
         children: [
           Container(
             color: constantColors.lightBlueColor,
-            height: 500,
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
             child: Image.asset(
-              "assets/logo/animatedLogo.gif",
+              "assets/images/Mared Logo_2.gif",
               fit: BoxFit.fitWidth,
             ),
           ),
