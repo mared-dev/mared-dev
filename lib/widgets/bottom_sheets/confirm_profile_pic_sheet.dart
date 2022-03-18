@@ -6,12 +6,16 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/constants/text_styles.dart';
+import 'package:mared_social/helpers/loading_helper.dart';
 import 'package:mared_social/screens/LandingPage/landingUtils.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:mared_social/widgets/bottom_sheets/auth_sheets/select_avatar_options_sheet.dart';
 import 'package:provider/provider.dart';
 
-confirmProfilePicSheet(BuildContext context) {
+confirmProfilePicSheet(
+    {required BuildContext context,
+    required File imageFile,
+    required setUploadedImageLinkCallback}) {
   return showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -28,7 +32,7 @@ confirmProfilePicSheet(BuildContext context) {
                       color: AppColors.darkGrayTextColor,
                       borderRadius: BorderRadius.circular(3)),
                 ),
-                const CircleAvatar(
+                CircleAvatar(
                   radius: 80,
                   backgroundColor: AppColors.accentColor,
                   // backgroundImage: FileImage(
@@ -37,24 +41,27 @@ confirmProfilePicSheet(BuildContext context) {
 
                   child: CircleAvatar(
                     radius: 76,
-                    backgroundImage: AssetImage(
-                        'assets/images/profile_placeholder_image.png'),
+                    backgroundImage: FileImage(imageFile),
                   ),
                 ),
                 Padding(
                   padding: EdgeInsets.only(top: 20.h, bottom: 8.h),
                   child: _optionButton(
-                      buttonText: "Confirm Image",
-                      callback: () {
-                        print('image picked!!!');
-                        //   Provider.of<FirebaseOperations>(context,
-                        //       listen: false)
-                        //       .uploadUserAvatar(context)
-                        //       .whenComplete(() {
-                        //
-                        //   });
-                        // },
-                      }),
+                    buttonText: "Confirm Image",
+                    callback: () async {
+                      print('image picked!!!');
+                      LoadingHelper.startLoading();
+                      String imageUrl = await Provider.of<FirebaseOperations>(
+                              context,
+                              listen: false)
+                          .uploadUserAvatar(
+                              context: context, pickedFile: imageFile);
+                      setUploadedImageLinkCallback(imageUrl);
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                      LoadingHelper.endLoading();
+                    },
+                  ),
                 ),
                 MaterialButton(
                   child: Text(
@@ -68,7 +75,6 @@ confirmProfilePicSheet(BuildContext context) {
                   ),
                   onPressed: () {
                     Navigator.of(context).pop();
-                    selectAvatarOptionsSheet(context);
                   },
                 ),
               ],

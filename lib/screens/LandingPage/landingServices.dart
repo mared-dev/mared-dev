@@ -98,7 +98,11 @@ class LandingService with ChangeNotifier {
                         onPressed: () {
                           Provider.of<FirebaseOperations>(context,
                                   listen: false)
-                              .uploadUserAvatar(context)
+                              .uploadUserAvatar(
+                                  context: context,
+                                  pickedFile: Provider.of<LandingUtils>(context,
+                                          listen: false)
+                                      .getUserAvatar)
                               .whenComplete(() {
                             signUpSheet(context);
                           });

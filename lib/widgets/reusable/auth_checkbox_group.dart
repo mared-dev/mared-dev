@@ -4,21 +4,27 @@ import 'package:collection/collection.dart';
 
 class AuthCheckBoxGroup extends StatefulWidget {
   final List<String> options;
+  final changeSelectedItemCallback;
 
-  const AuthCheckBoxGroup({Key? key, required this.options}) : super(key: key);
+  const AuthCheckBoxGroup(
+      {Key? key,
+      required this.options,
+      required this.changeSelectedItemCallback})
+      : super(key: key);
   @override
   _AuthCheckBoxGroupState createState() => _AuthCheckBoxGroupState();
 }
 
 class _AuthCheckBoxGroupState extends State<AuthCheckBoxGroup> {
   List<bool> selectedList = [];
-  int selectedIndex = -1;
+  int selectedIndex = 0;
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     selectedList = List.filled(widget.options.length, false);
+    selectedList[selectedIndex] = true;
   }
 
   @override
@@ -38,6 +44,7 @@ class _AuthCheckBoxGroupState extends State<AuthCheckBoxGroup> {
   }
 
   _changeSelectedItem(int newIndex) {
+    widget.changeSelectedItemCallback(newIndex);
     setState(() {
       selectedIndex = newIndex;
       selectedList = List.filled(widget.options.length, false);

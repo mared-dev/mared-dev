@@ -1,3 +1,4 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -5,13 +6,17 @@ import 'package:mared_social/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mared_social/constants/general_styles.dart';
 import 'package:mared_social/constants/text_styles.dart';
+import 'package:mared_social/helpers/loading_helper.dart';
 import 'package:mared_social/screens/LandingPage/landingServices.dart';
 import 'package:mared_social/screens/LandingPage/landingUtils.dart';
+import 'package:mared_social/screens/authentication/login_screen.dart';
+import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/widgets/bottom_sheets/auth_sheets/select_avatar_options_sheet.dart';
 import 'package:mared_social/widgets/bottom_sheets/confirm_profile_pic_sheet.dart';
 import 'package:mared_social/widgets/items/pick_image_avatar.dart';
 import 'package:mared_social/widgets/reusable/auth_checkbox_group.dart';
 import 'package:mared_social/widgets/reusable/auth_checkbox_item.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -20,6 +25,15 @@ class ForgotPasswordScreen extends StatefulWidget {
 }
 
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+  late TextEditingController _emailController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _emailController = TextEditingController();
+  }
+
   @override
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
@@ -66,8 +80,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       height: 21.h,
                     ),
                     TextField(
+                      controller: _emailController,
                       cursorColor: Colors.black,
-                      keyboardType: TextInputType.phone,
+                      keyboardType: TextInputType.emailAddress,
                       decoration: getAuthInputDecoration(
                         hintText: 'Email Address',
                       ),
@@ -78,7 +93,29 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     SizedBox(
                       width: screenSize.width,
                       child: ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () async {
+                          if (_emailController.text.isNotEmpty) {
+                            LoadingHelper.startLoading();
+                            await Provider.of<Authentication>(context,
+                                    listen: false)
+                                .resetPassword(
+                              _emailController.text,
+                            );
+                            LoadingHelper.endLoading();
+                            Navigator.pushReplacement(
+                                context,
+                                PageTransition(
+                                    child: LoginScreen(),
+                                    type: PageTransitionType.rightToLeft));
+                          } else {
+                            CoolAlert.show(
+                              context: context,
+                              type: CoolAlertType.error,
+                              title: "Error",
+                              text: "Email can't empty",
+                            );
+                          }
+                        },
                         style: ElevatedButton.styleFrom(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 22.w, vertical: 14.h),

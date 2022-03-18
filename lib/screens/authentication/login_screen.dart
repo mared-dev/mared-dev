@@ -4,6 +4,11 @@ import 'package:mared_social/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mared_social/constants/general_styles.dart';
 import 'package:mared_social/constants/text_styles.dart';
+import 'package:mared_social/helpers/loading_helper.dart';
+import 'package:mared_social/screens/LandingPage/landing_helpers.dart';
+import 'package:mared_social/screens/authentication/forgot_password_screen.dart';
+import 'package:mared_social/screens/authentication/signup_screen.dart';
+import 'package:page_transition/page_transition.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -102,27 +107,44 @@ class _LoginScreenState extends State<LoginScreen> {
                               return "This field can't be empty";
                             },
                           ),
-                          SizedBox(
-                            height: 17.h,
-                          ),
-                          SizedBox(
-                            width: screenSize.width,
-                            child: Text(
-                              'Forgot password ?',
-                              textAlign: TextAlign.end,
-                              style: regularTextStyle(
-                                  fontSize: 14.sp,
-                                  textColor: AppColors.darkGrayTextColor),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 28.h,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.pushReplacement(
+                                      context,
+                                      PageTransition(
+                                          child: ForgotPasswordScreen(),
+                                          type:
+                                              PageTransitionType.bottomToTop));
+                                },
+                                child: Padding(
+                                  padding:
+                                      EdgeInsets.only(top: 17.h, bottom: 28.h),
+                                  child: Text(
+                                    'Forgot password ?',
+                                    textAlign: TextAlign.end,
+                                    style: regularTextStyle(
+                                        fontSize: 14.sp,
+                                        textColor: AppColors.darkGrayTextColor),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           SizedBox(
                             width: screenSize.width,
                             child: ElevatedButton(
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {}
+                              onPressed: () async {
+                                if (_formKey.currentState!.validate()) {
+                                  LoadingHelper.startLoading();
+                                  await LandingHelpers.loginWithEmail(
+                                      context: context,
+                                      email: _emailController.text,
+                                      password: _passwordController.text);
+                                  LoadingHelper.endLoading();
+                                }
                               },
                               style: ElevatedButton.styleFrom(
                                   padding: EdgeInsets.symmetric(
@@ -153,7 +175,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                       textColor: AppColors.darkGrayTextColor),
                                   recognizer: TapGestureRecognizer()
                                     ..onTap = () {
-                                      print("SIGN UUUUUP");
+                                      Navigator.pushReplacement(
+                                          context,
+                                          PageTransition(
+                                              child: SignUpScreen(),
+                                              type: PageTransitionType
+                                                  .rightToLeft));
                                     }),
                             ]),
                           ),

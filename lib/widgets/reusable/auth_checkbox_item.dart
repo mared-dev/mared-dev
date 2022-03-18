@@ -13,29 +13,32 @@ class AuthCheckboxItem extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        SvgPicture.asset(
-          isSelected
-              ? 'assets/icons/checked_box.svg'
-              : 'assets/icons/unchecked_box.svg',
-          width: 12.h,
-          height: 12.h,
-          fit: BoxFit.fill,
-        ),
-        SizedBox(
-          width: 7.w,
-        ),
-        Text(
-          optionText,
-          style: regularTextStyle(
-              fontSize: 12, textColor: AppColors.darkGrayTextColor),
-        ),
-        SizedBox(
-          width: 26.w,
-        ),
-      ],
+    return Padding(
+      padding: EdgeInsets.only(top: 21.h, bottom: 28.h),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SvgPicture.asset(
+            isSelected
+                ? 'assets/icons/checked_box.svg'
+                : 'assets/icons/unchecked_box.svg',
+            width: 12.h,
+            height: 12.h,
+            fit: BoxFit.fill,
+          ),
+          SizedBox(
+            width: 7.w,
+          ),
+          Text(
+            optionText,
+            style: regularTextStyle(
+                fontSize: 12, textColor: AppColors.darkGrayTextColor),
+          ),
+          SizedBox(
+            width: 26.w,
+          ),
+        ],
+      ),
     );
   }
 }

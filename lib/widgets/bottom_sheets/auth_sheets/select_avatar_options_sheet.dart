@@ -12,7 +12,8 @@ import 'package:mared_social/widgets/bottom_sheets/confirm_profile_pic_sheet.dar
 import 'package:provider/provider.dart';
 
 late File userAvatar;
-Future selectAvatarOptionsSheet(BuildContext context) async {
+Future selectAvatarOptionsSheet(
+    {required BuildContext context, required setSelectedFileCallback}) async {
   return showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -54,9 +55,10 @@ Future selectAvatarOptionsSheet(BuildContext context) async {
                           print(pickedFile.path);
                           // confirmProfilePicSheet(
                           //     context, File(pickedFile.path));
-                          confirmProfilePicSheet(
-                            context,
-                          );
+                          // confirmProfilePicSheet(
+                          //   context,
+                          // );
+                          setSelectedFileCallback(File(pickedFile.path));
                         }),
                     _optionButton(
                         context: context,
@@ -67,9 +69,10 @@ Future selectAvatarOptionsSheet(BuildContext context) async {
 
                           // confirmProfilePicSheet(
                           //     context, File(pickedFile.path));
-                          confirmProfilePicSheet(
-                            context,
-                          );
+                          // confirmProfilePicSheet(
+                          //   context,
+                          // );
+                          setSelectedFileCallback(File(pickedFile.path));
                         }),
                   ],
                 )

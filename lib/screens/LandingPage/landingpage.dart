@@ -7,8 +7,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
+import 'package:mared_social/helpers/loading_helper.dart';
 import 'package:mared_social/screens/LandingPage/landing_helpers.dart';
 import 'package:mared_social/screens/authentication/login_screen.dart';
+import 'package:mared_social/screens/authentication/signup_screen.dart';
 import 'package:mared_social/widgets/reusable/landing_auth_button.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -150,14 +152,24 @@ class _LandingPageState extends State<LandingPage> {
                       SizedBox(
                         width: screenUtilObject.setWidth(23),
                       ),
-                      LandingAuthButton(buttonText: 'Sign up', callback: () {}),
+                      LandingAuthButton(
+                          buttonText: 'Sign up',
+                          callback: () {
+                            Navigator.push(
+                                context,
+                                PageTransition(
+                                    child: SignUpScreen(),
+                                    type: PageTransitionType.rightToLeft));
+                          }),
                       SizedBox(
                         width: screenUtilObject.setWidth(23),
                       ),
                       LandingAuthButton(
                           buttonText: 'Guest',
-                          callback: () {
-                            // LandingHelpers.loginAsGuest(context: context);
+                          callback: () async {
+                            LoadingHelper.startLoading();
+                            await LandingHelpers.loginAsGuest(context: context);
+                            LoadingHelper.endLoading();
                           }),
                     ],
                   ),
@@ -212,19 +224,23 @@ class _LandingPageState extends State<LandingPage> {
                         ),
                       ),
                       SizedBox(
-                        width: 25.w,
+                        width: Platform.isIOS ? 25.w : 0,
                       ),
-                      GestureDetector(
-                        onTap: () {
-                          LandingHelpers.loginWithApple(context);
-                        },
-                        child: SvgPicture.asset(
-                          'assets/icons/apple_icon.svg',
-                          fit: BoxFit.fill,
-                          width: 24.w,
-                          height: 26.h,
-                        ),
-                      )
+                      Platform.isIOS
+                          ? GestureDetector(
+                              onTap: () async {
+                                LoadingHelper.startLoading();
+                                await LandingHelpers.loginWithApple(context);
+                                LoadingHelper.endLoading();
+                              },
+                              child: SvgPicture.asset(
+                                'assets/icons/apple_icon.svg',
+                                fit: BoxFit.fill,
+                                width: 24.w,
+                                height: 26.h,
+                              ),
+                            )
+                          : Container()
                     ],
                   ),
 
