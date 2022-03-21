@@ -6,7 +6,7 @@ import 'package:form_field_validator/form_field_validator.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
-import 'package:mared_social/screens/splitter/splitter.dart';
+import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/widgets/bottom_sheets/auth_sheets/forgot_password_sheet.dart';
 import 'package:page_transition/page_transition.dart';
@@ -149,7 +149,7 @@ LoginSheet(BuildContext context) {
                                 Navigator.pushReplacement(
                                   context,
                                   PageTransition(
-                                      child: SplitPages(),
+                                      child: HomePage(),
                                       type: PageTransitionType.bottomToTop),
                                 );
                               } catch (e) {

@@ -13,7 +13,6 @@ import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/screens/Stories/stories_helper.dart';
 import 'package:mared_social/screens/Stories/stories_widget.dart';
-import 'package:mared_social/screens/splitter/splitter.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -74,7 +73,7 @@ class _StoriesState extends State<Stories> {
               Navigator.pushReplacement(
                 context,
                 PageTransition(
-                    child: SplitPages(), type: PageTransitionType.topToBottom),
+                    child: HomePage(), type: PageTransitionType.topToBottom),
               );
             }
           },
@@ -119,7 +118,7 @@ class _StoriesState extends State<Stories> {
                       Navigator.pushReplacement(
                         context,
                         PageTransition(
-                            child: SplitPages(),
+                            child: HomePage(),
                             type: PageTransitionType.topToBottom),
                       );
                     }
@@ -152,7 +151,7 @@ class _StoriesState extends State<Stories> {
                       Navigator.pushReplacement(
                         context,
                         PageTransition(
-                            child: SplitPages(),
+                            child: HomePage(),
                             type: PageTransitionType.topToBottom),
                       );
                     }
@@ -429,7 +428,7 @@ class _StoriesState extends State<Stories> {
                                                             context,
                                                             PageTransition(
                                                                 child:
-                                                                    SplitPages(),
+                                                                    HomePage(),
                                                                 type: PageTransitionType
                                                                     .topToBottom),
                                                           );
@@ -490,7 +489,7 @@ class _StoriesState extends State<Stories> {
         Navigator.pushReplacement(
           context,
           PageTransition(
-              child: SplitPages(), type: PageTransitionType.topToBottom),
+              child: HomePage(), type: PageTransitionType.topToBottom),
         );
       }
 

@@ -1,19 +1,12 @@
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
-import 'package:mared_social/screens/splitter/splitter.dart';
-import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
-import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/firebase_file_upload_service.dart';
 import 'package:mared_social/utils/pick_files_helper.dart';
-import 'package:nanoid/nanoid.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
 import 'package:video_player/video_player.dart';
 
 final ConstantColors constantColors = ConstantColors();

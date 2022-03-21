@@ -3,7 +3,7 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
-import 'package:mared_social/screens/splitter/splitter.dart';
+import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:mared_social/widgets/bottom_sheets/auth_sheets/warning_text.dart';
@@ -61,7 +61,7 @@ class LandingHelpers {
       Navigator.pushReplacement(
           context,
           PageTransition(
-              child: SplitPages(), type: PageTransitionType.rightToLeft));
+              child: HomePage(), type: PageTransitionType.rightToLeft));
     } catch (e) {
       CoolAlert.show(
         context: context,
@@ -121,7 +121,7 @@ class LandingHelpers {
       Navigator.pushReplacement(
           context,
           PageTransition(
-              child: SplitPages(), type: PageTransitionType.rightToLeft));
+              child: HomePage(), type: PageTransitionType.rightToLeft));
     } catch (e) {
       CoolAlert.show(
         context: context,
@@ -180,7 +180,7 @@ class LandingHelpers {
         Navigator.pushReplacement(
             context,
             PageTransition(
-                child: SplitPages(), type: PageTransitionType.rightToLeft));
+                child: HomePage(), type: PageTransitionType.rightToLeft));
       });
     } catch (e) {
       CoolAlert.show(
@@ -218,8 +218,7 @@ class LandingHelpers {
 
       Navigator.pushReplacement(
         context,
-        PageTransition(
-            child: SplitPages(), type: PageTransitionType.bottomToTop),
+        PageTransition(child: HomePage(), type: PageTransitionType.bottomToTop),
       );
     } catch (e) {
       CoolAlert.show(

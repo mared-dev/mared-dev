@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/screens/LandingPage/landingpage.dart';
-import 'package:mared_social/screens/splitter/splitter.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:page_transition/page_transition.dart';
@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
         await Provider.of<FirebaseOperations>(context, listen: false)
             .initUserData(context);
         Navigator.pushReplacement(context,
-            PageTransition(child: SplitPages(), type: PageTransitionType.fade));
+            PageTransition(child: HomePage(), type: PageTransitionType.fade));
         // signed in
       } else {
         Navigator.pushReplacement(

@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/models/enums/post_type.dart';
-import 'package:mared_social/screens/splitter/splitter.dart';
 import 'package:mared_social/services/firebase/firebase_file_upload_service.dart';
 import 'package:mared_social/utils/pick_files_helper.dart';
 import 'package:mared_social/utils/productUploadCameraScreen.dart';

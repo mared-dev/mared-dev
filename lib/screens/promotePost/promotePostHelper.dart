@@ -11,7 +11,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mared_social/checkout/StripeCheckout.dart';
 import 'package:mared_social/checkout/server_stub.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
-import 'package:mared_social/screens/splitter/splitter.dart';
+import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:nanoid/nanoid.dart';
@@ -299,7 +299,7 @@ class PromotePostHelper with ChangeNotifier {
         Navigator.pushReplacement(
             context,
             PageTransition(
-                child: SplitPages(), type: PageTransitionType.rightToLeft));
+                child: HomePage(), type: PageTransitionType.rightToLeft));
         CoolAlert.show(
             context: context,
             type: CoolAlertType.success,

@@ -11,7 +11,6 @@ import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/screens/LandingPage/landingServices.dart';
 import 'package:mared_social/screens/LandingPage/landingUtils.dart';
-import 'package:mared_social/screens/splitter/splitter.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/widgets/bottom_sheets/auth_sheets/login_sheet.dart';
@@ -187,7 +186,7 @@ class LandingHelpers with ChangeNotifier {
                         Navigator.pushReplacement(
                             context,
                             PageTransition(
-                                child: SplitPages(),
+                                child: HomePage(),
                                 type: PageTransitionType.rightToLeft));
                       } catch (e) {
                         CoolAlert.show(
@@ -257,7 +256,7 @@ class LandingHelpers with ChangeNotifier {
         Navigator.pushReplacement(
             context,
             PageTransition(
-                child: SplitPages(), type: PageTransitionType.rightToLeft));
+                child: HomePage(), type: PageTransitionType.rightToLeft));
       });
     } catch (e) {
       CoolAlert.show(
@@ -318,7 +317,7 @@ class LandingHelpers with ChangeNotifier {
       Navigator.pushReplacement(
           context,
           PageTransition(
-              child: SplitPages(), type: PageTransitionType.rightToLeft));
+              child: HomePage(), type: PageTransitionType.rightToLeft));
     } catch (e) {
       CoolAlert.show(
         context: context,
@@ -383,7 +382,7 @@ class LandingHelpers with ChangeNotifier {
             Navigator.pushReplacement(
                 context,
                 PageTransition(
-                    child: SplitPages(), type: PageTransitionType.rightToLeft));
+                    child: HomePage(), type: PageTransitionType.rightToLeft));
           } catch (e) {
             CoolAlert.show(
               context: context,

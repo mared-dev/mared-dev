@@ -12,7 +12,6 @@ import 'package:mared_social/models/sharedPrefUser.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/screens/LandingPage/landingUtils.dart';
-import 'package:mared_social/screens/splitter/splitter.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:page_transition/page_transition.dart';
@@ -173,7 +172,7 @@ class LandingService with ChangeNotifier {
                             Navigator.pushReplacement(
                               context,
                               PageTransition(
-                                  child: SplitPages(),
+                                  child: HomePage(),
                                   type: PageTransitionType.bottomToTop),
                             );
                           } catch (e) {
@@ -473,7 +472,7 @@ class LandingService with ChangeNotifier {
                               Navigator.pushReplacement(
                                 context,
                                 PageTransition(
-                                    child: SplitPages(),
+                                    child: HomePage(),
                                     type: PageTransitionType.bottomToTop),
                               );
                             } catch (e) {

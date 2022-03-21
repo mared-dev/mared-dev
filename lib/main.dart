@@ -35,7 +35,6 @@ import 'package:mared_social/screens/isAnon/isAnonHelper.dart';
 import 'package:mared_social/screens/promotePost/promotePostHelper.dart';
 import 'package:mared_social/screens/searchPage/searchPageHelper.dart';
 import 'package:mared_social/screens/splashscreens/splashscreen.dart';
-import 'package:mared_social/screens/splitter/splitterhelper.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/utils/auctionoptions.dart';
@@ -86,7 +85,6 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => AuctionFuctions()),
           ChangeNotifierProvider(create: (_) => AuctionFeedHelper()),
           ChangeNotifierProvider(create: (_) => AuctionAppHelper()),
-          ChangeNotifierProvider(create: (_) => SplitPagesHelper()),
           ChangeNotifierProvider(create: (_) => IsAnonHelper()),
           ChangeNotifierProvider(create: (_) => LandingHelpers()),
           ChangeNotifierProvider(create: (_) => LandingUtils()),

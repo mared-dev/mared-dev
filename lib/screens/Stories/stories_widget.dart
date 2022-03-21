@@ -14,7 +14,6 @@ import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/screens/Stories/stories_helper.dart';
-import 'package:mared_social/screens/splitter/splitter.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/mux/mux_video_stream.dart';
@@ -291,7 +290,7 @@ class StoryWidgets {
                                     Navigator.pushReplacement(
                                         context,
                                         PageTransition(
-                                            child: SplitPages(),
+                                            child: HomePage(),
                                             type: PageTransitionType
                                                 .rightToLeft));
                                   });

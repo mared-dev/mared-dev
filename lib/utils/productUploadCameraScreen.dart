@@ -13,7 +13,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
-import 'package:mared_social/screens/splitter/splitter.dart';
+import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:nanoid/nanoid.dart';
@@ -431,7 +431,7 @@ class _PostUploadCameraScreenState extends State<PostUploadCameraScreen> {
                           Navigator.push(
                               context,
                               PageTransition(
-                                  child: SplitPages(),
+                                  child: HomePage(),
                                   type: PageTransitionType.bottomToTop));
                         });
                       } else {

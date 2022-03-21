@@ -23,9 +23,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
-  final bool isAnon;
   const HomePage({
-    required this.isAnon,
     Key? key,
   }) : super(key: key);
 
@@ -40,6 +38,7 @@ class _HomePageState extends State<HomePage> {
 
   int pageIndex = 0;
   bool loading = true;
+  bool isAnon = false;
 
   @override
   void initState() {
@@ -58,6 +57,8 @@ class _HomePageState extends State<HomePage> {
             'Message also contained a notification: ${message.notification!.title}');
       }
     });
+    isAnon = Provider.of<Authentication>(context, listen: false).getIsAnon;
+
     super.initState();
   }
 

@@ -12,10 +12,10 @@ import 'package:mared_social/constants/text_styles.dart';
 import 'package:mared_social/helpers/loading_helper.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
+import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/screens/LandingPage/landingServices.dart';
 import 'package:mared_social/screens/LandingPage/landingUtils.dart';
 import 'package:mared_social/screens/authentication/login_screen.dart';
-import 'package:mared_social/screens/splitter/splitter.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:mared_social/widgets/bottom_sheets/auth_sheets/select_avatar_options_sheet.dart';
@@ -282,7 +282,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 Navigator.pushReplacement(
                                   context,
                                   PageTransition(
-                                      child: SplitPages(),
+                                      child: const HomePage(),
                                       type: PageTransitionType.bottomToTop),
                                 );
                               } catch (e) {
