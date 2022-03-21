@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
+//remove when new design is build
 class ConstantColors {
   final Color lightColor = const Color(0xff6c788a);
   final Color darkColor = const Color(0xFF100E20);
@@ -16,7 +17,7 @@ class ConstantColors {
   final Color greyColor = Colors.grey.shade600;
 }
 
-ConstantColors constantColors=ConstantColors();
+ConstantColors constantColors = ConstantColors();
 
 class ListTileOption extends StatelessWidget {
   const ListTileOption({

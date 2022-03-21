@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
@@ -25,23 +27,24 @@ class FirebaseOperations with ChangeNotifier {
   final FCMNotificationService _fcmNotificationService =
       FCMNotificationService();
 
-  Future uploadUserAvatar(BuildContext context) async {
-    Reference imageReference = FirebaseStorage.instance.ref().child(
-        "userProfileAvatar/${Provider.of<LandingUtils>(context, listen: false).getUserAvatar.path}/${TimeOfDay.now()}");
-    imageUploadTask = imageReference.putFile(
-        Provider.of<LandingUtils>(context, listen: false).getUserAvatar);
+  Future uploadUserAvatar(
+      {required BuildContext context, required File pickedFile}) async {
+    // Reference imageReference = FirebaseStorage.instance.ref().child(
+    //     "userProfileAvatar/${Provider.of<LandingUtils>(context, listen: false).getUserAvatar.path}/${TimeOfDay.now()}");
+    // imageUploadTask = imageReference.putFile(
+    //     Provider.of<LandingUtils>(context, listen: false).getUserAvatar);
+
+    Reference imageReference = FirebaseStorage.instance
+        .ref()
+        .child("userProfileAvatar/${pickedFile.path}/${TimeOfDay.now()}");
+    imageUploadTask = imageReference.putFile(pickedFile);
     await imageUploadTask!.whenComplete(
       () {
         print("Image uploaded!");
       },
     );
-    imageReference.getDownloadURL().then((url) {
-      Provider.of<LandingUtils>(context, listen: false).userAvatarUrl =
-          url.toString();
-      print(
-          "The user profile avatar url => ${Provider.of<LandingUtils>(context, listen: false).userAvatarUrl}");
-      notifyListeners();
-    });
+    String uploadedImageUrl = await imageReference.getDownloadURL();
+    return uploadedImageUrl;
   }
 
   Future createBannerCollection(
