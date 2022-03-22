@@ -9,6 +9,7 @@ import 'package:mared_social/screens/CategoryFeed/categoryfeedhelper.dart';
 import 'package:mared_social/screens/SearchFeed/searchfeed.dart';
 import 'package:mared_social/screens/SearchFeed/searchfeedhelper.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 class CategoryHelper with ChangeNotifier {
@@ -245,13 +246,23 @@ class CategoryHelper with ChangeNotifier {
                             .getCategoryNameVal(
                                 categoryNameVal: catDocSnap['categoryname']);
 
-                        Navigator.push(
-                            context,
-                            PageTransition(
-                                child: CategoryFeed(
-                                  categoryName: catDocSnap['categoryname'],
-                                ),
-                                type: PageTransitionType.rightToLeft));
+                        pushNewScreen(
+                          context,
+                          screen: CategoryFeed(
+                            categoryName: catDocSnap['categoryname'],
+                          ),
+                          withNavBar: false, // OPTIONAL VALUE. True by default.
+                          pageTransitionAnimation:
+                              PageTransitionAnimation.cupertino,
+                        );
+
+                        // Navigator.push(
+                        //     context,
+                        //     PageTransition(
+                        //         child: CategoryFeed(
+                        //           categoryName: catDocSnap['categoryname'],
+                        //         ),
+                        //         type: PageTransitionType.rightToLeft));
                       },
                       child: Stack(
                         children: [

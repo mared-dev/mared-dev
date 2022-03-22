@@ -26,6 +26,7 @@ import 'package:mared_social/utils/uploadpost.dart';
 import 'package:mared_social/widgets/items/profile_post_item.dart';
 import 'package:mared_social/widgets/items/show_post_details.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 class ProfileHelpers with ChangeNotifier {
@@ -599,12 +600,24 @@ class ProfileHelpers with ChangeNotifier {
         Provider.of<Authentication>(context, listen: false)
             .logOutViaEmail()
             .whenComplete(() {
-          Navigator.pushAndRemoveUntil(
-            context,
-            PageTransition(
-                child: LandingPage(), type: PageTransitionType.topToBottom),
+          Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
+            MaterialPageRoute(builder: (_) => LandingPage()),
             (Route<dynamic> route) => false,
           );
+          // pushNewScreen(
+          //   context,
+          //   screen: LandingPage(),
+          //   withNavBar: false, // OPTIONAL VALUE. True by default.
+          //   pageTransitionAnimation: PageTransitionAnimation.cupertino,
+          // );
+          // Navigator.pushAndRemoveUntil(
+          //   context,
+          //   PageTransition(
+          //     child: LandingPage(),
+          //     type: PageTransitionType.topToBottom,
+          //   ),
+          //   (Route<dynamic> route) => false,
+          // );
         });
       },
       confirmBtnTextStyle: TextStyle(

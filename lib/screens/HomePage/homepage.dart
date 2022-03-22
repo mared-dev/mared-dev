@@ -85,12 +85,12 @@ class _HomePageState extends State<HomePage> {
           iconPath: 'assets/icons/navbar_home_icon.svg',
           index: 0),
       _navBarItem(
-          itemText: 'chat',
-          iconPath: 'assets/icons/navbar_chat_icon.svg',
-          index: 1),
-      _navBarItem(
           itemText: 'menu',
           iconPath: 'assets/icons/navbar_menu_icon.svg',
+          index: 1),
+      _navBarItem(
+          itemText: 'chat',
+          iconPath: 'assets/icons/navbar_chat_icon.svg',
           index: 2),
       _navBarItem(
           itemText: 'map',
@@ -157,10 +157,6 @@ class _HomePageState extends State<HomePage> {
       required String iconPath,
       required int index}) {
     return PersistentBottomNavBarItem(
-      onSelectedTabPressWhenNoScreensPushed: () {
-        print('@@@@@@@@@@@');
-        currentIndex = index;
-      },
       inactiveIcon: Column(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [

@@ -5,6 +5,7 @@ import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/screens/Stories/stories.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class FeedStoryItem extends StatelessWidget {
   final int index;
@@ -18,15 +19,25 @@ class FeedStoryItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(
+        pushNewScreen(
           context,
-          PageTransition(
-              child: Stories(
-                querySnapshot: storiesSnaps,
-                snapIndex: index,
-              ),
-              type: PageTransitionType.bottomToTop),
+          screen: Stories(
+            querySnapshot: storiesSnaps,
+            snapIndex: index,
+          ),
+          withNavBar: false, // OPTIONAL VALUE. True by default.
+          pageTransitionAnimation: PageTransitionAnimation.cupertino,
         );
+
+        // Navigator.push(
+        //   context,
+        //   PageTransition(
+        //       child: Stories(
+        //         querySnapshot: storiesSnaps,
+        //         snapIndex: index,
+        //       ),
+        //       type: PageTransitionType.bottomToTop),
+        // );
       },
 
       ///use when listview is forcing the height/width of the chlidren
