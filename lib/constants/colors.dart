@@ -10,4 +10,5 @@ class AppColors {
   static const accentColor = Color(0xFF17AEF5);
   static const likeFilledColor = Color(0xFF17AEF5);
   static const commentButtonColor = Colors.black;
+  static const notActiveNavItemColor = Color(0xFFBCBCBC);
 }
