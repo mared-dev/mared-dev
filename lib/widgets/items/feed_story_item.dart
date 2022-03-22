@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/screens/Stories/stories.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FeedStoryItem extends StatelessWidget {
   final int index;
@@ -26,36 +28,30 @@ class FeedStoryItem extends StatelessWidget {
               type: PageTransitionType.bottomToTop),
         );
       },
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Stack(
-          children: [
-            Container(
-              height: 80,
-              width: 80,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                color: constantColors.blueColor,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: SizedBox(
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20),
-                  child: CachedNetworkImage(
-                    fit: BoxFit.cover,
-                    imageUrl: storiesSnaps.data!.docs[index]['userimage'],
-                    progressIndicatorBuilder:
-                        (context, url, downloadProgress) =>
-                            LoadingWidget(constantColors: constantColors),
-                    errorWidget: (context, url, error) =>
-                        const Icon(Icons.error),
-                  ),
-                ),
-                height: 80,
-                width: 80,
-              ),
+
+      ///use when listview is forcing the height/width of the chlidren
+      child: Align(
+        alignment: Alignment.center,
+        child: Container(
+          margin: EdgeInsets.only(right: 12.w),
+          width: 65,
+          height: 65,
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(100),
+              border: Border.all(color: AppColors.accentColor, width: 1)),
+          alignment: Alignment.center,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(100),
+            child: CachedNetworkImage(
+              width: 65,
+              height: 65,
+              fit: BoxFit.cover,
+              imageUrl: storiesSnaps.data!.docs[index]['userimage'],
+              progressIndicatorBuilder: (context, url, downloadProgress) =>
+                  LoadingWidget(constantColors: constantColors),
+              errorWidget: (context, url, error) => const Icon(Icons.error),
             ),
-          ],
+          ),
         ),
       ),
     );

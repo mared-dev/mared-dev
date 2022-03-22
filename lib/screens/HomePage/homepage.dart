@@ -9,6 +9,7 @@ import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/screens/Categories/category.dart';
 import 'package:mared_social/screens/Chatroom/chatroom.dart';
 import 'package:mared_social/screens/Feed/feed.dart';
@@ -106,7 +107,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: constantColors.darkColor,
+      backgroundColor: AppColors.backGroundColor,
       body: PageView(
         controller: homepageController,
         children: [

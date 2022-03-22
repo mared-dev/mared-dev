@@ -2,13 +2,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
-import 'package:mared_social/screens/AltProfile/altProfile.dart';
-import 'package:mared_social/screens/AltProfile/altProfileHelper.dart';
-import 'package:mared_social/services/firebase/authentication.dart';
-import 'package:mared_social/widgets/items/show_post_details.dart';
-import 'package:page_transition/page_transition.dart';
-import 'package:provider/provider.dart';
+import 'package:mared_social/constants/text_styles.dart';
+import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:get/get.dart';
 
 class BannersSection extends StatefulWidget {
   @override
@@ -16,6 +14,8 @@ class BannersSection extends StatefulWidget {
 }
 
 class _BannersSectionState extends State<BannersSection> {
+  var currentPage = 0.obs;
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<QuerySnapshot>(
@@ -29,23 +29,24 @@ class _BannersSectionState extends State<BannersSection> {
             bannerSnap.data == null) {
           return LoadingWidget(constantColors: constantColors);
         } else {
-          return Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Container(
-              alignment: Alignment.center,
-              height: MediaQuery.of(context).size.height * 0.2,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                color: constantColors.darkColor.withOpacity(0.5),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Swiper(
-                itemCount: bannerSnap.data!.docs.length,
-                itemBuilder: (context, index) {
-                  return Stack(
-                    children: [
-                      SizedBox(
-                        height: double.infinity,
+          return Container(
+            alignment: Alignment.center,
+            height: 254.h,
+            width: 1.sw,
+            child: Stack(
+              children: [
+                Swiper(
+                  onIndexChanged: (newIndex) {
+                    currentPage.value = newIndex;
+                  },
+                  itemCount: bannerSnap.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    return Align(
+                      alignment: Alignment.topCenter,
+                      child: Container(
+                        margin: EdgeInsets.symmetric(horizontal: 18.h),
+                        color: Colors.grey,
+                        height: 204.h,
                         width: double.infinity,
                         child: ClipRRect(
                           borderRadius:
@@ -64,100 +65,89 @@ class _BannersSectionState extends State<BannersSection> {
                           ),
                         ),
                       ),
-                      Positioned(
-                        bottom: 10,
-                        right: 20,
-                        left: 20,
-                        child: Row(
-                          children: [
-                            Expanded(
-                              child: InkWell(
-                                onTap: () async {
-                                  await FirebaseFirestore.instance
-                                      .collection("posts")
-                                      .doc(bannerSnap.data!.docs[index]
-                                          ['postid'])
-                                      .get()
-                                      .then((value) {
-                                    showPostDetail(
-                                        context: context,
-                                        documentSnapshot: value);
-                                  });
-                                },
-                                child: Container(
-                                  height: 30,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                    color: constantColors.blueColor
-                                        .withOpacity(0.9),
-                                    borderRadius: BorderRadius.circular(15),
-                                  ),
-                                  child: Text(
-                                    "View Post",
-                                    style: TextStyle(
-                                      color: constantColors.whiteColor,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 10,
-                            ),
-                            Visibility(
-                              visible: bannerSnap.data!.docs[index]
-                                      ['useruid'] !=
-                                  Provider.of<Authentication>(context,
-                                          listen: false)
-                                      .getUserId,
-                              child: Expanded(
-                                child: InkWell(
-                                  onTap: () {
-                                    Navigator.push(
-                                        context,
-                                        PageTransition(
-                                            child: AltProfile(
-                                              userUid: bannerSnap
-                                                  .data!.docs[index]['useruid'],
-                                            ),
-                                            type: PageTransitionType
-                                                .bottomToTop));
-                                  },
-                                  child: Container(
-                                    height: 30,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: constantColors.greenColor
-                                          .withOpacity(0.9),
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    child: Text(
-                                      "Visit Profile",
-                                      style: TextStyle(
-                                        color: constantColors.whiteColor,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                },
-                layout: SwiperLayout.DEFAULT,
-                autoplay: true,
-                duration: 5,
-                curve: Curves.fastOutSlowIn,
-              ),
+                    );
+                  },
+                  layout: SwiperLayout.DEFAULT,
+                  autoplay: true,
+                  duration: 1000,
+                  curve: Curves.fastOutSlowIn,
+                ),
+                Obx(() => SwiperIndicator(
+                      initialPage: currentPage.value,
+                      numOfDots: bannerSnap.data!.docs.length,
+                    ))
+              ],
             ),
           );
         }
       },
+    );
+  }
+}
+
+class SwiperIndicator extends StatelessWidget {
+  final int initialPage;
+  final int numOfDots;
+
+  const SwiperIndicator(
+      {Key? key, required this.initialPage, required this.numOfDots})
+      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      bottom: 12.h,
+      left: 0,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 18.h),
+        width: 1.sw,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            InkWell(
+              onTap: () {
+                print('view post');
+              },
+              child: Text(
+                'View post',
+                style: lightTextStyle(
+                  fontSize: 11,
+                  textColor: Colors.black,
+                ),
+              ),
+            ),
+            SmoothPageIndicator(
+              controller: PageController(initialPage: initialPage),
+              onDotClicked: (index) {
+                print('index');
+              },
+              // count: bannerSnap.data!.docs.length,
+              count: numOfDots,
+              axisDirection: Axis.horizontal,
+              effect: ScrollingDotsEffect(
+                  spacing: 8.0,
+                  radius: 20.0,
+                  dotWidth: 6,
+                  dotHeight: 6,
+                  paintStyle: PaintingStyle.fill,
+                  strokeWidth: 1.5,
+                  dotColor: Colors.black.withOpacity(0.1),
+                  activeDotColor: Colors.black.withOpacity(0.7)),
+            ),
+            InkWell(
+              onTap: () {
+                print('view post');
+              },
+              child: Text(
+                'View profile',
+                style: lightTextStyle(
+                  fontSize: 11,
+                  textColor: Colors.black,
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
