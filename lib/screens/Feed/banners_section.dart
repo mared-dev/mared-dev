@@ -30,6 +30,7 @@ class _BannersSectionState extends State<BannersSection> {
           return LoadingWidget(constantColors: constantColors);
         } else {
           return Container(
+            margin: EdgeInsets.only(top: 8.h, bottom: 18.h),
             alignment: Alignment.center,
             height: 254.h,
             width: 1.sw,

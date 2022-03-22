@@ -1,5 +1,6 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/helpers/post_helpers.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
@@ -23,9 +24,9 @@ class FeedPostItemBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 16.0),
+      padding: EdgeInsets.only(top: 16.0, left: 15.w, right: 15.w),
       child: SizedBox(
-          height: MediaQuery.of(context).size.height * 0.44,
+          height: 350.h,
           width: MediaQuery.of(context).size.width,
           child: !PostHelpers.checkIfPostIsVideo(imageList)
               ? Swiper(
@@ -43,7 +44,7 @@ class FeedPostItemBody extends StatelessWidget {
                     );
                   },
                   itemCount: (imageList as List).length,
-                  itemHeight: MediaQuery.of(context).size.height * 0.3,
+                  itemHeight: 350.h,
                   itemWidth: MediaQuery.of(context).size.width,
                   layout: SwiperLayout.DEFAULT,
                   indicatorLayout: PageIndicatorLayout.SCALE,
@@ -51,9 +52,9 @@ class FeedPostItemBody extends StatelessWidget {
                     margin: EdgeInsets.all(10),
                     builder: DotSwiperPaginationBuilder(
                       color: constantColors.whiteColor.withOpacity(0.6),
-                      activeColor: constantColors.darkColor.withOpacity(0.6),
-                      size: 15,
-                      activeSize: 15,
+                      activeColor: constantColors.whiteColor,
+                      size: 6,
+                      activeSize: 6,
                     ),
                   ),
                 )

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/utils/postoptions.dart';
@@ -140,7 +141,7 @@ class _HeartIconAnimatedState extends State<HeartIconAnimated>
     return Visibility(
       visible: !animationFinished && widget.isAnimating,
       child: SizedBox(
-        height: MediaQuery.of(context).size.height * 0.44,
+        height: 350.h,
         width: MediaQuery.of(context).size.width,
         child: Center(
           child: ScaleTransition(

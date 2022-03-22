@@ -8,20 +8,14 @@ import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/constants/text_styles.dart';
 import 'package:mared_social/widgets/bottom_sheets/show_comments_section.dart';
 
-class PostCommentsPart extends StatelessWidget {
-  final documentSnapshot;
-
-  const PostCommentsPart({Key? key, required this.documentSnapshot})
-      : super(key: key);
+class PostSharePart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
         //Start HERE
-        showCommentsSheet(
-            snapshot: documentSnapshot,
-            context: context,
-            postId: documentSnapshot['postid']);
+        ///TODO: a feature to add later
+        print('Share post!!');
       },
       child: Padding(
         padding: EdgeInsets.only(left: 10.w),
@@ -31,14 +25,10 @@ class PostCommentsPart extends StatelessWidget {
             SizedBox(
               width: 25.w,
             ),
-            SvgPicture.asset(
-              'assets/icons/post_comment_icon.svg',
-              width: 18,
-              height: 18,
-            ),
+            SvgPicture.asset('assets/icons/post_share_icon.svg'),
             Padding(
               padding: const EdgeInsets.only(left: 8.0),
-              child: Text('comment',
+              child: Text('share',
                   style: regularTextStyle(
                       fontSize: 11.sp,
                       textColor: AppColors.commentButtonColor)),
