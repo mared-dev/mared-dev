@@ -139,6 +139,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: AppColors.backGroundColor,
       body: PersistentTabView(context,
           stateManagement: true,
+          hideNavigationBar: false,
           margin: EdgeInsets.only(top: 10.h),
           controller: _controller,
           screens: _screens,

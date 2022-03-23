@@ -110,7 +110,7 @@ class SwiperIndicator extends StatelessWidget {
               },
               child: Text(
                 'View post',
-                style: lightTextStyle(
+                style: regularTextStyle(
                   fontSize: 11,
                   textColor: Colors.black,
                 ),
@@ -140,7 +140,7 @@ class SwiperIndicator extends StatelessWidget {
               },
               child: Text(
                 'View profile',
-                style: lightTextStyle(
+                style: regularTextStyle(
                   fontSize: 11,
                   textColor: Colors.black,
                 ),

@@ -24,7 +24,7 @@ class _StoriesSectionState extends State<StoriesSection> {
             .orderBy('time', descending: true)
             .get(),
         builder: (context, storiesSnaps) {
-          if (storiesSnaps.hasData && storiesSnaps.data!.docs.length == 0) {
+          if (storiesSnaps.hasData && storiesSnaps.data!.docs.isEmpty) {
             return Center(
               child: Text(
                 "No Stories Yet",

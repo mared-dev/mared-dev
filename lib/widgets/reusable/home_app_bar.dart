@@ -12,45 +12,33 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 PreferredSizeWidget homeAppBar(BuildContext context,
-    {required String leadingIconPath, required String actionIconPath}) {
+    {Widget? leadingIcon,
+    Widget? actionIcon,
+    Function()? leadingCallback,
+    Function()? actionCallback,
+    required String title}) {
   return AppBar(
       elevation: 0,
       leading: IconButton(
-        onPressed: () => Navigator.push(
-          context,
-          PageTransition(
-            child: SearchPage(),
-            type: PageTransitionType.rightToLeft,
-          ),
-        ),
-        icon: SvgPicture.asset(
-          leadingIconPath,
-          width: 18.w,
-          height: 18.h,
-        ),
-      ),
+          onPressed: () {
+            if (leadingCallback != null) {
+              leadingCallback();
+            }
+          },
+          icon: leadingIcon!),
       backgroundColor: AppColors.backGroundColor,
       centerTitle: true,
       actions: [
         IconButton(
-          onPressed: () {
-            if (Provider.of<Authentication>(context, listen: false).getIsAnon ==
-                false) {
-              Provider.of<UploadPost>(context, listen: false)
-                  .selectPostImageType(context);
-            } else {
-              IsAnonBottomSheet(context);
-            }
-          },
-          icon: SvgPicture.asset(
-            actionIconPath,
-            width: 20.w,
-            height: 18.h,
-          ),
-        ),
+            onPressed: () {
+              if (actionCallback != null) {
+                actionCallback();
+              }
+            },
+            icon: actionIcon!),
       ],
       title: Text(
-        'Mared FEED',
+        title,
         style: semiBoldTextStyle(
             fontSize: 20, textColor: AppColors.widgetsBackground),
       ));

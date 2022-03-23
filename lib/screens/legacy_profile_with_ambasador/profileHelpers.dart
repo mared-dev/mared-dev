@@ -417,6 +417,176 @@ class ProfileHelpers with ChangeNotifier {
     );
   }
 
+  Widget middleProfile(BuildContext context, UserModel userModel) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 3.0, left: 0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(2),
+            ),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 8.0, bottom: 4),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Icon(
+                      FontAwesomeIcons.userAstronaut,
+                      color: constantColors.yellowColor,
+                      size: 16,
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      UserInfoManger.getUserInfo().store == false
+                          ? "Recently Added"
+                          : "Mared Ambassador Promotions",
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                        color: constantColors.whiteColor,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+          ),
+          Container(
+            height: MediaQuery.of(context).size.height * 0.1,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              color: constantColors.darkColor.withOpacity(0.4),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: UserInfoManger.getUserInfo().store == false
+                ? StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection("users")
+                        .doc(userModel.uid)
+                        .collection("following")
+                        .snapshots(),
+                    builder: (context, followingSnap) {
+                      if (followingSnap.hasData) {
+                        return ListView(
+                          scrollDirection: Axis.horizontal,
+                          children:
+                              followingSnap.data!.docs.map((followingDocSnap) {
+                            return Padding(
+                              padding: const EdgeInsets.only(left: 8.0),
+                              child: SizedBox(
+                                height: 60,
+                                width: 60,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(30),
+                                  child: CachedNetworkImage(
+                                    fit: BoxFit.cover,
+                                    imageUrl: followingDocSnap['userimage'],
+                                    progressIndicatorBuilder:
+                                        (context, url, downloadProgress) =>
+                                            LoadingWidget(
+                                                constantColors: constantColors),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }).toList(),
+                        );
+                      } else {
+                        return Center(
+                          child: Text(
+                            "No Recent Followers",
+                            style: TextStyle(
+                              color: constantColors.whiteColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 28,
+                            ),
+                          ),
+                        );
+                      }
+                    })
+                : StreamBuilder<QuerySnapshot>(
+                    stream: FirebaseFirestore.instance
+                        .collection("users")
+                        .doc(userModel.uid)
+                        .collection("submittedWork")
+                        .orderBy("time", descending: true)
+                        .snapshots(),
+                    builder: (context, followingSnap) {
+                      if (followingSnap.hasData) {
+                        return ListView(
+                          scrollDirection: Axis.horizontal,
+                          children:
+                              followingSnap.data!.docs.map((followingDocSnap) {
+                            return followingDocSnap['approved']
+                                ? InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                          context,
+                                          PageTransition(
+                                              child: SeeVideo(
+                                                  documentSnapshot:
+                                                      followingDocSnap),
+                                              type: PageTransitionType
+                                                  .bottomToTop));
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 8.0),
+                                      child: SizedBox(
+                                        height: 60,
+                                        width: 60,
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(30),
+                                          child: CachedNetworkImage(
+                                            fit: BoxFit.cover,
+                                            imageUrl:
+                                                followingDocSnap['thumbnail'],
+                                            progressIndicatorBuilder: (context,
+                                                    url, downloadProgress) =>
+                                                LoadingWidget(
+                                                    constantColors:
+                                                        constantColors),
+                                            errorWidget:
+                                                (context, url, error) =>
+                                                    const Icon(Icons.error),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox(
+                                    height: 0,
+                                    width: 0,
+                                  );
+                          }).toList(),
+                        );
+                      } else {
+                        return Center(
+                          child: Text(
+                            "No Ambassador Promotions",
+                            style: TextStyle(
+                              color: constantColors.whiteColor,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 28,
+                            ),
+                          ),
+                        );
+                      }
+                    }),
+          ),
+        ],
+      ),
+    );
+  }
+
   logOutDialog(BuildContext context) {
     return CoolAlert.show(
       context: context,

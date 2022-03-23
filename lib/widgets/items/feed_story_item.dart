@@ -49,7 +49,7 @@ class FeedStoryItem extends StatelessWidget {
           height: 65,
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(100),
-              border: Border.all(color: AppColors.accentColor, width: 1)),
+              border: Border.all(color: AppColors.accentColor, width: 1.5)),
           alignment: Alignment.center,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(100),
