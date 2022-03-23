@@ -185,7 +185,7 @@ class _FeedPostItemState extends State<FeedPostItem> {
                         .getImageDescription(documentSnapshot['description']);
                   },
                   icon: Icon(EvaIcons.moreVertical,
-                      color: constantColors.whiteColor),
+                      color: AppColors.commentButtonColor),
                 )
               : const SizedBox(
                   height: 0,

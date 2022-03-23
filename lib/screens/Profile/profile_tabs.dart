@@ -14,6 +14,7 @@ import 'package:mared_social/constants/text_styles.dart';
 import 'package:mared_social/helpers/post_helpers.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
+import 'package:mared_social/screens/PostDetails/post_details_screen.dart';
 import 'package:mared_social/screens/Profile/profileHelpers.dart';
 import 'package:mared_social/screens/ambassaborsScreens/companiesScreen.dart';
 import 'package:mared_social/screens/ambassaborsScreens/seeVideo.dart';
@@ -25,6 +26,7 @@ import 'package:mared_social/widgets/items/profile_post_item.dart';
 import 'package:mared_social/widgets/items/promoted_post_item.dart';
 import 'package:mared_social/widgets/items/show_post_details.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 class PostsProfile extends StatelessWidget {
@@ -73,8 +75,16 @@ class PostsProfile extends StatelessWidget {
                   children: userPostSnap.data!.docs.map<Widget>((item) {
                     return InkWell(
                         onTap: () {
-                          showPostDetail(
-                              context: context, documentSnapshot: item);
+                          pushNewScreen(
+                            context,
+                            screen: PostDetailsScreen(
+                              documentSnapshot: item,
+                            ),
+                            withNavBar:
+                                false, // OPTIONAL VALUE. True by default.
+                            pageTransitionAnimation:
+                                PageTransitionAnimation.cupertino,
+                          );
                         },
                         child: ProfilePostItem(
                           urls:
