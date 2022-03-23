@@ -6,7 +6,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/constants/text_styles.dart';
-import 'package:mared_social/screens/LandingPage/landingServices.dart';
 import 'package:mared_social/utils/pick_files_helper.dart';
 import 'package:mared_social/widgets/bottom_sheets/confirm_profile_pic_sheet.dart';
 import 'package:provider/provider.dart';

@@ -7,15 +7,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mared_social/constants/general_styles.dart';
 import 'package:mared_social/constants/text_styles.dart';
 import 'package:mared_social/helpers/loading_helper.dart';
-import 'package:mared_social/screens/LandingPage/landingServices.dart';
-import 'package:mared_social/screens/LandingPage/landingUtils.dart';
 import 'package:mared_social/screens/authentication/login_screen.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
-import 'package:mared_social/widgets/bottom_sheets/auth_sheets/select_avatar_options_sheet.dart';
-import 'package:mared_social/widgets/bottom_sheets/confirm_profile_pic_sheet.dart';
-import 'package:mared_social/widgets/items/pick_image_avatar.dart';
-import 'package:mared_social/widgets/reusable/auth_checkbox_group.dart';
-import 'package:mared_social/widgets/reusable/auth_checkbox_item.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 

@@ -11,7 +11,8 @@ import 'package:mared_social/widgets/bottom_sheets/is_anon_bottom_sheet.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
-PreferredSizeWidget homeAppBar(BuildContext context) {
+PreferredSizeWidget homeAppBar(BuildContext context,
+    {required String leadingIconPath, required String actionIconPath}) {
   return AppBar(
       elevation: 0,
       leading: IconButton(
@@ -23,7 +24,7 @@ PreferredSizeWidget homeAppBar(BuildContext context) {
           ),
         ),
         icon: SvgPicture.asset(
-          'assets/icons/home_search_icon.svg',
+          leadingIconPath,
           width: 18.w,
           height: 18.h,
         ),
@@ -42,7 +43,7 @@ PreferredSizeWidget homeAppBar(BuildContext context) {
             }
           },
           icon: SvgPicture.asset(
-            'assets/icons/camera_icon.svg',
+            actionIconPath,
             width: 20.w,
             height: 18.h,
           ),

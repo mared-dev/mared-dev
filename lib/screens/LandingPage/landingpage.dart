@@ -243,18 +243,6 @@ class _LandingPageState extends State<LandingPage> {
                           : Container()
                     ],
                   ),
-
-                  // bodyColor(),
-                  // Provider.of<LandingHelpers>(context, listen: false)
-                  //     .bodyImage(context),
-                  // Provider.of<LandingHelpers>(context, listen: false)
-                  //     .taglineText(context),
-                  // Provider.of<LandingHelpers>(context, listen: false)
-                  //     .mainButton(context),
-                  // Provider.of<LandingHelpers>(context, listen: false)
-                  //     .exploreApp(context),
-                  // Provider.of<LandingHelpers>(context, listen: false)
-                  //     .privacyText(context),
                 ],
               ),
             ),

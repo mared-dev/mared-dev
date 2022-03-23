@@ -11,7 +11,11 @@ class Feed extends StatelessWidget {
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.backGroundColor,
-      appBar: homeAppBar(context),
+      appBar: homeAppBar(
+        context,
+        leadingIconPath: 'assets/icons/home_search_icon.svg',
+        actionIconPath: 'assets/icons/camera_icon.svg',
+      ),
       body: FeedBody(),
     );
   }
