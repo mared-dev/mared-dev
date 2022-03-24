@@ -6,7 +6,9 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/constants/text_styles.dart';
+import 'package:mared_social/screens/PostDetails/comments_screen.dart';
 import 'package:mared_social/widgets/bottom_sheets/show_comments_section.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 class PostCommentsPart extends StatelessWidget {
   final documentSnapshot;
@@ -18,10 +20,19 @@ class PostCommentsPart extends StatelessWidget {
     return InkWell(
       onTap: () {
         //Start HERE
-        showCommentsSheet(
+        // showCommentsSheet(
+        //     snapshot: documentSnapshot,
+        //     context: context,
+        //     postId: documentSnapshot['postid']);
+        pushNewScreen(
+          context,
+          screen: CommentsScreen(
             snapshot: documentSnapshot,
-            context: context,
-            postId: documentSnapshot['postid']);
+            postId: documentSnapshot['postid'],
+          ),
+          withNavBar: false, // OPTIONAL VALUE. True by default.
+          pageTransitionAnimation: PageTransitionAnimation.cupertino,
+        );
       },
       child: Padding(
         padding: EdgeInsets.only(left: 10.w),

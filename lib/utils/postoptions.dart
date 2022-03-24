@@ -298,7 +298,6 @@ class PostFunctions with ChangeNotifier {
           .doc(postID)
           .update({'likes': newLikesList});
     } else {
-      print('11111111111111111');
       await FirebaseFirestore.instance.collection('posts').doc(postID).update({
         'likes': [
           ...post.data()!['likes'],
@@ -311,7 +310,6 @@ class PostFunctions with ChangeNotifier {
           }
         ]
       });
-      print('22222222222222222');
 
       await FirebaseFirestore.instance
           .collection("users")
@@ -330,7 +328,6 @@ class PostFunctions with ChangeNotifier {
           }
         ]
       });
-      print('333333333333333333');
 
       await FirebaseFirestore.instance
           .collection("users")

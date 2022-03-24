@@ -21,7 +21,6 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     shouldUseSentData = (widget.documentSnapshot != null);
   }

@@ -11,9 +11,6 @@ import 'package:nanoid/nanoid.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
-///TODO: change to another location when you create contollers
-///
-
 class LandingHelpers {
   static loginAsGuest({context}) async {
     try {

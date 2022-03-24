@@ -360,6 +360,7 @@ class AuctionFuctions with ChangeNotifier {
     required BuildContext context,
   }) async {
     String commentId = nanoid(14).toString();
+
     await FirebaseFirestore.instance
         .collection('auctions')
         .doc(auctionId)

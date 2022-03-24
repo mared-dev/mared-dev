@@ -143,6 +143,7 @@ class _HomePageState extends State<HomePage> {
           controller: _controller,
           screens: _screens,
           handleAndroidBackButtonPress: true,
+          hideNavigationBarWhenKeyboardShows: true,
           items: _navBarItems,
           // padding: NavBarPadding.only(bottom: 10),
           navBarHeight: 85.h,

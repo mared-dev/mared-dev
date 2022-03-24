@@ -153,7 +153,6 @@ class UploadPost with ChangeNotifier {
                             ImageSource.camera,
                           );
                         } else {
-                          //TODO:redo this logic
                           _video = await PickFilesHelper.pickVide(
                               source: ImageSource.camera);
                           if (_video != null) {

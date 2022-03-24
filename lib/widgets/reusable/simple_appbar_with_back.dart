@@ -12,7 +12,7 @@ PreferredSizeWidget simpleAppBarWithBack(BuildContext context,
               leadingCallback();
             }
           },
-          icon: leadingIcon!),
+          icon: leadingIcon ?? Container()),
       backgroundColor: AppColors.backGroundColor,
       centerTitle: false,
       title: Text(

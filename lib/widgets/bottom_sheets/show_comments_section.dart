@@ -17,7 +17,7 @@ import 'package:provider/provider.dart';
 //move later to constants file
 final FCMNotificationService _fcmNotificationService = FCMNotificationService();
 
-TextEditingController commentController = TextEditingController();
+TextEditingController _commentController = TextEditingController();
 
 showCommentsSheet({
   required BuildContext context,
@@ -260,7 +260,7 @@ class _CommentsSectionState extends State<CommentsSection> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        controller: commentController,
+                        controller: _commentController,
                         style: TextStyle(
                           color: constantColors.whiteColor,
                           fontSize: 16,
@@ -281,9 +281,9 @@ class _CommentsSectionState extends State<CommentsSection> {
                           addComment(
                               userUid: widget.snapshot['useruid'],
                               postId: widget.snapshot['postid'],
-                              comment: commentController.text,
+                              comment: _commentController.text,
                               context: context);
-                          commentController.clear();
+                          _commentController.clear();
                           Navigator.of(context).pop();
                         } else {
                           IsAnonBottomSheet(context);
@@ -308,14 +308,13 @@ class _CommentsSectionState extends State<CommentsSection> {
   }
 }
 
-//TODO:move this later to firestore stuff file
 Future addComment({
   required String userUid,
   required String postId,
   required String comment,
   required BuildContext context,
 }) async {
-  String commentId = nanoid(14).toString();
+  String commentId = (await nanoid(14)).toString();
 
   var post =
       await FirebaseFirestore.instance.collection('posts').doc(postId).get();

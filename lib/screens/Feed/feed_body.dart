@@ -18,7 +18,6 @@ class _FeedBodyState extends State<FeedBody> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _topSectionItems = [StoriesSection(), BannersSection()];
   }

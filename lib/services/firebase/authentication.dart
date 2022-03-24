@@ -161,7 +161,6 @@ class Authentication with ChangeNotifier {
       await saveLocalCredentials(userUid);
       notifyListeners();
     } catch (e) {
-      // TODO: Show alert here
       print(e);
     }
   }

@@ -31,7 +31,6 @@ class _FeedItemWithLikeState extends State<FeedItemBodyWithLike> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     isAnimating = false;
     isAlreadyLiked = widget.likes
@@ -107,7 +106,6 @@ class _HeartIconAnimatedState extends State<HeartIconAnimated>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     animationController =
         AnimationController(vsync: this, duration: Duration(milliseconds: 250));
@@ -118,7 +116,6 @@ class _HeartIconAnimatedState extends State<HeartIconAnimated>
   //this when the init state don't work and you need something to init the app
   @override
   void didUpdateWidget(covariant HeartIconAnimated oldWidget) {
-    // TODO: implement didUpdateWidget
     super.didUpdateWidget(oldWidget);
     if (widget.isAnimating && oldWidget.isAnimating != widget.isAnimating) {
       doAnimation();
@@ -159,7 +156,6 @@ class _HeartIconAnimatedState extends State<HeartIconAnimated>
 
   @override
   void dispose() {
-    // TODO: implement dispose
     animationController.dispose();
     super.dispose();
   }
