@@ -25,7 +25,7 @@ PreferredSizeWidget homeAppBar(BuildContext context,
               leadingCallback();
             }
           },
-          icon: leadingIcon!),
+          icon: leadingIcon ?? Container()),
       backgroundColor: AppColors.backGroundColor,
       centerTitle: true,
       actions: [
@@ -35,7 +35,7 @@ PreferredSizeWidget homeAppBar(BuildContext context,
                 actionCallback();
               }
             },
-            icon: actionIcon!),
+            icon: actionIcon ?? Container()),
       ],
       title: Text(
         title,

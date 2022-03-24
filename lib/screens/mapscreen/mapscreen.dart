@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mared_social/widgets/items/show_post_details.dart';
+import 'package:mared_social/widgets/reusable/home_app_bar.dart';
 import 'package:provider/provider.dart';
 
 class MapScreen extends StatefulWidget {
@@ -51,6 +52,7 @@ class _MapScreenState extends State<MapScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: homeAppBar(context, title: 'MARED MAP'),
       body: GoogleMap(
         mapType: MapType.normal,
         markers: Set<Marker>.of(markers.values),
