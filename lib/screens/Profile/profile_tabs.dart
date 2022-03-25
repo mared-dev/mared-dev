@@ -6,9 +6,6 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:lottie/lottie.dart';
-import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/constants/text_styles.dart';
 import 'package:mared_social/helpers/post_helpers.dart';
@@ -16,16 +13,9 @@ import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/PostDetails/post_details_screen.dart';
 import 'package:mared_social/screens/Profile/profileHelpers.dart';
-import 'package:mared_social/screens/ambassaborsScreens/companiesScreen.dart';
-import 'package:mared_social/screens/ambassaborsScreens/seeVideo.dart';
-import 'package:mared_social/screens/auctionFeed/createAuctionScreen.dart';
-import 'package:mared_social/screens/auctionMap/auctionMapHelper.dart';
-import 'package:mared_social/screens/userSettings/usersettings.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
+import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:mared_social/widgets/items/profile_post_item.dart';
-import 'package:mared_social/widgets/items/promoted_post_item.dart';
-import 'package:mared_social/widgets/items/show_post_details.dart';
-import 'package:page_transition/page_transition.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
@@ -51,8 +41,9 @@ class PostsProfile extends StatelessWidget {
         children: [
           _profileHeader(userModel ?? _storedUserInfo, context),
           _userStatsSection(userModel ?? _storedUserInfo, context),
+          _otherProfileSection(userModel, context),
           SizedBox(
-            height: 47.h,
+            height: userModel == null ? 47.h : 32.h,
           ),
 
           ///I can only exapand to the height of my parent
@@ -100,6 +91,112 @@ class PostsProfile extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  Widget _otherProfileSection(UserModel? userModel, BuildContext context) {
+    if (userModel == null) {
+      return Container();
+    } else {
+      return Padding(
+        padding: EdgeInsets.only(top: 19.h),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            StreamBuilder<DocumentSnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection("users")
+                    .doc(userId)
+                    .collection("followers")
+                    .doc(UserInfoManger.getUserId())
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  bool isFollowed = snapshot.data!.exists;
+
+                  return ElevatedButton.icon(
+                    icon: SvgPicture.asset(
+                      isFollowed
+                          ? 'assets/icons/alread_followed_icon.svg'
+                          : 'assets/icons/follow_icon.svg',
+                      color: isFollowed
+                          ? Colors.white
+                          : AppColors.commentButtonColor,
+                    ),
+                    label: Text(
+                      isFollowed ? 'unfollow' : 'follow',
+                      style: regularTextStyle(
+                          fontSize: 11,
+                          textColor: isFollowed
+                              ? Colors.white
+                              : AppColors.commentButtonColor),
+                    ),
+                    onPressed: () {
+                      if (!isFollowed) {
+                        UserModel currentUserInfo =
+                            UserInfoManger.getUserInfo();
+                        Provider.of<FirebaseOperations>(context, listen: false)
+                            .followUser(
+                          followingUid: userId!,
+                          followingDocId: currentUserInfo.uid,
+                          followingData: {
+                            'username': currentUserInfo.userName,
+                            'userimage': currentUserInfo.photoUrl,
+                            'useremail': currentUserInfo.email,
+                            'useruid': currentUserInfo.uid,
+                            'time': Timestamp.now(),
+                          },
+                          followerUid: currentUserInfo.uid,
+                          followerDocId: userId!,
+                          followerData: {
+                            'username': userModel.userName,
+                            'userimage': userModel.photoUrl,
+                            'useremail': userModel.email,
+                            'useruid': userModel.uid,
+                            'time': Timestamp.now(),
+                          },
+                        );
+                      } else {
+                        Provider.of<FirebaseOperations>(context, listen: false)
+                            .unfollowUser(
+                          followingUid: userId!,
+                          followingDocId: UserInfoManger.getUserId(),
+                          followerUid: UserInfoManger.getUserId(),
+                          followerDocId: userId!,
+                        );
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 7.h, horizontal: 20.w),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6.0),
+                      ),
+                    ),
+                  );
+                }),
+            ElevatedButton.icon(
+              icon: SvgPicture.asset(
+                'assets/icons/message_user_icon.svg',
+                color: AppColors.commentButtonColor,
+              ),
+              label: Text(
+                'message',
+                style: regularTextStyle(
+                    fontSize: 11, textColor: AppColors.commentButtonColor),
+              ),
+              onPressed: () {
+                print('Button Pressed');
+              },
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.symmetric(vertical: 7.h, horizontal: 20.w),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6.0),
+                ),
+              ),
+            )
+          ],
+        ),
+      );
+    }
   }
 
   Widget _userStatsSection(UserModel userModel, BuildContext context) {
