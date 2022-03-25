@@ -7,6 +7,7 @@ import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/constants/text_styles.dart';
 import 'package:mared_social/helpers/loading_helper.dart';
+import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
@@ -88,6 +89,15 @@ class _CommentsScreenState extends State<CommentsScreen> {
                                 context,
                                 PageTransition(
                                     child: AltProfile(
+                                      userModel: UserModel(
+                                          uid: commentItem['useruid'],
+                                          userName: commentItem['username'],
+                                          photoUrl: commentItem['userimage'],
+                                          email: commentItem['useremail'],
+                                          fcmToken: "",
+
+                                          ///later you have to give this the right value
+                                          store: false),
                                       userUid: commentItem['useruid'],
                                     ),
                                     type: PageTransitionType.bottomToTop));

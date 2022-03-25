@@ -58,7 +58,7 @@ class _ProfileState extends State<Profile> {
               .logOutDialog(context);
         },
       ),
-      body: PostsProfile(constantColors: constantColors, size: size),
+      body: PostsProfile(size: size),
     );
   }
 }

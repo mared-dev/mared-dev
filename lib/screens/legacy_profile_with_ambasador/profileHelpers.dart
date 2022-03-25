@@ -769,15 +769,15 @@ class ProfileHelpers with ChangeNotifier {
                                 .map((followingDocSnap) {
                               return ListTile(
                                 onTap: () {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      PageTransition(
-                                          child: AltProfile(
-                                            userUid:
-                                                followingDocSnap['useruid'],
-                                          ),
-                                          type:
-                                              PageTransitionType.bottomToTop));
+                                  // Navigator.pushReplacement(
+                                  //     context,
+                                  //     PageTransition(
+                                  //         child: AltProfile(
+                                  //           userUid:
+                                  //               followingDocSnap['useruid'],
+                                  //         ),
+                                  //         type:
+                                  //             PageTransitionType.bottomToTop));
                                 },
                                 trailing: MaterialButton(
                                   color: constantColors.blueColor,
@@ -903,14 +903,14 @@ class ProfileHelpers with ChangeNotifier {
                                 followerSnap.data!.docs.map((followerDocSnap) {
                               return ListTile(
                                 onTap: () {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      PageTransition(
-                                          child: AltProfile(
-                                            userUid: followerDocSnap['useruid'],
-                                          ),
-                                          type:
-                                              PageTransitionType.bottomToTop));
+                                  // Navigator.pushReplacement(
+                                  //     context,
+                                  //     PageTransition(
+                                  //         child: AltProfile(
+                                  //           userUid: followerDocSnap['useruid'],
+                                  //         ),
+                                  //         type:
+                                  //             PageTransitionType.bottomToTop));
                                 },
                                 leading: Padding(
                                   padding: const EdgeInsets.only(bottom: 8.0),

@@ -9,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
+import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/screens/Stories/stories_helper.dart';
@@ -188,13 +190,28 @@ class _StoriesState extends State<Stories> {
                         onTap: () {
                           if (widget.querySnapshot.data!.docs[widget.snapIndex]
                                   ['useruid'] !=
-                              Provider.of<Authentication>(context,
-                                      listen: false)
-                                  .getUserId) {
+                              UserInfoManger.getUserId()) {
                             Navigator.push(
                                 context,
                                 PageTransition(
                                     child: AltProfile(
+                                      userModel: UserModel(
+                                          uid: widget.querySnapshot.data!
+                                                  .docs[widget.snapIndex]
+                                              ['useruid'],
+                                          userName: widget.querySnapshot.data!
+                                                  .docs[widget.snapIndex]
+                                              ['username'],
+                                          photoUrl: widget.querySnapshot.data!
+                                                  .docs[widget.snapIndex]
+                                              ['userimage'],
+                                          email: widget.querySnapshot.data!
+                                                  .docs[widget.snapIndex]
+                                              ['useremail'],
+                                          fcmToken: "",
+
+                                          ///later you have to give this the right value
+                                          store: false),
                                       userUid: widget.querySnapshot.data!
                                           .docs[widget.snapIndex]['useruid'],
                                     ),

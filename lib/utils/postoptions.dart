@@ -348,141 +348,6 @@ class PostFunctions with ChangeNotifier {
     }
   }
 
-  showAwardsPresenter({required BuildContext context, required String postId}) {
-    return showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (context) {
-        return SafeArea(
-          bottom: true,
-          child: Container(
-            decoration: BoxDecoration(
-              color: constantColors.blueGreyColor,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(12),
-                topRight: Radius.circular(12),
-              ),
-            ),
-            height: MediaQuery.of(context).size.height * 0.5,
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 150),
-                  child: Divider(
-                    thickness: 4,
-                    color: constantColors.whiteColor,
-                  ),
-                ),
-                Container(
-                  width: 100,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: constantColors.whiteColor,
-                    ),
-                    borderRadius: BorderRadius.circular(5),
-                  ),
-                  child: Center(
-                    child: Text(
-                      "Awards",
-                      style: TextStyle(
-                        color: constantColors.blueColor,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.3,
-                  width: MediaQuery.of(context).size.width,
-                  child: StreamBuilder<QuerySnapshot>(
-                    stream: FirebaseFirestore.instance
-                        .collection('posts')
-                        .doc(postId)
-                        .collection("awards")
-                        .orderBy('time', descending: true)
-                        .snapshots(),
-                    builder: (context, awardSnaps) {
-                      return ListView(
-                        children: awardSnaps.data!.docs.map(
-                          (DocumentSnapshot awardDocSnap) {
-                            return InkWell(
-                              onTap: () {
-                                if (awardDocSnap['useruid'] !=
-                                    Provider.of<Authentication>(context,
-                                            listen: false)
-                                        .getUserId) {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      PageTransition(
-                                          child: AltProfile(
-                                            userUid: awardDocSnap['useruid'],
-                                          ),
-                                          type:
-                                              PageTransitionType.bottomToTop));
-                                }
-                              },
-                              child: ListTile(
-                                leading: SizedBox(
-                                  height: 30,
-                                  width: 30,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(15),
-                                    child: CachedNetworkImage(
-                                      fit: BoxFit.cover,
-                                      imageUrl: awardDocSnap['userimage'],
-                                      progressIndicatorBuilder: (context, url,
-                                              downloadProgress) =>
-                                          LoadingWidget(
-                                              constantColors: constantColors),
-                                      errorWidget: (context, url, error) =>
-                                          const Icon(Icons.error),
-                                    ),
-                                  ),
-                                ),
-                                trailing: Provider.of<Authentication>(context,
-                                                listen: false)
-                                            .getUserId ==
-                                        awardDocSnap['useruid']
-                                    ? const SizedBox(
-                                        height: 0,
-                                        width: 0,
-                                      )
-                                    : MaterialButton(
-                                        child: Text("Follow",
-                                            style: TextStyle(
-                                              color: constantColors.whiteColor,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14,
-                                            )),
-                                        onPressed: () {},
-                                        color: constantColors.blueColor,
-                                      ),
-                                title: Text(
-                                  awardDocSnap['username'],
-                                  style: TextStyle(
-                                    color: constantColors.blueColor,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16,
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ).toList(),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
-    );
-  }
-
   showLikes({required BuildContext context, required likes}) {
     return showModalBottomSheet(
       context: context,
@@ -543,6 +408,16 @@ class PostFunctions with ChangeNotifier {
                                       context,
                                       PageTransition(
                                           child: AltProfile(
+                                            userModel: UserModel(
+                                                uid: likesItem['useruid'],
+                                                userName: likesItem['username'],
+                                                photoUrl:
+                                                    likesItem['userimage'],
+                                                email: likesItem['useremail'],
+                                                fcmToken: "",
+
+                                                ///later you have to give this the right value
+                                                store: false),
                                             userUid: likesItem['useruid'],
                                           ),
                                           type:

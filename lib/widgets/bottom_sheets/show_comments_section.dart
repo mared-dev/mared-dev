@@ -111,6 +111,19 @@ class _CommentsSectionState extends State<CommentsSection> {
                                             context,
                                             PageTransition(
                                                 child: AltProfile(
+                                                  userModel: UserModel(
+                                                      uid: commentDocSnap[
+                                                          'useruid'],
+                                                      userName: commentDocSnap[
+                                                          'username'],
+                                                      photoUrl: commentDocSnap[
+                                                          'userimage'],
+                                                      email: commentDocSnap[
+                                                          'useremail'],
+                                                      fcmToken: "",
+
+                                                      ///later you have to give this the right value
+                                                      store: false),
                                                   userUid:
                                                       commentDocSnap['useruid'],
                                                 ),

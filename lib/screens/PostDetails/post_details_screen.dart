@@ -9,8 +9,10 @@ import 'package:mared_social/widgets/reusable/simple_appbar_with_back.dart';
 
 class PostDetailsScreen extends StatefulWidget {
   final documentSnapshot;
+  final String? userId;
 
-  const PostDetailsScreen({Key? key, this.documentSnapshot}) : super(key: key);
+  const PostDetailsScreen({Key? key, this.documentSnapshot, this.userId})
+      : super(key: key);
 
   @override
   State<PostDetailsScreen> createState() => _PostDetailsScreenState();
@@ -44,7 +46,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
         child: StreamBuilder<DocumentSnapshot>(
           stream: FirebaseFirestore.instance
               .collection("users")
-              .doc(UserInfoManger.getUserId())
+              .doc(widget.userId ?? UserInfoManger.getUserId())
               .collection("posts")
               .doc(widget.documentSnapshot['postid'])
               .snapshots(),

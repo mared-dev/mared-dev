@@ -1069,6 +1069,19 @@ class AltProfileHelper with ChangeNotifier {
                                         context,
                                         PageTransition(
                                             child: AltProfile(
+                                              userModel: UserModel(
+                                                  uid: followingDocSnap[
+                                                      'useruid'],
+                                                  userName: followingDocSnap[
+                                                      'username'],
+                                                  photoUrl: followingDocSnap[
+                                                      'userimage'],
+                                                  email: followingDocSnap[
+                                                      'useremail'],
+                                                  fcmToken: "",
+
+                                                  ///later you have to give this the right value
+                                                  store: false),
                                               userUid:
                                                   followingDocSnap['useruid'],
                                             ),
@@ -1201,6 +1214,19 @@ class AltProfileHelper with ChangeNotifier {
                                         context,
                                         PageTransition(
                                             child: AltProfile(
+                                              userModel: UserModel(
+                                                  uid: followerDocSnap[
+                                                      'useruid'],
+                                                  userName: followerDocSnap[
+                                                      'username'],
+                                                  photoUrl: followerDocSnap[
+                                                      'userimage'],
+                                                  email: followerDocSnap[
+                                                      'useremail'],
+                                                  fcmToken: "",
+
+                                                  ///later you have to give this the right value
+                                                  store: false),
                                               userUid:
                                                   followerDocSnap['useruid'],
                                             ),

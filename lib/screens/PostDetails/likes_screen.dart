@@ -107,13 +107,20 @@ class _LikesScreenState extends State<LikesScreen> {
                             'assets/icons/alread_followed_icon.svg')
                         : SvgPicture.asset('assets/icons/follow_icon.svg'),
                     leadingCallback: () {
-                      if (likeItem['useruid'] !=
-                          Provider.of<Authentication>(context, listen: false)
-                              .getUserId) {
+                      if (likeItem['useruid'] != UserInfoManger.getUserId()) {
                         Navigator.push(
                             context,
                             PageTransition(
                                 child: AltProfile(
+                                  userModel: UserModel(
+                                      uid: likeItem['useruid'],
+                                      userName: likeItem['username'],
+                                      photoUrl: likeItem['userimage'],
+                                      email: likeItem['useremail'],
+                                      fcmToken: "",
+
+                                      ///later you have to give this the right value
+                                      store: false),
                                   userUid: likeItem['useruid'],
                                 ),
                                 type: PageTransitionType.bottomToTop));

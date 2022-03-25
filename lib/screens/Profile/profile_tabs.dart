@@ -30,27 +30,27 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 class PostsProfile extends StatelessWidget {
-  const PostsProfile({
-    Key? key,
-    required this.constantColors,
-    required this.size,
-  }) : super(key: key);
+  const PostsProfile(
+      {Key? key, required this.size, this.userId, this.userModel})
+      : super(key: key);
 
-  final ConstantColors constantColors;
   final Size size;
+  final String? userId;
+  final UserModel? userModel;
 
   @override
   Widget build(BuildContext context) {
-    UserModel _userInfo = UserInfoManger.getUserInfo();
+    UserModel _storedUserInfo = UserInfoManger.getUserInfo();
     return Container(
       height: MediaQuery.of(context).size.height,
       child: ListView(
         physics: NeverScrollableScrollPhysics(),
         shrinkWrap: true,
-        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 27.h),
+        padding: EdgeInsets.symmetric(
+            horizontal: 20.w, vertical: userId == null ? 27.h : 0),
         children: [
-          _profileHeader(_userInfo, context),
-          _userStatsSection(_userInfo, context),
+          _profileHeader(userModel ?? _storedUserInfo, context),
+          _userStatsSection(userModel ?? _storedUserInfo, context),
           SizedBox(
             height: 47.h,
           ),
@@ -61,8 +61,7 @@ class PostsProfile extends StatelessWidget {
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection("users")
-                  .doc(Provider.of<Authentication>(context, listen: false)
-                      .getUserId)
+                  .doc(userId ?? UserInfoManger.getUserId())
                   .collection("posts")
                   .orderBy("time", descending: true)
                   .snapshots(),
@@ -78,6 +77,7 @@ class PostsProfile extends StatelessWidget {
                           pushNewScreen(
                             context,
                             screen: PostDetailsScreen(
+                              userId: userId,
                               documentSnapshot: item,
                             ),
                             withNavBar:
@@ -200,8 +200,10 @@ class PostsProfile extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () {
-            Provider.of<ProfileHelpers>(context, listen: false)
-                .postSelectType(context: context);
+            if (userModel == null) {
+              Provider.of<ProfileHelpers>(context, listen: false)
+                  .postSelectType(context: context);
+            }
           },
           child: Container(
             alignment: Alignment.center,
@@ -213,14 +215,19 @@ class PostsProfile extends StatelessWidget {
                     radius: 70.h,
                     backgroundImage:
                         CachedNetworkImageProvider(userModel.photoUrl)),
-                Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: SvgPicture.asset(
-                      'assets/icons/add_picture_icon.svg',
-                      width: 50.h,
-                      height: 50.h,
-                    ))
+                userModel != null
+                    ? const SizedBox(
+                        width: 0,
+                        height: 0,
+                      )
+                    : Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: SvgPicture.asset(
+                          'assets/icons/add_picture_icon.svg',
+                          width: 50.h,
+                          height: 50.h,
+                        ))
               ],
             ),
           ),

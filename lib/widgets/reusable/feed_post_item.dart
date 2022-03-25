@@ -11,6 +11,7 @@ import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/constants/text_styles.dart';
 import 'package:mared_social/helpers/post_helpers.dart';
 import 'package:mared_social/helpers/time_helpers.dart';
+import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/isAnon/isAnon.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
@@ -61,6 +62,18 @@ class _FeedPostItemState extends State<FeedPostItem> {
                               context,
                               PageTransition(
                                   child: AltProfile(
+                                    userModel: UserModel(
+                                        uid: widget.documentSnapshot['useruid'],
+                                        userName:
+                                            widget.documentSnapshot['username'],
+                                        photoUrl: widget
+                                            .documentSnapshot['userimage'],
+                                        email: widget
+                                            .documentSnapshot['useremail'],
+                                        fcmToken: "",
+
+                                        ///later you have to give this the right value
+                                        store: false),
                                     userUid: widget.documentSnapshot['useruid'],
                                   ),
                                   type: PageTransitionType.bottomToTop));
@@ -215,6 +228,16 @@ class _FeedPostItemState extends State<FeedPostItem> {
                         context,
                         PageTransition(
                             child: AltProfile(
+                              userModel: UserModel(
+                                  uid: widget.documentSnapshot['useruid'],
+                                  userName: widget.documentSnapshot['username'],
+                                  photoUrl:
+                                      widget.documentSnapshot['userimage'],
+                                  email: widget.documentSnapshot['useremail'],
+                                  fcmToken: "",
+
+                                  ///later you have to give this the right value
+                                  store: false),
                               userUid: userId,
                             ),
                             type: PageTransitionType.bottomToTop));
