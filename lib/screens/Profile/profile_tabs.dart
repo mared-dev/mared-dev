@@ -69,6 +69,7 @@ class PostsProfile extends StatelessWidget {
                             context,
                             screen: PostDetailsScreen(
                               userId: userId,
+                              postId: item['postid'],
                               documentSnapshot: item,
                             ),
                             withNavBar:

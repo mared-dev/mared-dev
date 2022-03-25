@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/text_styles.dart';
+import 'package:mared_social/screens/PostDetails/post_details_screen.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:get/get.dart';
 
@@ -15,6 +17,8 @@ class BannersSection extends StatefulWidget {
 
 class _BannersSectionState extends State<BannersSection> {
   var currentPage = 0.obs;
+  String selectedUserId = "";
+  String selectedPostId = "";
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +33,11 @@ class _BannersSectionState extends State<BannersSection> {
             bannerSnap.data == null) {
           return LoadingWidget(constantColors: constantColors);
         } else {
+          if (selectedUserId.isEmpty) {
+            selectedUserId = bannerSnap.data!.docs[0]['useruid'];
+            selectedPostId = bannerSnap.data!.docs[0]['postid'];
+          }
+
           return Container(
             margin: EdgeInsets.only(top: 8.h, bottom: 18.h),
             alignment: Alignment.center,
@@ -38,6 +47,8 @@ class _BannersSectionState extends State<BannersSection> {
               children: [
                 Swiper(
                   onIndexChanged: (newIndex) {
+                    selectedUserId = bannerSnap.data!.docs[newIndex]['useruid'];
+                    selectedPostId = bannerSnap.data!.docs[newIndex]['postid'];
                     currentPage.value = newIndex;
                   },
                   itemCount: bannerSnap.data!.docs.length,
@@ -69,11 +80,13 @@ class _BannersSectionState extends State<BannersSection> {
                     );
                   },
                   layout: SwiperLayout.DEFAULT,
-                  autoplay: true,
+                  autoplay: false,
                   duration: 1000,
                   curve: Curves.fastOutSlowIn,
                 ),
                 Obx(() => SwiperIndicator(
+                      selectedPostId: selectedPostId,
+                      selectedUserId: selectedUserId,
                       initialPage: currentPage.value,
                       numOfDots: bannerSnap.data!.docs.length,
                     ))
@@ -89,9 +102,15 @@ class _BannersSectionState extends State<BannersSection> {
 class SwiperIndicator extends StatelessWidget {
   final int initialPage;
   final int numOfDots;
+  final String selectedUserId;
+  final String selectedPostId;
 
   const SwiperIndicator(
-      {Key? key, required this.initialPage, required this.numOfDots})
+      {Key? key,
+      required this.initialPage,
+      required this.numOfDots,
+      required this.selectedPostId,
+      required this.selectedUserId})
       : super(key: key);
   @override
   Widget build(BuildContext context) {
@@ -106,7 +125,15 @@ class SwiperIndicator extends StatelessWidget {
           children: [
             InkWell(
               onTap: () {
-                print('view post');
+                pushNewScreen(
+                  context,
+                  screen: PostDetailsScreen(
+                    userId: selectedUserId,
+                    postId: selectedPostId,
+                  ),
+                  withNavBar: false, // OPTIONAL VALUE. True by default.
+                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                );
               },
               child: Text(
                 'View post',

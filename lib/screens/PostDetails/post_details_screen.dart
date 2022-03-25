@@ -10,8 +10,10 @@ import 'package:mared_social/widgets/reusable/simple_appbar_with_back.dart';
 class PostDetailsScreen extends StatefulWidget {
   final documentSnapshot;
   final String? userId;
+  final String postId;
 
-  const PostDetailsScreen({Key? key, this.documentSnapshot, this.userId})
+  const PostDetailsScreen(
+      {Key? key, this.documentSnapshot, this.userId, required this.postId})
       : super(key: key);
 
   @override
@@ -48,7 +50,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
               .collection("users")
               .doc(widget.userId ?? UserInfoManger.getUserId())
               .collection("posts")
-              .doc(widget.documentSnapshot['postid'])
+              .doc(widget.postId)
               .snapshots(),
           builder: (context, postDocSnap) {
             if (postDocSnap.connectionState == ConnectionState.waiting ||
