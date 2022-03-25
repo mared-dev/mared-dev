@@ -83,7 +83,9 @@ class InteractedUserItem extends StatelessWidget {
       ///TODO :fix this later (the follow/ unfollow flow in the screen)
       trailing: InkWell(
           onTap: () {
-            print('99999999999999');
+            if (trailingCallback != null) {
+              trailingCallback!();
+            }
           },
           child: trailingIcon),
     );
