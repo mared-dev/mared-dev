@@ -244,6 +244,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     photoUrl: _uploadedImageLink,
                                     fcmToken: ''));
 
+                                await UserInfoManger.saveAnonFlag(0);
+
                                 String name = "${_nameController.text} ";
 
                                 List<String> splitList = name.split(" ");

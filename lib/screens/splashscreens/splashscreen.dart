@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/screens/LandingPage/landingpage.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
@@ -25,7 +26,8 @@ class _SplashScreenState extends State<SplashScreen> {
         const Duration(
           milliseconds: 3500,
         ), () async {
-      if (FirebaseAuth.instance.currentUser != null) {
+      if (FirebaseAuth.instance.currentUser != null &&
+          !UserInfoManger.getAnonFlag()) {
         Provider.of<Authentication>(context, listen: false)
             .returningUserLogin(FirebaseAuth.instance.currentUser!.uid);
         await Provider.of<FirebaseOperations>(context, listen: false)

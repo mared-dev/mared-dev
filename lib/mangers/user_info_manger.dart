@@ -37,11 +37,15 @@ class UserInfoManger {
     }
   }
 
-  static saveAnonFlag() async {
-    await SharedPreferencesHelper.setInt('anonFlag', 1);
+  static saveAnonFlag(value) async {
+    await SharedPreferencesHelper.setInt('anonFlag', value);
   }
 
   static bool getAnonFlag() {
-    return SharedPreferencesHelper.getInt('anonFlag') == 1;
+    try {
+      return SharedPreferencesHelper.getInt('anonFlag') == 1;
+    } catch (e) {
+      return false;
+    }
   }
 }

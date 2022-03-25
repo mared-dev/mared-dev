@@ -136,6 +136,7 @@ LoginSheet(BuildContext context) {
                                         .getUserId)
                                     .get();
 
+                                await UserInfoManger.saveAnonFlag(0);
                                 await UserInfoManger.saveUserInfo(UserModel(
                                     uid: Provider.of<Authentication>(context,
                                             listen: false)
