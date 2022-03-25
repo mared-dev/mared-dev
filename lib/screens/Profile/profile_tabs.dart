@@ -298,7 +298,7 @@ class PostsProfile extends StatelessWidget {
       children: [
         GestureDetector(
           onTap: () {
-            if (userModel == null) {
+            if (userModel.uid == UserInfoManger.getUserId()) {
               Provider.of<ProfileHelpers>(context, listen: false)
                   .postSelectType(context: context);
             }
@@ -313,7 +313,7 @@ class PostsProfile extends StatelessWidget {
                     radius: 70.h,
                     backgroundImage:
                         CachedNetworkImageProvider(userModel.photoUrl)),
-                userModel != null
+                (userModel.uid != UserInfoManger.getUserId())
                     ? const SizedBox(
                         width: 0,
                         height: 0,

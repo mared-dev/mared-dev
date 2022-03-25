@@ -17,6 +17,10 @@ class UserInfoManger {
     await SharedPreferencesHelper.setString('userInfo', decodedObject);
   }
 
+  static clearUserInfo() async {
+    await SharedPreferencesHelper.clearSharedPrefs();
+  }
+
   static UserModel getUserInfo() {
     try {
       UserModel userModel = UserModel.fromJson(
@@ -31,5 +35,13 @@ class UserInfoManger {
           store: false,
           uid: '');
     }
+  }
+
+  static saveAnonFlag() async {
+    await SharedPreferencesHelper.setInt('anonFlag', 1);
+  }
+
+  static bool getAnonFlag() {
+    return SharedPreferencesHelper.getInt('anonFlag') == 1;
   }
 }

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/text_styles.dart';
+import 'package:mared_social/models/user_model.dart';
+import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/PostDetails/post_details_screen.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -19,6 +21,7 @@ class _BannersSectionState extends State<BannersSection> {
   var currentPage = 0.obs;
   String selectedUserId = "";
   String selectedPostId = "";
+  late UserModel selectedUser;
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +37,16 @@ class _BannersSectionState extends State<BannersSection> {
           return LoadingWidget(constantColors: constantColors);
         } else {
           if (selectedUserId.isEmpty) {
-            selectedUserId = bannerSnap.data!.docs[0]['useruid'];
-            selectedPostId = bannerSnap.data!.docs[0]['postid'];
+            var bannerItem = bannerSnap.data!.docs[0];
+            selectedUserId = bannerItem['useruid'];
+            selectedPostId = bannerItem['postid'];
+            selectedUser = UserModel(
+                userName: bannerItem['username'],
+                email: bannerItem['useremail'],
+                photoUrl: bannerItem['userimage'],
+                fcmToken: '',
+                store: false,
+                uid: bannerItem['useruid']);
           }
 
           return Container(
@@ -47,8 +58,21 @@ class _BannersSectionState extends State<BannersSection> {
               children: [
                 Swiper(
                   onIndexChanged: (newIndex) {
-                    selectedUserId = bannerSnap.data!.docs[newIndex]['useruid'];
-                    selectedPostId = bannerSnap.data!.docs[newIndex]['postid'];
+                    var bannerItem = bannerSnap.data!.docs[newIndex];
+                    print('##################');
+                    print(newIndex);
+                    print(bannerItem['username']);
+                    print(bannerItem['useremail']);
+                    selectedUser = UserModel(
+                        userName: bannerItem['username'],
+                        email: bannerItem['useremail'],
+                        photoUrl: bannerItem['userimage'],
+                        fcmToken: '',
+                        store: false,
+                        uid: bannerItem['useruid']);
+                    selectedUserId = bannerItem['useruid'];
+                    selectedPostId = bannerItem['postid'];
+
                     currentPage.value = newIndex;
                   },
                   itemCount: bannerSnap.data!.docs.length,
@@ -89,6 +113,7 @@ class _BannersSectionState extends State<BannersSection> {
                       selectedUserId: selectedUserId,
                       initialPage: currentPage.value,
                       numOfDots: bannerSnap.data!.docs.length,
+                      userModel: selectedUser,
                     ))
               ],
             ),
@@ -104,9 +129,11 @@ class SwiperIndicator extends StatelessWidget {
   final int numOfDots;
   final String selectedUserId;
   final String selectedPostId;
+  final UserModel userModel;
 
   const SwiperIndicator(
       {Key? key,
+      required this.userModel,
       required this.initialPage,
       required this.numOfDots,
       required this.selectedPostId,
@@ -163,7 +190,13 @@ class SwiperIndicator extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-                print('view post');
+                pushNewScreen(
+                  context,
+                  screen:
+                      AltProfile(userUid: selectedUserId, userModel: userModel),
+                  withNavBar: false, // OPTIONAL VALUE. True by default.
+                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                );
               },
               child: Text(
                 'View profile',

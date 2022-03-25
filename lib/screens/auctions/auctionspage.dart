@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/screens/LandingPage/landingpage.dart';
 import 'package:mared_social/screens/Profile/profile.dart';
 import 'package:mared_social/screens/auctionFeed/auctionFeed.dart';
@@ -102,7 +103,8 @@ class _AuctionAppState extends State<AuctionApp> {
                                 .signOutWithGoogle();
                             Provider.of<Authentication>(context, listen: false)
                                 .logOutViaEmail()
-                                .whenComplete(() {
+                                .whenComplete(() async {
+                              await UserInfoManger.clearUserInfo();
                               Navigator.pushReplacement(
                                 context,
                                 PageTransition(
