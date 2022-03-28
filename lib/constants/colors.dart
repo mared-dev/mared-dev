@@ -8,4 +8,7 @@ class AppColors {
   static const darkGrayTextColor = Color(0xFF707070);
   static const authInputFillColor = Color(0xFFCED0D2);
   static const accentColor = Color(0xFF17AEF5);
+  static const likeFilledColor = Color(0xFF17AEF5);
+  static const commentButtonColor = Colors.black;
+  static const notActiveNavItemColor = Color(0xFFBCBCBC);
 }

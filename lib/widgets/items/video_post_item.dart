@@ -49,7 +49,6 @@ class _VideoPostItemState extends State<VideoPostItem> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _videoPlayerController.dispose();
     _chewieController.dispose();
     super.dispose();

@@ -76,22 +76,22 @@ class AuctionFeedHelper with ChangeNotifier {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      if (documentSnapshot['useruid'] !=
-                                          Provider.of<Authentication>(context,
-                                                  listen: false)
-                                              .getUserId) {
-                                        Navigator.push(
-                                          context,
-                                          PageTransition(
-                                            child: AltProfile(
-                                              userUid:
-                                                  documentSnapshot['useruid'],
-                                            ),
-                                            type:
-                                                PageTransitionType.bottomToTop,
-                                          ),
-                                        );
-                                      }
+                                      // if (documentSnapshot['useruid'] !=
+                                      //     Provider.of<Authentication>(context,
+                                      //             listen: false)
+                                      //         .getUserId) {
+                                      //   Navigator.push(
+                                      //     context,
+                                      //     PageTransition(
+                                      //       child: AltProfile(
+                                      //         userUid:
+                                      //             documentSnapshot['useruid'],
+                                      //       ),
+                                      //       type:
+                                      //           PageTransitionType.bottomToTop,
+                                      //     ),
+                                      //   );
+                                      // }
                                     },
                                     child: SizedBox(
                                       height: 40,

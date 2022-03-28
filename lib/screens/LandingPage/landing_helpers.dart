@@ -11,9 +11,6 @@ import 'package:nanoid/nanoid.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
-///TODO: change to another location when you create contollers
-///
-
 class LandingHelpers {
   static loginAsGuest({context}) async {
     try {
@@ -58,6 +55,8 @@ class LandingHelpers {
           fcmToken: '',
           store: false));
 
+      await UserInfoManger.saveAnonFlag(1);
+
       Navigator.pushReplacement(
           context,
           PageTransition(
@@ -101,6 +100,7 @@ class LandingHelpers {
           photoUrl: Provider.of<Authentication>(context, listen: false)
               .getgoogleUserImage,
           fcmToken: ''));
+      await UserInfoManger.saveAnonFlag(0);
 
       await Provider.of<FirebaseOperations>(context, listen: false)
           .createUserCollection(context, {
@@ -176,6 +176,7 @@ class LandingHelpers {
             photoUrl: Provider.of<Authentication>(context, listen: false)
                 .getappleUserImage,
             fcmToken: ''));
+        await UserInfoManger.saveAnonFlag(0);
 
         Navigator.pushReplacement(
             context,
@@ -215,6 +216,7 @@ class LandingHelpers {
           userName: userSnapShot['username'],
           photoUrl: userSnapShot.data()!['userimage'],
           fcmToken: ''));
+      await UserInfoManger.saveAnonFlag(0);
 
       Navigator.pushReplacement(
         context,

@@ -4,637 +4,369 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:lottie/lottie.dart';
-import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:mared_social/constants/colors.dart';
+import 'package:mared_social/constants/text_styles.dart';
 import 'package:mared_social/helpers/post_helpers.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
+import 'package:mared_social/screens/PostDetails/post_details_screen.dart';
 import 'package:mared_social/screens/Profile/profileHelpers.dart';
-import 'package:mared_social/screens/ambassaborsScreens/companiesScreen.dart';
-import 'package:mared_social/screens/ambassaborsScreens/seeVideo.dart';
-import 'package:mared_social/screens/auctionFeed/createAuctionScreen.dart';
-import 'package:mared_social/screens/auctionMap/auctionMapHelper.dart';
-import 'package:mared_social/screens/userSettings/usersettings.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
+import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:mared_social/widgets/items/profile_post_item.dart';
-import 'package:mared_social/widgets/items/promoted_post_item.dart';
-import 'package:mared_social/widgets/items/show_post_details.dart';
-import 'package:page_transition/page_transition.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 class PostsProfile extends StatelessWidget {
-  const PostsProfile({
-    Key? key,
-    required this.constantColors,
-    required this.size,
-  }) : super(key: key);
+  const PostsProfile(
+      {Key? key, required this.size, this.userId, this.userModel})
+      : super(key: key);
 
-  final ConstantColors constantColors;
   final Size size;
+  final String? userId;
+  final UserModel? userModel;
 
   @override
   Widget build(BuildContext context) {
-    UserModel _userInfo = UserInfoManger.getUserInfo();
-    return Scaffold(
-      backgroundColor: constantColors.blueGreyColor,
-      appBar: AppBar(
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () {
-            Navigator.push(
-                context,
-                PageTransition(
-                    child: UserSettingsPage(),
-                    type: PageTransitionType.leftToRight));
-          },
-          icon: Icon(
-            FontAwesomeIcons.cogs,
-            color: constantColors.greenColor,
+    UserModel _storedUserInfo = UserInfoManger.getUserInfo();
+    return Container(
+      height: MediaQuery.of(context).size.height,
+      child: ListView(
+        physics: NeverScrollableScrollPhysics(),
+        shrinkWrap: true,
+        padding: EdgeInsets.symmetric(
+            horizontal: 20.w, vertical: userId == null ? 27.h : 0),
+        children: [
+          _profileHeader(userModel ?? _storedUserInfo, context),
+          _userStatsSection(userModel ?? _storedUserInfo, context),
+          _otherProfileSection(userModel, context),
+          SizedBox(
+            height: userModel == null ? 47.h : 32.h,
           ),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Provider.of<ProfileHelpers>(context, listen: false)
-                  .logOutDialog(context);
-            },
-            icon: Icon(
-              EvaIcons.logOutOutline,
-              color: constantColors.greenColor,
+
+          ///I can only exapand to the height of my parent
+          Container(
+            height: 350.h,
+            child: StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection("users")
+                  .doc(userId ?? UserInfoManger.getUserId())
+                  .collection("posts")
+                  .orderBy("time", descending: true)
+                  .snapshots(),
+              builder: (context, userPostSnap) {
+                return GridView.count(
+                  padding: EdgeInsets.only(bottom: 60.h),
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 5,
+                  mainAxisSpacing: 5,
+                  children: userPostSnap.data!.docs.map<Widget>((item) {
+                    return InkWell(
+                        onTap: () {
+                          pushNewScreen(
+                            context,
+                            screen: PostDetailsScreen(
+                              userId: userId,
+                              postId: item['postid'],
+                              documentSnapshot: item,
+                            ),
+                            withNavBar:
+                                false, // OPTIONAL VALUE. True by default.
+                            pageTransitionAnimation:
+                                PageTransitionAnimation.cupertino,
+                          );
+                        },
+                        child: ProfilePostItem(
+                          urls:
+                              PostHelpers.checkIfPostIsVideo(item['imageslist'])
+                                  ? [item['thumbnail']]
+                                  : item['imageslist'],
+                        ));
+                  }).toList(),
+                );
+              },
             ),
           ),
         ],
-        backgroundColor: constantColors.blueGreyColor.withOpacity(0.4),
-        title: RichText(
-          text: TextSpan(
-            text: "My ",
-            style: TextStyle(
-              color: constantColors.whiteColor,
-              fontWeight: FontWeight.bold,
-              fontSize: 20,
-            ),
-            children: <TextSpan>[
-              TextSpan(
-                text: "Profile",
-                style: TextStyle(
-                  color: constantColors.blueColor,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: constantColors.darkColor,
-        onPressed: () {
-          Provider.of<ProfileHelpers>(context, listen: false)
-              .postSelectType(context: context);
-        },
-        child: Stack(
+    );
+  }
+
+  Widget _otherProfileSection(UserModel? userModel, BuildContext context) {
+    if (userModel == null) {
+      return Container();
+    } else {
+      return Padding(
+        padding: EdgeInsets.only(top: 19.h),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Center(
-              child: Icon(
-                EvaIcons.plusCircleOutline,
-                color: constantColors.whiteColor,
-              ),
-            ),
-            Lottie.asset("assets/animations/cool.json"),
-          ],
-        ),
-      ),
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            automaticallyImplyLeading: false,
-            expandedHeight: size.height * 0.43,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                  color: constantColors.blueGreyColor,
-                  child: Column(
-                    children: [
-                      Provider.of<ProfileHelpers>(context, listen: false)
-                          .headerProfile(context, _userInfo),
-                      Provider.of<ProfileHelpers>(context, listen: false)
-                          .divider(),
-                      Provider.of<ProfileHelpers>(context, listen: false)
-                          .middleProfile(context, _userInfo),
-                    ],
-                  )),
-            ),
-          ),
-          StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection("users")
-                .doc(Provider.of<Authentication>(context, listen: false)
-                    .getUserId)
-                .collection("posts")
-                .orderBy("time", descending: true)
-                .snapshots(),
-            builder: (context, userPostSnap) {
-              return SliverPadding(
-                padding: const EdgeInsets.all(4),
-                sliver: SliverGrid(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 5,
-                    mainAxisSpacing: 5,
-                  ),
-                  delegate: SliverChildBuilderDelegate(
-                    (BuildContext context, int index) {
-                      if (index.toInt() < userPostSnap.data!.docs.length) {
-                        var userPostDocSnap = userPostSnap.data!.docs[index];
-                        // print('############');
-                        // print(userPostSnap.data!.docs.toString());
-                        // print(userPostDocSnap['imageslist']);
-                        return InkWell(
-                            onTap: () {
-                              showPostDetail(
-                                  context: context,
-                                  documentSnapshot: userPostDocSnap);
-                            },
-                            child: ProfilePostItem(
-                              urls: PostHelpers.checkIfPostIsVideo(
-                                      userPostDocSnap['imageslist'])
-                                  ? [userPostDocSnap['thumbnail']]
-                                  : userPostDocSnap['imageslist'],
-                            ));
+            StreamBuilder<DocumentSnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection("users")
+                    .doc(userId)
+                    .collection("followers")
+                    .doc(UserInfoManger.getUserId())
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  bool isFollowed = snapshot.data!.exists;
+
+                  return ElevatedButton.icon(
+                    icon: SvgPicture.asset(
+                      isFollowed
+                          ? 'assets/icons/alread_followed_icon.svg'
+                          : 'assets/icons/follow_icon.svg',
+                      color: isFollowed
+                          ? Colors.white
+                          : AppColors.commentButtonColor,
+                    ),
+                    label: Text(
+                      isFollowed ? 'unfollow' : 'follow',
+                      style: regularTextStyle(
+                          fontSize: 11,
+                          textColor: isFollowed
+                              ? Colors.white
+                              : AppColors.commentButtonColor),
+                    ),
+                    onPressed: () {
+                      if (!isFollowed) {
+                        UserModel currentUserInfo =
+                            UserInfoManger.getUserInfo();
+                        Provider.of<FirebaseOperations>(context, listen: false)
+                            .followUser(
+                          followingUid: userId!,
+                          followingDocId: currentUserInfo.uid,
+                          followingData: {
+                            'username': currentUserInfo.userName,
+                            'userimage': currentUserInfo.photoUrl,
+                            'useremail': currentUserInfo.email,
+                            'useruid': currentUserInfo.uid,
+                            'time': Timestamp.now(),
+                          },
+                          followerUid: currentUserInfo.uid,
+                          followerDocId: userId!,
+                          followerData: {
+                            'username': userModel.userName,
+                            'userimage': userModel.photoUrl,
+                            'useremail': userModel.email,
+                            'useruid': userModel.uid,
+                            'time': Timestamp.now(),
+                          },
+                        );
+                      } else {
+                        Provider.of<FirebaseOperations>(context, listen: false)
+                            .unfollowUser(
+                          followingUid: userId!,
+                          followingDocId: UserInfoManger.getUserId(),
+                          followerUid: UserInfoManger.getUserId(),
+                          followerDocId: userId!,
+                        );
                       }
                     },
-                  ),
+                    style: ElevatedButton.styleFrom(
+                      padding:
+                          EdgeInsets.symmetric(vertical: 7.h, horizontal: 20.w),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(6.0),
+                      ),
+                    ),
+                  );
+                }),
+            ElevatedButton.icon(
+              icon: SvgPicture.asset(
+                'assets/icons/message_user_icon.svg',
+                color: AppColors.commentButtonColor,
+              ),
+              label: Text(
+                'message',
+                style: regularTextStyle(
+                    fontSize: 11, textColor: AppColors.commentButtonColor),
+              ),
+              onPressed: () {
+                print('Button Pressed');
+              },
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.symmetric(vertical: 7.h, horizontal: 20.w),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6.0),
                 ),
-              );
-            },
-          ),
-        ],
-      ),
+              ),
+            )
+          ],
+        ),
+      );
+    }
+  }
+
+  Widget _userStatsSection(UserModel userModel, BuildContext context) {
+    return Wrap(
+      alignment: WrapAlignment.center,
+      children: [
+        StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection("users")
+                .doc(userModel.uid)
+                .collection("posts")
+                .snapshots(),
+            builder: (context, userPostSnaps) {
+              if (!userPostSnaps.hasData) {
+                return _statItem(statText: 'Posts', statValue: '0');
+              } else {
+                return _statItem(
+                  statText: 'Posts',
+                  statValue: userPostSnaps.data!.docs.length.toString(),
+                );
+              }
+            }),
+        SizedBox(
+          width: 23.w,
+        ),
+        InkWell(
+          onTap: () {
+            Provider.of<ProfileHelpers>(context, listen: false)
+                .checkFollowerSheet(context: context, userId: userModel.uid);
+          },
+          child: StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection("users")
+                  .doc(userModel.uid)
+                  .collection("followers")
+                  .snapshots(),
+              builder: (context, followerSnap) {
+                if (followerSnap.hasData) {
+                  return _statItem(
+                      statText: 'Followers',
+                      statValue: followerSnap.data!.docs.length.toString());
+                }
+                return _statItem(statText: 'Followers', statValue: '0');
+              }),
+        ),
+        SizedBox(
+          width: 23.w,
+        ),
+        InkWell(
+          onTap: () {
+            Provider.of<ProfileHelpers>(context, listen: false)
+                .checkFollowingSheet(context: context, userId: userModel.uid);
+          },
+          child: StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance
+                  .collection("users")
+                  .doc(userModel.uid)
+                  .collection("following")
+                  .snapshots(),
+              builder: (context, followingSnap) {
+                if (followingSnap.hasData) {
+                  return _statItem(
+                    statText: 'Following',
+                    statValue: followingSnap.data!.docs.length.toString(),
+                  );
+                }
+                return _statItem(statText: 'Following', statValue: "0");
+              }),
+        ),
+      ],
     );
   }
-}
 
-// class AuctionsProfile extends StatelessWidget {
-//   const AuctionsProfile({
-//     Key? key,
-//     required this.constantColors,
-//     required this.size,
-//   }) : super(key: key);
-//
-//   final ConstantColors constantColors;
-//   final Size size;
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: constantColors.blueGreyColor,
-//       appBar: AppBar(
-//         automaticallyImplyLeading: false,
-//         centerTitle: true,
-//         actions: [
-//           IconButton(
-//             onPressed: () {
-//               Provider.of<ProfileHelpers>(context, listen: false)
-//                   .logOutDialog(context);
-//             },
-//             icon: Icon(
-//               EvaIcons.logOutOutline,
-//               color: constantColors.greenColor,
-//             ),
-//           ),
-//         ],
-//         backgroundColor: constantColors.blueGreyColor.withOpacity(0.4),
-//         title: RichText(
-//           text: TextSpan(
-//             text: "My ",
-//             style: TextStyle(
-//               color: constantColors.whiteColor,
-//               fontWeight: FontWeight.bold,
-//               fontSize: 20,
-//             ),
-//             children: <TextSpan>[
-//               TextSpan(
-//                 text: "Auctions",
-//                 style: TextStyle(
-//                   color: constantColors.blueColor,
-//                   fontWeight: FontWeight.bold,
-//                   fontSize: 20,
-//                 ),
-//               ),
-//             ],
-//           ),
-//         ),
-//       ),
-//       floatingActionButton: FloatingActionButton.extended(
-//         backgroundColor: constantColors.darkColor,
-//         onPressed: () {
-//           Navigator.push(
-//               context,
-//               PageTransition(
-//                   child: CreateAuctionScreen(),
-//                   type: PageTransitionType.rightToLeft));
-//         },
-//         label: Text(
-//           "Post Auction",
-//           style: TextStyle(
-//             color: constantColors.whiteColor,
-//             fontWeight: FontWeight.bold,
-//             fontSize: 12,
-//           ),
-//         ),
-//         icon: Lottie.asset(
-//           "assets/animations/gavel.json",
-//           height: 20,
-//         ),
-//       ),
-//       body: CustomScrollView(
-//         slivers: [
-//           SliverAppBar(
-//             automaticallyImplyLeading: false,
-//             expandedHeight: size.height * 0.43,
-//             flexibleSpace: FlexibleSpaceBar(
-//               background: Container(
-//                 color: constantColors.blueGreyColor,
-//                 child: StreamBuilder<DocumentSnapshot>(
-//                   stream: FirebaseFirestore.instance
-//                       .collection("users")
-//                       .doc(Provider.of<Authentication>(context, listen: false)
-//                           .getUserId)
-//                       .snapshots(),
-//                   builder: (context, snapshot) {
-//                     if (snapshot.connectionState == ConnectionState.waiting) {
-//                       return const Center(
-//                         child: CircularProgressIndicator(),
-//                       );
-//                     } else {
-//                       return Column(
-//                         children: [
-//                           Provider.of<ProfileHelpers>(context, listen: false)
-//                               .headerProfile(context, snapshot),
-//                           Provider.of<ProfileHelpers>(context, listen: false)
-//                               .divider(),
-//                           Provider.of<ProfileHelpers>(context, listen: false)
-//                               .middleProfile(context, snapshot),
-//                         ],
-//                       );
-//                     }
-//                   },
-//                 ),
-//               ),
-//             ),
-//           ),
-//           StreamBuilder<QuerySnapshot>(
-//             stream: FirebaseFirestore.instance
-//                 .collection("users")
-//                 .doc(Provider.of<Authentication>(context, listen: false)
-//                     .getUserId)
-//                 .collection("auctions")
-//                 .orderBy("time", descending: true)
-//                 .snapshots(),
-//             builder: (context, userAuctionSnap) {
-//               return SliverPadding(
-//                 padding: const EdgeInsets.all(4),
-//                 sliver: SliverGrid(
-//                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-//                     crossAxisCount: 3,
-//                     crossAxisSpacing: 5,
-//                     mainAxisSpacing: 5,
-//                   ),
-//                   delegate: SliverChildBuilderDelegate(
-//                     (BuildContext context, int index) {
-//                       if (index.toInt() < userAuctionSnap.data!.docs.length) {
-//                         var userAuctionDocSnap =
-//                             userAuctionSnap.data!.docs[index];
-//
-//                         bool dateCheck = DateTime.now().isBefore(
-//                             (userAuctionDocSnap['enddate'] as Timestamp)
-//                                 .toDate());
-//                         return InkWell(
-//                           onTap: () {
-//                             Provider.of<AuctionMapHelper>(context,
-//                                     listen: false)
-//                                 .showAuctionDetails(
-//                                     context: context,
-//                                     documentSnapshot: userAuctionDocSnap);
-//                           },
-//                           child: Stack(
-//                             children: [
-//                               Padding(
-//                                 padding: const EdgeInsets.all(2.0),
-//                                 child: SizedBox(
-//                                   child: ClipRRect(
-//                                     borderRadius: BorderRadius.circular(5),
-//                                     child: Swiper(
-//                                       itemBuilder:
-//                                           (BuildContext context, int index) {
-//                                         return CachedNetworkImage(
-//                                           fit: BoxFit.cover,
-//                                           imageUrl:
-//                                               userAuctionDocSnap['imageslist']
-//                                                   [index],
-//                                           progressIndicatorBuilder: (context,
-//                                                   url, downloadProgress) =>
-//                                               SizedBox(
-//                                             height: 50,
-//                                             width: 50,
-//                                             child: LoadingWidget(
-//                                                 constantColors: constantColors),
-//                                           ),
-//                                           errorWidget: (context, url, error) =>
-//                                               const Icon(Icons.error),
-//                                         );
-//                                       },
-//                                       itemCount:
-//                                           (userAuctionDocSnap['imageslist']
-//                                                   as List)
-//                                               .length,
-//                                       itemHeight:
-//                                           MediaQuery.of(context).size.height *
-//                                               0.3,
-//                                       itemWidth:
-//                                           MediaQuery.of(context).size.width,
-//                                       layout: SwiperLayout.DEFAULT,
-//                                     ),
-//                                   ),
-//                                 ),
-//                               ),
-//                               Visibility(
-//                                 visible: dateCheck,
-//                                 replacement: Container(
-//                                   height: size.height,
-//                                   width: size.width,
-//                                   decoration: BoxDecoration(
-//                                     color: constantColors.greyColor
-//                                         .withOpacity(0.9),
-//                                     borderRadius: BorderRadius.circular(10),
-//                                   ),
-//                                   child: Center(
-//                                     child: Text(
-//                                       "Auction Over",
-//                                       style: TextStyle(
-//                                         color: constantColors.whiteColor,
-//                                       ),
-//                                     ),
-//                                   ),
-//                                 ),
-//                                 child: Positioned(
-//                                   top: 5,
-//                                   right: 5,
-//                                   child: SizedBox(
-//                                     height: 20,
-//                                     width: 20,
-//                                     child: Lottie.asset(
-//                                       "assets/animations/gavel.json",
-//                                       height: 20,
-//                                     ),
-//                                   ),
-//                                 ),
-//                               ),
-//                             ],
-//                           ),
-//                         );
-//                       }
-//                     },
-//                   ),
-//                 ),
-//               );
-//             },
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-class AmbassadorProfile extends StatelessWidget {
-  const AmbassadorProfile({
-    Key? key,
-    required this.constantColors,
-    required this.size,
-  }) : super(key: key);
-
-  final ConstantColors constantColors;
-  final Size size;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: constantColors.blueGreyColor,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () {
-              Provider.of<ProfileHelpers>(context, listen: false)
-                  .logOutDialog(context);
-            },
-            icon: Icon(
-              EvaIcons.logOutOutline,
-              color: constantColors.greenColor,
-            ),
-          ),
-        ],
-        backgroundColor: constantColors.blueGreyColor.withOpacity(0.4),
-        title: RichText(
-          text: TextSpan(
-            text: "Mared ",
-            style: TextStyle(
-              color: constantColors.whiteColor,
-              fontSize: 20,
-            ),
-            children: <TextSpan>[
-              TextSpan(
-                text: " Ambassador",
-                style: TextStyle(
-                  color: constantColors.blueColor,
-                  fontSize: 20,
-                ),
-              ),
-            ],
-          ),
+  Widget _statItem({required String statText, required String statValue}) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          statValue,
+          style:
+              lightTextStyle(fontSize: 20.sp, textColor: AppColors.accentColor),
         ),
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: Colors.pink,
-        onPressed: () {
-          Navigator.push(
-              context,
-              PageTransition(
-                  child: CompaniesScreen(),
-                  type: PageTransitionType.rightToLeft));
-        },
-        label: Text(
-          "Create Brand Video",
-          style: TextStyle(
-            color: constantColors.whiteColor,
-            fontWeight: FontWeight.bold,
-            fontSize: 12,
-          ),
+        SizedBox(
+          width: 8.w,
         ),
-        icon: Icon(FontAwesomeIcons.video,
-            size: 20, color: constantColors.whiteColor),
-      ),
-      body: SingleChildScrollView(
-        ///no need for realtime data for now
-        child: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection("users")
-              .doc(
-                  Provider.of<Authentication>(context, listen: false).getUserId)
-              .collection("ambassadorWork")
-              .orderBy("time", descending: true)
-              .snapshots(),
-          builder: (context, userWorkSnap) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                height: size.height * 0.75,
-                width: size.width,
-                child: GridView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: userWorkSnap.data!.docs.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    mainAxisExtent: 256,
-                  ),
-                  itemBuilder: (context, index) {
-                    DocumentSnapshot workData = userWorkSnap.data!.docs[index];
-                    return Stack(
-                      children: [
-                        Container(
-                          height: double.infinity,
-                          width: double.infinity,
-                          color: constantColors.blueGreyColor,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(20),
-                            child: CachedNetworkImage(
-                              fit: BoxFit.cover,
-                              imageUrl: workData['thumbnail'],
-                              progressIndicatorBuilder:
-                                  (context, url, downloadProgress) => SizedBox(
-                                height: 50,
-                                width: 50,
-                                child: LoadingWidget(
-                                    constantColors: constantColors),
-                              ),
-                              errorWidget: (context, url, error) =>
-                                  const Icon(Icons.error),
-                            ),
-                          ),
-                        ),
-                        Positioned(
-                          bottom: 5,
-                          right: 5,
-                          child: SizedBox(
-                            height: 30,
-                            child: Lottie.asset("assets/animations/video.json"),
-                          ),
-                        ),
-                      ],
-                    );
-                  },
-                ),
-              ),
-            );
-          },
-        ),
-      ),
+        Text(
+          statText,
+          style: lightTextStyle(
+              fontSize: 12.sp, textColor: AppColors.commentButtonColor),
+        )
+      ],
     );
   }
-}
 
-class UserSubmittedWorkProfile extends StatelessWidget {
-  const UserSubmittedWorkProfile({
-    Key? key,
-    required this.constantColors,
-    required this.size,
-  }) : super(key: key);
-
-  final ConstantColors constantColors;
-  final Size size;
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: constantColors.blueGreyColor,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        centerTitle: true,
-        actions: [
-          IconButton(
-            onPressed: () {
+  Widget _profileHeader(UserModel userModel, BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        GestureDetector(
+          onTap: () {
+            if (userModel.uid == UserInfoManger.getUserId()) {
               Provider.of<ProfileHelpers>(context, listen: false)
-                  .logOutDialog(context);
-            },
-            icon: Icon(
-              EvaIcons.logOutOutline,
-              color: constantColors.greenColor,
-            ),
-          ),
-        ],
-        backgroundColor: constantColors.blueGreyColor.withOpacity(0.4),
-        title: RichText(
-          text: TextSpan(
-            text: "Mared ",
-            style: TextStyle(
-              color: constantColors.whiteColor,
-              fontSize: 20,
-            ),
-            children: <TextSpan>[
-              TextSpan(
-                text: " Brands Works",
-                style: TextStyle(
-                  color: constantColors.blueColor,
-                  fontSize: 20,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-
-      ///no need for this to be fetched in realtime
-      body: SingleChildScrollView(
-        child: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection("users")
-              .doc(
-                  Provider.of<Authentication>(context, listen: false).getUserId)
-              .collection("submittedWork")
-              .orderBy("time", descending: true)
-              .snapshots(),
-          builder: (context, userWorkSnap) {
-            return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                height: size.height * 0.75,
-                width: size.width,
-                child: GridView.builder(
-                  physics: const BouncingScrollPhysics(),
-                  itemCount: userWorkSnap.data!.docs.length,
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    mainAxisExtent: 256,
-                  ),
-                  itemBuilder: (context, index) {
-                    DocumentSnapshot workData = userWorkSnap.data!.docs[index];
-                    bool approved = workData['approved'] == true ? true : false;
-                    return PromotedPostItem(
-                      isApproved: approved,
-                      workData: workData,
-                    );
-                  },
-                ),
-              ),
-            );
+                  .postSelectType(context: context);
+            }
           },
+          child: Container(
+            alignment: Alignment.center,
+            child: Stack(
+              children: [
+                CircleAvatar(
+                    backgroundColor: Colors.transparent,
+                    foregroundColor: Colors.transparent,
+                    radius: 70.h,
+                    backgroundImage:
+                        CachedNetworkImageProvider(userModel.photoUrl)),
+                (userModel.uid != UserInfoManger.getUserId())
+                    ? const SizedBox(
+                        width: 0,
+                        height: 0,
+                      )
+                    : Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: SvgPicture.asset(
+                          'assets/icons/add_picture_icon.svg',
+                          width: 50.h,
+                          height: 50.h,
+                        ))
+              ],
+            ),
+          ),
         ),
-      ),
+        SizedBox(
+          height: 13.h,
+        ),
+        Text(
+          userModel.userName,
+          textAlign: TextAlign.center,
+          style: semiBoldTextStyle(
+              fontSize: 17.sp, textColor: AppColors.accentColor),
+        ),
+        SizedBox(
+          height: 6.h,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              EvaIcons.email,
+              color: AppColors.accentColor,
+              size: 16.w,
+            ),
+            Flexible(
+              child: Container(
+                padding: const EdgeInsets.only(left: 8.0),
+                child: Text(
+                  userModel.email,
+                  textAlign: TextAlign.center,
+                  style: regularTextStyle(
+                      fontSize: 10.sp, textColor: AppColors.commentButtonColor),
+                ),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 16.h,
+        ),
+      ],
     );
   }
 }

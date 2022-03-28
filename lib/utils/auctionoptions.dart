@@ -4,6 +4,7 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
@@ -360,6 +361,7 @@ class AuctionFuctions with ChangeNotifier {
     required BuildContext context,
   }) async {
     String commentId = nanoid(14).toString();
+
     await FirebaseFirestore.instance
         .collection('auctions')
         .doc(auctionId)
@@ -486,6 +488,21 @@ class AuctionFuctions with ChangeNotifier {
                                                     context,
                                                     PageTransition(
                                                         child: AltProfile(
+                                                          userModel: UserModel(
+                                                              uid: commentDocSnap[
+                                                                  'useruid'],
+                                                              userName:
+                                                                  commentDocSnap[
+                                                                      'username'],
+                                                              photoUrl:
+                                                                  commentDocSnap[
+                                                                      'userimage'],
+                                                              email: commentDocSnap[
+                                                                  'useremail'],
+                                                              fcmToken: "",
+
+                                                              ///later you have to give this the right value
+                                                              store: false),
                                                           userUid:
                                                               commentDocSnap[
                                                                   'useruid'],
@@ -787,6 +804,19 @@ class AuctionFuctions with ChangeNotifier {
                                         context,
                                         PageTransition(
                                             child: AltProfile(
+                                              userModel: UserModel(
+                                                  uid: documentSnapshot[
+                                                      'useruid'],
+                                                  userName: documentSnapshot[
+                                                      'username'],
+                                                  photoUrl: documentSnapshot[
+                                                      'userimage'],
+                                                  email: documentSnapshot[
+                                                      'useremail'],
+                                                  fcmToken: "",
+
+                                                  ///later you have to give this the right value
+                                                  store: false),
                                               userUid:
                                                   documentSnapshot['useruid'],
                                             ),

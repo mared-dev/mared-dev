@@ -13,8 +13,6 @@ import 'package:mared_social/helpers/loading_helper.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/HomePage/homepage.dart';
-import 'package:mared_social/screens/LandingPage/landingServices.dart';
-import 'package:mared_social/screens/LandingPage/landingUtils.dart';
 import 'package:mared_social/screens/authentication/login_screen.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
@@ -47,7 +45,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _nameController = TextEditingController();
     _emailController = TextEditingController();
@@ -246,6 +243,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     userName: _nameController.text,
                                     photoUrl: _uploadedImageLink,
                                     fcmToken: ''));
+
+                                await UserInfoManger.saveAnonFlag(0);
 
                                 String name = "${_nameController.text} ";
 

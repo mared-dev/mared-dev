@@ -97,19 +97,19 @@ class ChatroomHelpers with ChangeNotifier {
                           children: memberSnaps.data!.docs.map((memberDocSnap) {
                             return InkWell(
                               onTap: () {
-                                if (memberDocSnap['useruid'] !=
-                                    Provider.of<Authentication>(context,
-                                            listen: false)
-                                        .getUserId) {
-                                  Navigator.pushReplacement(
-                                      context,
-                                      PageTransition(
-                                          child: AltProfile(
-                                            userUid: memberDocSnap['useruid'],
-                                          ),
-                                          type:
-                                              PageTransitionType.bottomToTop));
-                                }
+                                // if (memberDocSnap['useruid'] !=
+                                //     Provider.of<Authentication>(context,
+                                //             listen: false)
+                                //         .getUserId) {
+                                //   Navigator.pushReplacement(
+                                //       context,
+                                //       PageTransition(
+                                //           child: AltProfile(
+                                //             userUid: memberDocSnap['useruid'],
+                                //           ),
+                                //           type:
+                                //               PageTransitionType.bottomToTop));
+                                // }
                               },
                               child: Padding(
                                 padding: const EdgeInsets.only(left: 8.0),

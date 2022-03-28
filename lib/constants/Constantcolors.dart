@@ -136,6 +136,9 @@ class LoadingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
+      child: CircularProgressIndicator(),
+    );
+    return Center(
       child: Container(
         decoration: BoxDecoration(
           color: constantColors.whiteColor,

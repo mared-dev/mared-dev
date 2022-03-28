@@ -14,9 +14,6 @@ import 'package:mared_social/screens/CategoryFeed/categoryfeedhelper.dart';
 import 'package:mared_social/screens/Chatroom/chatroom_helpers.dart';
 import 'package:mared_social/screens/Chatroom/privateChatHelpers.dart';
 import 'package:mared_social/screens/HomePage/homepageHelpers.dart';
-import 'package:mared_social/screens/LandingPage/landingHelpers.dart';
-import 'package:mared_social/screens/LandingPage/landingServices.dart';
-import 'package:mared_social/screens/LandingPage/landingUtils.dart';
 import 'package:mared_social/screens/LandingPage/landingpage.dart';
 import 'package:mared_social/screens/Messaging/groupmessagehelper.dart';
 import 'package:mared_social/screens/Messaging/privateMessageHelper.dart';
@@ -86,11 +83,8 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => AuctionFeedHelper()),
           ChangeNotifierProvider(create: (_) => AuctionAppHelper()),
           ChangeNotifierProvider(create: (_) => IsAnonHelper()),
-          ChangeNotifierProvider(create: (_) => LandingHelpers()),
-          ChangeNotifierProvider(create: (_) => LandingUtils()),
           ChangeNotifierProvider(create: (_) => FirebaseOperations()),
           ChangeNotifierProvider(create: (_) => Authentication()),
-          ChangeNotifierProvider(create: (_) => LandingService()),
           ChangeNotifierProvider(create: (_) => ProfileHelpers()),
           ChangeNotifierProvider(create: (_) => UploadPost()),
           ChangeNotifierProvider(create: (_) => PostFunctions()),

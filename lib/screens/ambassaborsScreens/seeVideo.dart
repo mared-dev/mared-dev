@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
@@ -140,6 +141,19 @@ class _SeeVideoState extends State<SeeVideo> {
                                   context,
                                   PageTransition(
                                       child: AltProfile(
+                                        userModel: UserModel(
+                                            uid: widget
+                                                .documentSnapshot['useruid'],
+                                            userName: widget
+                                                .documentSnapshot['username'],
+                                            photoUrl: widget
+                                                .documentSnapshot['userimage'],
+                                            email: widget
+                                                .documentSnapshot['useremail'],
+                                            fcmToken: "",
+
+                                            ///later you have to give this the right value
+                                            store: false),
                                         userUid:
                                             widget.documentSnapshot['useruid'],
                                       ),

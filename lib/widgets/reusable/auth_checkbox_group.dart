@@ -21,7 +21,6 @@ class _AuthCheckBoxGroupState extends State<AuthCheckBoxGroup> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     selectedList = List.filled(widget.options.length, false);
     selectedList[selectedIndex] = true;

@@ -5,7 +5,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
-import 'package:mared_social/screens/LandingPage/landingUtils.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/fcm_notification_Service.dart';
 import 'package:provider/provider.dart';
@@ -323,12 +322,30 @@ class FirebaseOperations with ChangeNotifier {
 
   Future deleteUserComment(
       {required String postId, required String commentId}) async {
-    return FirebaseFirestore.instance
-        .collection("posts")
+    var post =
+        await FirebaseFirestore.instance.collection('posts').doc(postId).get();
+
+    //fix this
+    UserModel userModel = UserInfoManger.getUserInfo();
+
+    var newCommentsList = [];
+    var commentsList = post.data()!['comments'];
+    for (var i = 0; i < commentsList.length; i++) {
+      if (commentsList[i]['commentid'] != commentId) {
+        newCommentsList.add(commentsList[i]);
+      }
+    }
+
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(post['useruid'])
+        .collection('posts')
         .doc(postId)
-        .collection("comments")
-        .doc(commentId)
-        .delete();
+        .update({'comments': newCommentsList});
+    await FirebaseFirestore.instance
+        .collection('posts')
+        .doc(postId)
+        .update({'comments': newCommentsList});
   }
 
   Future deleteAuctionUserComment(

@@ -8,43 +8,14 @@ import 'package:mared_social/screens/CategoryFeed/categoryfeed.dart';
 import 'package:mared_social/screens/CategoryFeed/categoryfeedhelper.dart';
 import 'package:mared_social/screens/SearchFeed/searchfeed.dart';
 import 'package:mared_social/screens/SearchFeed/searchfeedhelper.dart';
+import 'package:mared_social/widgets/items/category_item.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 class CategoryHelper with ChangeNotifier {
   ConstantColors constantColors = ConstantColors();
   TextEditingController searchController = TextEditingController();
-
-  PreferredSizeWidget appBar(BuildContext context) {
-    return AppBar(
-      backgroundColor: constantColors.blueGreyColor,
-      centerTitle: true,
-      leading: const SizedBox(
-        height: 0,
-        width: 0,
-      ),
-      title: RichText(
-        text: TextSpan(
-          text: "Mared ",
-          style: TextStyle(
-            color: constantColors.whiteColor,
-            fontWeight: FontWeight.bold,
-            fontSize: 20,
-          ),
-          children: <TextSpan>[
-            TextSpan(
-              text: "Categories",
-              style: TextStyle(
-                color: constantColors.blueColor,
-                fontWeight: FontWeight.bold,
-                fontSize: 20,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   Widget headerCategory({required BuildContext context}) {
     return StatefulBuilder(builder: (context, innerState) {
@@ -55,30 +26,6 @@ class CategoryHelper with ChangeNotifier {
         child: Stack(
           children: [
             //it doesn't make sense for this to change in realtime
-            FutureBuilder<QuerySnapshot>(
-              future: FirebaseFirestore.instance
-                  .collection("categoryHeader")
-                  .limit(1)
-                  .get(),
-              builder: (context, headerSnap) {
-                return Container(
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  child: FittedBox(
-                    fit: BoxFit.fill,
-                    child: CachedNetworkImage(
-                      fit: BoxFit.fill,
-                      imageUrl: headerSnap.data!.docs[0]['image'],
-                      progressIndicatorBuilder:
-                          (context, url, downloadProgress) =>
-                              LoadingWidget(constantColors: constantColors),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.error),
-                    ),
-                  ),
-                );
-              },
-            ),
             Positioned(
               top: 20,
               right: 16,
@@ -237,72 +184,8 @@ class CategoryHelper with ChangeNotifier {
                 childAspectRatio: 1.0,
                 children: catSnaps.data!.docs.map(
                   (catDocSnap) {
-                    return InkWell(
-                      onTap: () async {
-                        // * Push to Category screen
-                        await Provider.of<CatgeoryFeedHelper>(context,
-                                listen: false)
-                            .getCategoryNameVal(
-                                categoryNameVal: catDocSnap['categoryname']);
-
-                        Navigator.push(
-                            context,
-                            PageTransition(
-                                child: CategoryFeed(
-                                  categoryName: catDocSnap['categoryname'],
-                                ),
-                                type: PageTransitionType.rightToLeft));
-                      },
-                      child: Stack(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(2.0),
-                            child: Container(
-                              alignment: Alignment.topCenter,
-                              child: Container(
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color: constantColors.blueColor,
-                                    width: 3,
-                                  ),
-                                  borderRadius: BorderRadius.circular(30),
-                                ),
-                                height: 90,
-                                width: 90,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(15),
-                                  child: CachedNetworkImage(
-                                    fit: BoxFit.cover,
-                                    imageUrl: catDocSnap['categoryimage'],
-                                    progressIndicatorBuilder:
-                                        (context, url, downloadProgress) =>
-                                            LoadingWidget(
-                                                constantColors: constantColors),
-                                    errorWidget: (context, url, error) =>
-                                        const Icon(Icons.error),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            bottom: 5,
-                            right: 6,
-                            left: 6,
-                            child: Center(
-                              child: Text(
-                                catDocSnap['categoryname'],
-                                style: TextStyle(
-                                  color: constantColors.whiteColor,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 10,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                    return CategoryItem(
+                      catDocSnap: catDocSnap,
                     );
                   },
                 ).toList(),
