@@ -11,6 +11,8 @@ import 'package:mared_social/constants/text_styles.dart';
 import 'package:mared_social/helpers/post_helpers.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
+import 'package:mared_social/screens/PostDetails/followers_screen.dart';
+import 'package:mared_social/screens/PostDetails/following_screen.dart';
 import 'package:mared_social/screens/PostDetails/post_details_screen.dart';
 import 'package:mared_social/screens/Profile/profileHelpers.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
@@ -223,50 +225,71 @@ class PostsProfile extends StatelessWidget {
         SizedBox(
           width: 23.w,
         ),
-        InkWell(
-          onTap: () {
-            Provider.of<ProfileHelpers>(context, listen: false)
-                .checkFollowerSheet(context: context, userId: userModel.uid);
-          },
-          child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection("users")
-                  .doc(userModel.uid)
-                  .collection("followers")
-                  .snapshots(),
-              builder: (context, followerSnap) {
-                if (followerSnap.hasData) {
-                  return _statItem(
+        StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection("users")
+                .doc(userModel.uid)
+                .collection("followers")
+                .snapshots(),
+            builder: (context, followerSnap) {
+              return InkWell(
+                  onTap: () {
+                    if (followerSnap.hasData) {
+                      // Provider.of<ProfileHelpers>(context, listen: false)
+                      //     .checkFollowerSheet(
+                      //         context: context, userId: userModel.uid);
+
+                      pushNewScreen(
+                        context,
+                        screen: FollowersScreen(
+                          followersSnap: followerSnap.data!.docs,
+                        ),
+                        withNavBar: false, // OPTIONAL VALUE. True by default.
+                        pageTransitionAnimation:
+                            PageTransitionAnimation.cupertino,
+                      );
+                    }
+                  },
+                  child: _statItem(
                       statText: 'Followers',
-                      statValue: followerSnap.data!.docs.length.toString());
-                }
-                return _statItem(statText: 'Followers', statValue: '0');
-              }),
-        ),
+                      statValue: followerSnap.hasData
+                          ? followerSnap.data!.docs.length.toString()
+                          : "0"));
+            }),
         SizedBox(
           width: 23.w,
         ),
-        InkWell(
-          onTap: () {
-            Provider.of<ProfileHelpers>(context, listen: false)
-                .checkFollowingSheet(context: context, userId: userModel.uid);
-          },
-          child: StreamBuilder<QuerySnapshot>(
-              stream: FirebaseFirestore.instance
-                  .collection("users")
-                  .doc(userModel.uid)
-                  .collection("following")
-                  .snapshots(),
-              builder: (context, followingSnap) {
-                if (followingSnap.hasData) {
-                  return _statItem(
-                    statText: 'Following',
-                    statValue: followingSnap.data!.docs.length.toString(),
-                  );
-                }
-                return _statItem(statText: 'Following', statValue: "0");
-              }),
-        ),
+        StreamBuilder<QuerySnapshot>(
+            stream: FirebaseFirestore.instance
+                .collection("users")
+                .doc(userModel.uid)
+                .collection("following")
+                .snapshots(),
+            builder: (context, followingSnap) {
+              return InkWell(
+                child: _statItem(
+                  statText: 'Following',
+                  statValue: followingSnap.hasData
+                      ? followingSnap.data!.docs.length.toString()
+                      : "0",
+                ),
+                onTap: () {
+                  // Provider.of<ProfileHelpers>(context, listen: false)
+                  //     .checkFollowingSheet(context: context, userId: userModel.uid);
+
+                  if (followingSnap.hasData) {
+                    pushNewScreen(
+                      context,
+                      screen: FollowingScreen(
+                          followingSnap: followingSnap.data!.docs),
+                      withNavBar: false, // OPTIONAL VALUE. True by default.
+                      pageTransitionAnimation:
+                          PageTransitionAnimation.cupertino,
+                    );
+                  }
+                },
+              );
+            }),
       ],
     );
   }

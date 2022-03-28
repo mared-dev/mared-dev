@@ -63,6 +63,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 18.h),
                 children: widget.snapshot['comments']
                     .map<Widget>((commentItem) => InteractedUserItem(
+                        itemUserId: commentItem['useruid'],
                         imageUrl: commentItem['userimage'],
                         title: commentItem['username'],
                         subtitle: commentItem['comment'],

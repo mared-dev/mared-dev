@@ -2,10 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/constants/text_styles.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
 
 class InteractedUserItem extends StatelessWidget {
   final String imageUrl;
   final String title;
+  final String itemUserId;
   final String subtitle;
   final Widget? trailingIcon;
   final Function() leadingCallback;
@@ -14,6 +16,7 @@ class InteractedUserItem extends StatelessWidget {
   const InteractedUserItem(
       {Key? key,
       required this.imageUrl,
+      required this.itemUserId,
       required this.title,
       required this.subtitle,
       required this.leadingCallback,
@@ -26,21 +29,9 @@ class InteractedUserItem extends StatelessWidget {
       contentPadding: EdgeInsets.zero,
       leading: GestureDetector(
         onTap: () {
-          print('222222222222222');
-
-          // if (likesItem['useruid'] !=
-          //     Provider.of<Authentication>(context,
-          //         listen: false)
-          //         .getUserId) {
-          //   Navigator.pushReplacement(
-          //       context,
-          //       PageTransition(
-          //           child: AltProfile(
-          //             userUid: likesItem['useruid'],
-          //           ),
-          //           type:
-          //           PageTransitionType.bottomToTop));
-          // }
+          if (leadingCallback != null) {
+            leadingCallback();
+          }
         },
         child: Container(
           width: 60,
@@ -52,21 +43,9 @@ class InteractedUserItem extends StatelessWidget {
       ),
       title: GestureDetector(
         onTap: () {
-          print('222222222222222');
-
-          // if (likesItem['useruid'] !=
-          //     Provider.of<Authentication>(context,
-          //         listen: false)
-          //         .getUserId) {
-          //   Navigator.pushReplacement(
-          //       context,
-          //       PageTransition(
-          //           child: AltProfile(
-          //             userUid: likesItem['useruid'],
-          //           ),
-          //           type:
-          //           PageTransitionType.bottomToTop));
-          // }
+          if (leadingCallback != null) {
+            leadingCallback();
+          }
         },
         child: Text(
           title,
@@ -79,15 +58,15 @@ class InteractedUserItem extends StatelessWidget {
         style: regularTextStyle(
             fontSize: 11, textColor: AppColors.commentButtonColor),
       ),
-
-      ///TODO :fix this later (the follow/ unfollow flow in the screen)
-      trailing: InkWell(
-          onTap: () {
-            if (trailingCallback != null) {
-              trailingCallback!();
-            }
-          },
-          child: trailingIcon),
+      trailing: itemUserId == UserInfoManger.getUserId()
+          ? null
+          : InkWell(
+              onTap: () {
+                if (trailingCallback != null) {
+                  trailingCallback!();
+                }
+              },
+              child: trailingIcon),
     );
   }
 }

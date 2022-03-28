@@ -16,16 +16,17 @@ import 'package:mared_social/widgets/reusable/simple_appbar_with_back.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
-class LikesScreen extends StatefulWidget {
-  final likes;
+class FollowersScreen extends StatefulWidget {
+  final followersSnap;
 
-  const LikesScreen({Key? key, this.likes}) : super(key: key);
+  const FollowersScreen({Key? key, required this.followersSnap})
+      : super(key: key);
 
   @override
-  State<LikesScreen> createState() => _LikesScreenState();
+  _FollowersScreenState createState() => _FollowersScreenState();
 }
 
-class _LikesScreenState extends State<LikesScreen> {
+class _FollowersScreenState extends State<FollowersScreen> {
   List<String> followingIds = [];
   late UserModel userInfo;
 
@@ -35,7 +36,7 @@ class _LikesScreenState extends State<LikesScreen> {
     return Scaffold(
       backgroundColor: AppColors.backGroundColor,
       appBar: simpleAppBarWithBack(context,
-          title: 'Likes',
+          title: 'Followers',
           leadingIcon: SvgPicture.asset(
             'assets/icons/back_icon.svg',
             fit: BoxFit.fill,
@@ -60,29 +61,29 @@ class _LikesScreenState extends State<LikesScreen> {
           }
           return ListView(
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 18.h),
-              children: widget.likes.map<Widget>((likeItem) {
+              children: widget.followersSnap.map<Widget>((followerItem) {
                 bool isUserFollowed = followingIds
-                    .any((element) => element == likeItem['useruid']);
+                    .any((element) => element == followerItem['useruid']);
                 return InteractedUserItem(
-                    itemUserId: likeItem['useruid'],
-                    imageUrl: likeItem['userimage'],
-                    title: likeItem['username'],
-                    subtitle: likeItem['useremail'],
+                    itemUserId: followerItem['useruid'],
+                    imageUrl: followerItem['userimage'],
+                    title: followerItem['username'],
+                    subtitle: followerItem['useremail'],
                     trailingCallback: () async {
                       if (isUserFollowed) {
                         await Provider.of<FirebaseOperations>(context,
                                 listen: false)
                             .unfollowUser(
-                          followingUid: likeItem['useruid'],
+                          followingUid: followerItem['useruid'],
                           followingDocId: userInfo.uid,
                           followerUid: userInfo.uid,
-                          followerDocId: likeItem['useruid'],
+                          followerDocId: followerItem['useruid'],
                         );
                       } else {
                         await Provider.of<FirebaseOperations>(context,
                                 listen: false)
                             .followUser(
-                          followingUid: likeItem['useruid'],
+                          followingUid: followerItem['useruid'],
                           followingDocId: userInfo.uid,
                           followingData: {
                             'username': userInfo.userName,
@@ -92,12 +93,12 @@ class _LikesScreenState extends State<LikesScreen> {
                             'time': Timestamp.now(),
                           },
                           followerUid: userInfo.uid,
-                          followerDocId: likeItem['useruid'],
+                          followerDocId: followerItem['useruid'],
                           followerData: {
-                            'username': likeItem['username'],
-                            'userimage': likeItem['userimage'],
-                            'useremail': likeItem['useremail'],
-                            'useruid': likeItem['useruid'],
+                            'username': followerItem['username'],
+                            'userimage': followerItem['userimage'],
+                            'useremail': followerItem['useremail'],
+                            'useruid': followerItem['useruid'],
                             'time': Timestamp.now(),
                           },
                         );
@@ -108,21 +109,22 @@ class _LikesScreenState extends State<LikesScreen> {
                             'assets/icons/alread_followed_icon.svg')
                         : SvgPicture.asset('assets/icons/follow_icon.svg'),
                     leadingCallback: () {
-                      if (likeItem['useruid'] != UserInfoManger.getUserId()) {
+                      if (followerItem['useruid'] !=
+                          UserInfoManger.getUserId()) {
                         Navigator.push(
                             context,
                             PageTransition(
                                 child: AltProfile(
                                   userModel: UserModel(
-                                      uid: likeItem['useruid'],
-                                      userName: likeItem['username'],
-                                      photoUrl: likeItem['userimage'],
-                                      email: likeItem['useremail'],
+                                      uid: followerItem['useruid'],
+                                      userName: followerItem['username'],
+                                      photoUrl: followerItem['userimage'],
+                                      email: followerItem['useremail'],
                                       fcmToken: "",
 
                                       ///later you have to give this the right value
                                       store: false),
-                                  userUid: likeItem['useruid'],
+                                  userUid: followerItem['useruid'],
                                 ),
                                 type: PageTransitionType.bottomToTop));
                       }
