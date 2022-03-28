@@ -3,7 +3,6 @@ import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/helpers/post_helpers.dart';
-import 'package:mared_social/utils/video_thumbnail_generator.dart';
 
 class ProfilePostItem extends StatefulWidget {
   final List<dynamic> urls;

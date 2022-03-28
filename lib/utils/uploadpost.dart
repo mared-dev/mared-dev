@@ -9,7 +9,6 @@ import 'package:mared_social/services/firebase/firebase_file_upload_service.dart
 import 'package:mared_social/utils/pick_files_helper.dart';
 import 'package:mared_social/utils/productUploadCameraScreen.dart';
 import 'package:mared_social/utils/productUploadScreen.dart';
-import 'package:mared_social/utils/video_thumbnail_generator.dart';
 import 'package:mared_social/widgets/bottom_sheets.dart';
 import 'package:nanoid/nanoid.dart';
 import 'package:page_transition/page_transition.dart';
@@ -19,7 +18,6 @@ import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
 import 'package:google_maps_place_picker_mb/providers/place_provider.dart';
 import 'package:google_maps_place_picker_mb/providers/search_provider.dart';
 import 'package:video_player/video_player.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:chewie/chewie.dart';
 
 class UploadPost with ChangeNotifier {
