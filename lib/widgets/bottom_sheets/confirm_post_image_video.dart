@@ -67,6 +67,7 @@ confirmPostImageVideo({
                               multipleImages: imageFiles);
 
                       LoadingHelper.endLoading();
+                      print('2222222222222222');
                       Navigator.of(context).pop();
                       Navigator.of(context).pop();
                       Navigator.of(context).pop();

@@ -271,6 +271,8 @@ class UploadPost with ChangeNotifier {
         ? showPostCameraImage(context)
         : print("Image upload error");
 
+    print('111111111111111');
+    Navigator.of(context).pop();
     confirmPostImageVideo(
         context: context, imageFiles: [XFile(uploadPostImage.path)]);
   }
