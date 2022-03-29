@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
@@ -57,7 +58,7 @@ class UserResultItem extends StatelessWidget {
         ),
         title: Text(
           userData['username'],
-          style: TextStyle(color: constantColors.whiteColor),
+          style: TextStyle(color: AppColors.commentButtonColor),
         ),
       ),
     );

@@ -65,8 +65,6 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
                 child: CircularProgressIndicator(),
               );
             } else {
-              print('!!!!!!!!!!!!!');
-              print(postDocSnap.data);
               return FeedPostItem(
                 documentSnapshot: postDocSnap.data,
               );

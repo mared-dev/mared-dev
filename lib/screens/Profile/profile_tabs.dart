@@ -59,35 +59,39 @@ class PostsProfile extends StatelessWidget {
                   .orderBy("time", descending: true)
                   .snapshots(),
               builder: (context, userPostSnap) {
-                return GridView.count(
-                  padding: EdgeInsets.only(bottom: 60.h),
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 5,
-                  mainAxisSpacing: 5,
-                  children: userPostSnap.data!.docs.map<Widget>((item) {
-                    return InkWell(
-                        onTap: () {
-                          pushNewScreen(
-                            context,
-                            screen: PostDetailsScreen(
-                              userId: userId,
-                              postId: item['postid'],
-                              documentSnapshot: item,
-                            ),
-                            withNavBar:
-                                false, // OPTIONAL VALUE. True by default.
-                            pageTransitionAnimation:
-                                PageTransitionAnimation.cupertino,
-                          );
-                        },
-                        child: ProfilePostItem(
-                          urls:
-                              PostHelpers.checkIfPostIsVideo(item['imageslist'])
-                                  ? [item['thumbnail']]
-                                  : item['imageslist'],
-                        ));
-                  }).toList(),
-                );
+                if (userPostSnap.hasData && !userPostSnap.hasError) {
+                  return GridView.count(
+                    padding: EdgeInsets.only(bottom: 60.h),
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 5,
+                    mainAxisSpacing: 5,
+                    children: userPostSnap.data!.docs.map<Widget>((item) {
+                      return InkWell(
+                          onTap: () {
+                            pushNewScreen(
+                              context,
+                              screen: PostDetailsScreen(
+                                userId: userId,
+                                postId: item['postid'],
+                                documentSnapshot: item,
+                              ),
+                              withNavBar:
+                                  false, // OPTIONAL VALUE. True by default.
+                              pageTransitionAnimation:
+                                  PageTransitionAnimation.cupertino,
+                            );
+                          },
+                          child: ProfilePostItem(
+                            urls: PostHelpers.checkIfPostIsVideo(
+                                    item['imageslist'])
+                                ? [item['thumbnail']]
+                                : item['imageslist'],
+                          ));
+                    }).toList(),
+                  );
+                } else {
+                  return Container();
+                }
               },
             ),
           ),
@@ -113,7 +117,8 @@ class PostsProfile extends StatelessWidget {
                     .doc(UserInfoManger.getUserId())
                     .snapshots(),
                 builder: (context, snapshot) {
-                  bool isFollowed = snapshot.data!.exists;
+                  bool isFollowed =
+                      snapshot.hasData ? snapshot.data!.exists : false;
 
                   return ElevatedButton.icon(
                     icon: SvgPicture.asset(

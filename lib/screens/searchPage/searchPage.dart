@@ -1,8 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
-import 'package:mared_social/screens/searchPage/searchPageHelper.dart';
+import 'package:mared_social/constants/colors.dart';
+import 'package:mared_social/constants/text_styles.dart';
+import 'package:mared_social/screens/searchPage/search_page_header_tabs.dart';
 import 'package:mared_social/screens/searchPage/searchPageWidgets.dart';
+import 'package:mared_social/widgets/reusable/simple_appbar_with_back.dart';
 import 'package:provider/provider.dart';
 
 class SearchPage extends StatefulWidget {
@@ -21,21 +26,22 @@ class _SearchPageState extends State<SearchPage> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: constantColors.blueGreyColor,
-      appBar: AppBar(
-        backgroundColor: constantColors.darkColor,
-        title: Text(
-          "Search Page",
-          style: TextStyle(
-            color: constantColors.whiteColor,
-          ),
-        ),
-      ),
+      backgroundColor: AppColors.backGroundColor,
+      appBar: simpleAppBarWithBack(context,
+          title: 'Search',
+          leadingIcon: SvgPicture.asset(
+            'assets/icons/back_icon.svg',
+            fit: BoxFit.fill,
+            width: 22.w,
+            height: 22.h,
+          ), leadingCallback: () {
+        Navigator.of(context).pop();
+      }),
       body: SizedBox(
         height: double.infinity,
         width: double.infinity,
         child: Padding(
-          padding: const EdgeInsets.all(5.0),
+          padding: EdgeInsets.symmetric(horizontal: 27.w, vertical: 18.h),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,22 +50,22 @@ class _SearchPageState extends State<SearchPage> {
                 controller: textController,
                 keyboardType: TextInputType.text,
                 autocorrect: false,
-                style: TextStyle(
-                  color: constantColors.whiteColor,
-                ),
+                style: regularTextStyle(
+                    fontSize: 12, textColor: AppColors.commentButtonColor),
                 decoration: InputDecoration(
+                  contentPadding:
+                      EdgeInsets.symmetric(vertical: 17.h, horizontal: 20.w),
                   filled: true,
-                  fillColor: constantColors.darkColor,
-                  hintText: "What do you desire?",
-                  hintStyle: TextStyle(
-                    color: constantColors.lightColor.withOpacity(0.6),
-                  ),
+                  fillColor: AppColors.backGroundColor,
+                  hintText: "Search here...",
+                  hintStyle: regularTextStyle(
+                      fontSize: 12, textColor: AppColors.commentButtonColor),
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(5),
                   ),
                   prefixIcon: Icon(
                     Icons.search_outlined,
-                    color: constantColors.whiteColor,
+                    color: AppColors.commentButtonColor,
                   ),
                   suffixIcon: IconButton(
                     onPressed: () {
@@ -68,18 +74,22 @@ class _SearchPageState extends State<SearchPage> {
                     },
                     icon: Icon(
                       Icons.clear,
-                      color: constantColors.whiteColor,
+                      color: AppColors.commentButtonColor,
                     ),
                   ),
                 ),
+              ),
+              SizedBox(
+                height: 28.h,
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 8.0),
                 child: SizedBox(
                     height: size.height * 0.06,
                     width: size.width,
-                    child: Provider.of<SearchPageHelper>(context, listen: false)
-                        .topNavBar(context, pageIndex, pageController)),
+                    child: SearchPageHeaderTabs(
+                      pageController: pageController,
+                    )),
               ),
               SizedBox(
                 height: size.height * 0.7,
@@ -87,18 +97,24 @@ class _SearchPageState extends State<SearchPage> {
                 child: PageView(
                   controller: pageController,
                   children: [
-                    UserSearch(
-                      userSearchVal: textController.text,
+                    UserSearchResultBody(
+                      isVendor: false,
+                      searchQuery: textController.text,
+                      searchIndexName: 'usersearchindex',
+                      collectionName: 'users',
                     ),
-                    VendorSearch(
-                      vendorSearchVal: textController.text,
+                    UserSearchResultBody(
+                      isVendor: true,
+                      searchQuery: textController.text,
+                      searchIndexName: 'usersearchindex',
+                      collectionName: 'users',
                     ),
                     PostSearch(
                       postSearchVal: textController.text,
                     ),
-                    AuctionSearch(
-                      auctionSearchVal: textController.text,
-                    ),
+                    // AuctionSearch(
+                    //   auctionSearchVal: textController.text,
+                    // ),
                   ],
                   physics: const NeverScrollableScrollPhysics(),
                   onPageChanged: (page) {

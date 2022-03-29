@@ -4,30 +4,43 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/constants/colors.dart';
+import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/AltProfile/altProfileHelper.dart';
 import 'package:mared_social/screens/auctionFeed/auctionpage.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
+import 'package:mared_social/widgets/reusable/interacted_user_item.dart';
 import 'package:mared_social/widgets/reusable/post_result_item.dart';
 import 'package:mared_social/widgets/reusable/user_result_item.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
-class UserSearch extends StatelessWidget {
-  final String userSearchVal;
-  final ConstantColors constantColors = ConstantColors();
+class UserSearchResultBody extends StatelessWidget {
+  final String searchQuery;
+  final String collectionName;
+  final String searchIndexName;
+  final bool isVendor;
 
-  UserSearch({Key? key, required this.userSearchVal}) : super(key: key);
+  UserSearchResultBody(
+      {Key? key,
+      required this.searchQuery,
+      required this.collectionName,
+      required this.searchIndexName,
+      required this.isVendor})
+      : super(key: key);
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return userSearchVal.isEmpty
+    return searchQuery.isEmpty
         ? NoSearchText(constantColors: constantColors, size: size)
         : StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
-                .collection("users")
-                .where('usersearchindex',
-                    arrayContains: userSearchVal.toLowerCase())
+                .collection(collectionName)
+                .where(searchIndexName,
+                    arrayContains: searchQuery.toLowerCase())
+                .where('store', isEqualTo: isVendor)
                 .snapshots(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
@@ -38,15 +51,46 @@ class UserSearch extends StatelessWidget {
                   height: size.height,
                   width: size.width,
                   decoration: BoxDecoration(
-                    color: constantColors.darkColor,
+                    color: AppColors.backGroundColor,
                     borderRadius: BorderRadius.circular(20),
                   ),
-                  child: ListView.builder(
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (context, index) {
-                      var userData = snapshot.data!.docs[index];
-                      return UserResultItem(userData: userData);
-                    },
+                  child: SizedBox(
+                    width: size.width,
+                    height: size.height * 0.7,
+                    child: ListView.builder(
+                      itemCount: snapshot.data!.docs.length,
+                      itemBuilder: (context, index) {
+                        var userData = snapshot.data!.docs[index];
+                        return Container(
+                          child: InteractedUserItem(
+                              imageUrl: userData['userimage'],
+                              itemUserId: userData['useruid'],
+                              title: userData['username'],
+                              subtitle: userData['useremail'],
+                              leadingCallback: () {
+                                pushNewScreen(
+                                  context,
+                                  screen: AltProfile(
+                                    userUid: userData['useruid'],
+                                    userModel: UserModel(
+                                        uid: userData['useruid'],
+                                        userName: userData['username'],
+                                        photoUrl: userData['userimage'],
+                                        email: userData['useremail'],
+                                        fcmToken: "",
+
+                                        ///later you have to give this the right value
+                                        store: false),
+                                  ),
+                                  withNavBar:
+                                      false, // OPTIONAL VALUE. True by default.
+                                  pageTransitionAnimation:
+                                      PageTransitionAnimation.cupertino,
+                                );
+                              }),
+                        );
+                      },
+                    ),
                   ),
                 );
               } else {
@@ -71,81 +115,6 @@ class UserSearch extends StatelessWidget {
                         child: Center(
                           child: Text(
                             "No users found, please use the above search bar to find your desired users",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: constantColors.whiteColor),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                );
-              }
-            },
-          );
-  }
-}
-
-class VendorSearch extends StatelessWidget {
-  final String vendorSearchVal;
-  final ConstantColors constantColors = ConstantColors();
-
-  VendorSearch({Key? key, required this.vendorSearchVal}) : super(key: key);
-  @override
-  Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return vendorSearchVal.isEmpty
-        ? NoSearchText(constantColors: constantColors, size: size)
-        : StreamBuilder<QuerySnapshot>(
-            stream: FirebaseFirestore.instance
-                .collection("users")
-                .where('usersearchindex',
-                    arrayContains: vendorSearchVal.toLowerCase())
-                .where('store', isEqualTo: true)
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return LoadingWidget(constantColors: constantColors);
-              } else if (snapshot.data!.docs.isNotEmpty) {
-                return Container(
-                  padding: const EdgeInsets.only(top: 10),
-                  height: size.height,
-                  width: size.width,
-                  decoration: BoxDecoration(
-                    color: constantColors.darkColor,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: ListView.builder(
-                    itemCount: snapshot.data!.docs.length,
-                    itemBuilder: (context, index) {
-                      var vendorData = snapshot.data!.docs[index];
-                      return UserResultItem(
-                        userData: vendorData,
-                      );
-                    },
-                  ),
-                );
-              } else {
-                return Container(
-                  height: size.height,
-                  width: size.width,
-                  decoration: BoxDecoration(
-                    color: constantColors.darkColor,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 400,
-                        width: 400,
-                        child: Lottie.asset(
-                          "assets/animations/empty.json",
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 30, right: 30),
-                        child: Center(
-                          child: Text(
-                            "No vendors found, please use the above search bar to find your desired vendor",
                             textAlign: TextAlign.center,
                             style: TextStyle(color: constantColors.whiteColor),
                           ),
@@ -185,7 +154,7 @@ class PostSearch extends StatelessWidget {
                   height: size.height,
                   width: size.width,
                   decoration: BoxDecoration(
-                    color: constantColors.darkColor,
+                    color: AppColors.backGroundColor,
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: ListView.builder(
@@ -246,28 +215,16 @@ class NoSearchText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: constantColors.darkColor,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: size.height * 0.3,
-            width: size.width,
-            child: Lottie.asset("assets/animations/searching.json"),
-          ),
-          Text(
-            "Use the search bar above to get what you desire",
-            style: TextStyle(
-              color: constantColors.whiteColor,
-            ),
-          ),
-        ],
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SizedBox(
+          height: size.height * 0.3,
+          width: size.width,
+          child: Lottie.asset("assets/animations/searching.json"),
+        ),
+      ],
     );
   }
 }

@@ -58,15 +58,16 @@ class InteractedUserItem extends StatelessWidget {
         style: regularTextStyle(
             fontSize: 11, textColor: AppColors.commentButtonColor),
       ),
-      trailing: itemUserId == UserInfoManger.getUserId()
-          ? null
-          : InkWell(
-              onTap: () {
-                if (trailingCallback != null) {
-                  trailingCallback!();
-                }
-              },
-              child: trailingIcon),
+      trailing:
+          (itemUserId == UserInfoManger.getUserId() || trailingIcon == null)
+              ? null
+              : InkWell(
+                  onTap: () {
+                    if (trailingCallback != null) {
+                      trailingCallback!();
+                    }
+                  },
+                  child: trailingIcon),
     );
   }
 }
