@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/screens/Feed/feed_body.dart';
+import 'package:mared_social/screens/Profile/profileHelpers.dart';
 import 'package:mared_social/screens/searchPage/searchPage.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/utils/uploadpost.dart';
@@ -43,8 +44,8 @@ class Feed extends StatelessWidget {
         actionCallback: () {
           if (Provider.of<Authentication>(context, listen: false).getIsAnon ==
               false) {
-            Provider.of<UploadPost>(context, listen: false)
-                .selectPostImageType(context);
+            Provider.of<ProfileHelpers>(context, listen: false)
+                .postSelectType(context: context);
           } else {
             IsAnonBottomSheet(context);
           }

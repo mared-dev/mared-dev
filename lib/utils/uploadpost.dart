@@ -2,14 +2,20 @@ import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/models/enums/post_type.dart';
 import 'package:mared_social/services/firebase/firebase_file_upload_service.dart';
 import 'package:mared_social/utils/pick_files_helper.dart';
 import 'package:mared_social/utils/productUploadCameraScreen.dart';
 import 'package:mared_social/utils/productUploadScreen.dart';
 import 'package:mared_social/widgets/bottom_sheets.dart';
+import 'package:mared_social/widgets/bottom_sheets/confirm_post_image_video.dart';
+import 'package:mared_social/widgets/reusable/bottom_sheet_top_divider.dart';
+import 'package:mared_social/widgets/reusable/simple_button_icon.dart';
 import 'package:nanoid/nanoid.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:path_provider/path_provider.dart';
@@ -53,97 +59,89 @@ class UploadPost with ChangeNotifier {
         return SafeArea(
           bottom: true,
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.1,
+            height: 100.h,
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-              color: constantColors.blueGreyColor,
-              borderRadius: BorderRadius.circular(12),
-            ),
+                color: AppColors.commentButtonColor,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(6), topRight: Radius.circular(6))),
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 150),
-                  child: Divider(
-                    thickness: 4,
-                    color: constantColors.whiteColor,
-                  ),
-                ),
+                BottomSheetTopDivider(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    MaterialButton(
-                      color: constantColors.blueColor,
-                      child: Text(
-                        "Gallery",
-                        style: TextStyle(
-                          color: constantColors.whiteColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                    SimpleButtonIcon(
+                        buttonText: "Gallery",
+                        buttonIcon: SvgPicture.asset(
+                          'assets/icons/gallery_icon.svg',
+                          width: 14,
+                          height: 14,
                         ),
-                      ),
-                      onPressed: () async {
-                        _selectedSource = ImageSource.gallery;
-                        if (_postType == PostType.IMAGE) {
-                          multipleImages =
-                              await PickFilesHelper.multiImagePicker();
-                          if (multipleImages.isNotEmpty) {
-                            showPostCameraImage(context);
-                          }
-                        } else {
-                          _video = await PickFilesHelper.pickVide();
-                          if (_video != null) {
-                            _videoPlayerController =
-                                VideoPlayerController.file(File(_video!.path));
+                        buttonCallback: () async {
+                          _selectedSource = ImageSource.gallery;
+                          if (_postType == PostType.IMAGE) {
+                            multipleImages =
+                                await PickFilesHelper.multiImagePicker();
+                            if (multipleImages.isNotEmpty) {
+                              confirmPostImageVideo(
+                                  context: context, imageFiles: multipleImages);
+                            }
+                          } else {
+                            _video = await PickFilesHelper.pickVide();
+                            if (_video != null) {
+                              _videoPlayerController =
+                                  VideoPlayerController.file(
+                                      File(_video!.path));
 
-                            //START HERE
-                            _videoPlayerController
-                              ..initialize().then((value) {
-                                _videoPlayerController.play();
-                                previewStoryImage(
-                                    video: _video,
-                                    context: context,
-                                    videoPlayerController:
-                                        _videoPlayerController,
-                                    onCompleteCallback: ({String? videoUrl}) {
-                                      print('@@@@@@@@@@@@');
-                                      print(videoUrl);
-                                      Navigator.push(
-                                          context,
-                                          PageTransition(
-                                              child: PostUploadScreen(
-                                                multipleImages: [_video!],
-                                                imagesList: [videoUrl!],
-                                                postType: PostType.VIDEO,
-                                              ),
-                                              type: PageTransitionType
-                                                  .bottomToTop));
-                                    });
-                              });
-                            // Navigator.push(
-                            //     context,
-                            //     PageTransition(
-                            //         child: PostUploadScreen(
-                            //           multipleImages: multipleImages,
-                            //           imagesList: imagesList,
-                            //         ),
-                            //         type: PageTransitionType.bottomToTop));
+                              //START HERE
+                              _videoPlayerController
+                                ..initialize().then((value) {
+                                  _videoPlayerController.play();
+                                  previewStoryImage(
+                                      video: _video,
+                                      context: context,
+                                      videoPlayerController:
+                                          _videoPlayerController,
+                                      onCompleteCallback: ({String? videoUrl}) {
+                                        print('@@@@@@@@@@@@');
+                                        print(videoUrl);
+                                        Navigator.of(context).pop();
+                                        Navigator.of(context).pop();
+                                        Navigator.of(context).pop();
+                                        Navigator.push(
+                                            context,
+                                            PageTransition(
+                                                child: PostUploadScreen(
+                                                  multipleImages: [_video!],
+                                                  imagesList: [videoUrl!],
+                                                  postType: PostType.VIDEO,
+                                                ),
+                                                type: PageTransitionType
+                                                    .bottomToTop));
+                                      });
+                                });
+                              // Navigator.push(
+                              //     context,
+                              //     PageTransition(
+                              //         child: PostUploadScreen(
+                              //           multipleImages: multipleImages,
+                              //           imagesList: imagesList,
+                              //         ),
+                              //         type: PageTransitionType.bottomToTop));
 
-                            // showPostCameraImage(context);
+                              // showPostCameraImage(context);
+                            }
                           }
-                        }
-                      },
-                    ),
-                    MaterialButton(
-                      color: constantColors.blueColor,
-                      child: Text(
-                        "Camera",
-                        style: TextStyle(
-                          color: constantColors.whiteColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
+                        }),
+                    SimpleButtonIcon(
+                      buttonText: "Camera",
+                      buttonIcon: SvgPicture.asset(
+                        'assets/icons/camera_icon.svg',
+                        width: 14,
+                        height: 14,
                       ),
-                      onPressed: () async {
+                      buttonCallback: () async {
                         _selectedSource = ImageSource.camera;
                         if (_postType == PostType.IMAGE) {
                           pickUploadPostImage(
@@ -166,6 +164,9 @@ class UploadPost with ChangeNotifier {
                                     videoPlayerController:
                                         _videoPlayerController,
                                     onCompleteCallback: ({String? videoUrl}) {
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
                                       Navigator.push(
                                           context,
                                           PageTransition(
@@ -209,56 +210,42 @@ class UploadPost with ChangeNotifier {
         return SafeArea(
           bottom: true,
           child: Container(
-            height: MediaQuery.of(context).size.height * 0.1,
+            height: 100.h,
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
-              color: constantColors.blueGreyColor,
+              color: AppColors.commentButtonColor,
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 150),
-                  child: Divider(
-                    thickness: 4,
-                    color: constantColors.whiteColor,
-                  ),
-                ),
+                BottomSheetTopDivider(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    MaterialButton(
-                      color: constantColors.blueColor,
-                      child: Text(
-                        "Image",
-                        style: TextStyle(
-                          color: constantColors.whiteColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                    SimpleButtonIcon(
+                        buttonText: "Image",
+                        buttonIcon: SvgPicture.asset(
+                          'assets/icons/select_image_icon.svg',
+                          width: 14,
+                          height: 14,
                         ),
-                      ),
-                      onPressed: () async {
-                        _postType = PostType.IMAGE;
-                        Navigator.of(context).pop();
-                        selectPostImageType(context);
-                      },
-                    ),
-                    MaterialButton(
-                      color: constantColors.blueColor,
-                      child: Text(
-                        "Video",
-                        style: TextStyle(
-                          color: constantColors.whiteColor,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
+                        buttonCallback: () async {
+                          _postType = PostType.IMAGE;
+                          Navigator.of(context).pop();
+                          selectPostImageType(context);
+                        }),
+                    SimpleButtonIcon(
+                        buttonText: "Video",
+                        buttonIcon: SvgPicture.asset(
+                          'assets/icons/select_video_icon.svg',
+                          width: 14,
+                          height: 14,
                         ),
-                      ),
-                      onPressed: () {
-                        _postType = PostType.VIDEO;
-                        Navigator.of(context).pop();
-                        selectPostImageType(context);
-                      },
-                    ),
+                        buttonCallback: () async {
+                          _postType = PostType.VIDEO;
+                          Navigator.of(context).pop();
+                          selectPostImageType(context);
+                        }),
                   ],
                 ),
               ],
@@ -284,7 +271,8 @@ class UploadPost with ChangeNotifier {
         ? showPostCameraImage(context)
         : print("Image upload error");
 
-    notifyListeners();
+    confirmPostImageVideo(
+        context: context, imageFiles: [XFile(uploadPostImage.path)]);
   }
 
   showPostCameraImage(BuildContext context) {

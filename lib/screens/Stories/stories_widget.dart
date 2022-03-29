@@ -268,33 +268,30 @@ class StoryWidgets {
                                   'useremail': userModel.email,
                                   'useruid': userModel.uid,
                                   'time': Timestamp.now(),
-                                }).whenComplete(() async {
-                                  await FirebaseFirestore.instance
-                                      .collection("users")
-                                      .doc(Provider.of<Authentication>(context,
-                                              listen: false)
-                                          .getUserId)
-                                      .collection("stories")
-                                      .doc(storyId)
-                                      .set({
-                                    'storyid': storyId,
-                                    'videourl': videoUrl,
-                                    'thumbnail':
-                                        getMuxThumbnailImage(playBackId),
-                                    'username': userModel.userName,
-                                    'userimage': userModel.photoUrl,
-                                    'useremail': userModel.email,
-                                    'useruid': userModel.uid,
-                                    'time': Timestamp.now(),
-                                  }).whenComplete(() {
-                                    Navigator.pushReplacement(
-                                        context,
-                                        PageTransition(
-                                            child: HomePage(),
-                                            type: PageTransitionType
-                                                .rightToLeft));
-                                  });
                                 });
+
+                                await FirebaseFirestore.instance
+                                    .collection("users")
+                                    .doc(Provider.of<Authentication>(context,
+                                            listen: false)
+                                        .getUserId)
+                                    .collection("stories")
+                                    .doc(storyId)
+                                    .set({
+                                  'storyid': storyId,
+                                  'videourl': videoUrl,
+                                  'thumbnail': getMuxThumbnailImage(playBackId),
+                                  'username': userModel.userName,
+                                  'userimage': userModel.photoUrl,
+                                  'useremail': userModel.email,
+                                  'useruid': userModel.uid,
+                                  'time': Timestamp.now(),
+                                });
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop();
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pop();
                               } catch (e) {
                                 CoolAlert.show(
                                   context: context,

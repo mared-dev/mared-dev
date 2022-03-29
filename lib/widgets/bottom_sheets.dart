@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/helpers/loading_helper.dart';
 import 'package:mared_social/services/firebase/firebase_file_upload_service.dart';
 import 'package:mared_social/utils/pick_files_helper.dart';
 import 'package:video_player/video_player.dart';
@@ -86,16 +87,20 @@ previewStoryImage(
                         ),
                         onPressed: () async {
                           videoPlayerController.pause().then((_) {
-                            CoolAlert.show(
-                                context: context,
-                                type: CoolAlertType.loading,
-                                text:
-                                    "Please wait, your story is being uploaded!");
+                            // CoolAlert.show(
+                            //     context: context,
+                            //     type: CoolAlertType.loading,
+                            //     text:
+                            //         "Please wait, your story is being uploaded!");
+                            LoadingHelper.startLoading();
                           });
 
                           String videoUrl =
                               await FirebaseFileUploadService.uploadPostVideo(
                                   context: context, video: video);
+                          LoadingHelper.endLoading();
+                          print(videoUrl);
+
                           onCompleteCallback(videoUrl: videoUrl);
                         },
                       ),

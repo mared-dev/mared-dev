@@ -111,7 +111,6 @@ class PostFunctions with ChangeNotifier {
                                           fontSize: 16,
                                         )),
                                     onPressed: () {
-                                      // Navigator.pop(context);
                                       CoolAlert.show(
                                         context: context,
                                         type: CoolAlertType.warning,
@@ -120,8 +119,6 @@ class PostFunctions with ChangeNotifier {
                                         showCancelBtn: true,
                                         title: "Delete this post?",
                                         onConfirmBtnTap: () async {
-                                          Navigator.pop(context);
-                                          Navigator.pop(context);
                                           await Provider.of<FirebaseOperations>(
                                                   context,
                                                   listen: false)
@@ -130,10 +127,16 @@ class PostFunctions with ChangeNotifier {
                                                 postDocSnap.data!['useruid'],
                                             postId: postId,
                                           );
+                                          Navigator.of(context,
+                                                  rootNavigator: true)
+                                              .pop();
+                                          Navigator.of(context).pop();
                                         },
                                         onCancelBtnTap: () {
-                                          Navigator.pop(context);
-                                          Navigator.pop(context);
+                                          Navigator.of(context,
+                                                  rootNavigator: true)
+                                              .pop();
+                                          Navigator.of(context).pop();
                                         },
                                       );
                                     },

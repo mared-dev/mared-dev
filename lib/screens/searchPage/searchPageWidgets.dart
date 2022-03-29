@@ -5,11 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
+import 'package:mared_social/constants/text_styles.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/AltProfile/altProfileHelper.dart';
 import 'package:mared_social/screens/auctionFeed/auctionpage.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
+import 'package:mared_social/widgets/reusable/empty_search_result.dart';
 import 'package:mared_social/widgets/reusable/interacted_user_item.dart';
 import 'package:mared_social/widgets/reusable/post_result_item.dart';
 import 'package:mared_social/widgets/reusable/user_result_item.dart';
@@ -94,35 +96,7 @@ class UserSearchResultBody extends StatelessWidget {
                   ),
                 );
               } else {
-                return Container(
-                  height: size.height,
-                  width: size.width,
-                  decoration: BoxDecoration(
-                    color: constantColors.darkColor,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 400,
-                        width: 400,
-                        child: Lottie.asset(
-                          "assets/animations/empty.json",
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 30, right: 30),
-                        child: Center(
-                          child: Text(
-                            "No users found, please use the above search bar to find your desired users",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: constantColors.whiteColor),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                );
+                return EmptySearchResults();
               }
             },
           );
@@ -168,35 +142,7 @@ class PostSearch extends StatelessWidget {
                   ),
                 );
               } else {
-                return Container(
-                  height: size.height,
-                  width: size.width,
-                  decoration: BoxDecoration(
-                    color: constantColors.darkColor,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Column(
-                    children: [
-                      SizedBox(
-                        height: 400,
-                        width: 400,
-                        child: Lottie.asset(
-                          "assets/animations/empty.json",
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 30, right: 30),
-                        child: Center(
-                          child: Text(
-                            "No posts found, please use the above search bar to find your desired item",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: constantColors.whiteColor),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                );
+                return EmptySearchResults();
               }
             },
           );
@@ -223,6 +169,14 @@ class NoSearchText extends StatelessWidget {
           height: size.height * 0.3,
           width: size.width,
           child: Lottie.asset("assets/animations/searching.json"),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 24),
+          child: Text("Use the search bar above to get what you desire",
+              maxLines: 2,
+              textAlign: TextAlign.center,
+              style: regularTextStyle(
+                  fontSize: 13, textColor: AppColors.commentButtonColor)),
         ),
       ],
     );

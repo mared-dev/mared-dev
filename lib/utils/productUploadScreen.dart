@@ -507,11 +507,12 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
                             widget.imagesList.clear();
                             widget.multipleImages.clear();
                           });
-                          Navigator.push(
-                              context,
-                              PageTransition(
-                                  child: HomePage(),
-                                  type: PageTransitionType.bottomToTop));
+                          Navigator.of(context).pop();
+                          // Navigator.push(
+                          //     context,
+                          //     PageTransition(
+                          //         child: HomePage(),
+                          //         type: PageTransitionType.bottomToTop));
                         } catch (e) {
                           print('@@@@@@@@@@@@@@error@@@@@@@@@@@@@@@@@@@');
                           print(e);

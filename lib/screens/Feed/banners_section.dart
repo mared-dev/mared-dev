@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/text_styles.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/PostDetails/post_details_screen.dart';
@@ -59,10 +60,6 @@ class _BannersSectionState extends State<BannersSection> {
                 Swiper(
                   onIndexChanged: (newIndex) {
                     var bannerItem = bannerSnap.data!.docs[newIndex];
-                    print('##################');
-                    print(newIndex);
-                    print(bannerItem['username']);
-                    print(bannerItem['useremail']);
                     selectedUser = UserModel(
                         userName: bannerItem['username'],
                         email: bannerItem['useremail'],
@@ -190,13 +187,15 @@ class SwiperIndicator extends StatelessWidget {
             ),
             InkWell(
               onTap: () {
-                pushNewScreen(
-                  context,
-                  screen:
-                      AltProfile(userUid: selectedUserId, userModel: userModel),
-                  withNavBar: false, // OPTIONAL VALUE. True by default.
-                  pageTransitionAnimation: PageTransitionAnimation.cupertino,
-                );
+                if (UserInfoManger.getUserId() != userModel.uid) {
+                  pushNewScreen(
+                    context,
+                    screen: AltProfile(
+                        userUid: selectedUserId, userModel: userModel),
+                    withNavBar: false, // OPTIONAL VALUE. True by default.
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
+                }
               },
               child: Text(
                 'View profile',
