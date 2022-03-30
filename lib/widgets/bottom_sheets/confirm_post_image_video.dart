@@ -15,6 +15,7 @@ import 'package:mared_social/utils/productUploadScreen.dart';
 import 'package:mared_social/widgets/bottom_sheets/auth_sheets/select_avatar_options_sheet.dart';
 import 'package:mared_social/widgets/reusable/bottom_sheet_top_divider.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 confirmPostImageVideo({
@@ -67,19 +68,20 @@ confirmPostImageVideo({
                               multipleImages: imageFiles);
 
                       LoadingHelper.endLoading();
-                      print('2222222222222222');
                       Navigator.of(context).pop();
                       Navigator.of(context).pop();
                       Navigator.of(context).pop();
 
-                      Navigator.push(
-                          context,
-                          PageTransition(
-                              child: PostUploadScreen(
-                                multipleImages: imageFiles,
-                                imagesList: imagesList,
-                              ),
-                              type: PageTransitionType.bottomToTop));
+                      pushNewScreen(
+                        context,
+                        screen: PostUploadScreen(
+                          multipleImages: imageFiles,
+                          imagesList: imagesList,
+                        ),
+                        withNavBar: false, // OPTIONAL VALUE. True by default.
+                        pageTransitionAnimation:
+                            PageTransitionAnimation.cupertino,
+                      );
                     },
                   ),
                 ),

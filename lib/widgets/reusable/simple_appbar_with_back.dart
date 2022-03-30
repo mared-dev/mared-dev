@@ -3,7 +3,10 @@ import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/constants/text_styles.dart';
 
 PreferredSizeWidget simpleAppBarWithBack(BuildContext context,
-    {Widget? leadingIcon, Function()? leadingCallback, required String title}) {
+    {Widget? leadingIcon,
+    Function()? leadingCallback,
+    required String title,
+    bool isTitleCentered = false}) {
   return AppBar(
       elevation: 0,
       leading: IconButton(
@@ -14,7 +17,7 @@ PreferredSizeWidget simpleAppBarWithBack(BuildContext context,
           },
           icon: leadingIcon ?? Container()),
       backgroundColor: AppColors.backGroundColor,
-      centerTitle: false,
+      centerTitle: isTitleCentered,
       title: Text(
         title,
         style: semiBoldTextStyle(

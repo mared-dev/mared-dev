@@ -19,6 +19,7 @@ import 'package:mared_social/widgets/reusable/simple_button_icon.dart';
 import 'package:nanoid/nanoid.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
 import 'package:google_maps_place_picker_mb/providers/place_provider.dart';
@@ -95,32 +96,32 @@ class UploadPost with ChangeNotifier {
                                       File(_video!.path));
 
                               //START HERE
-                              _videoPlayerController
-                                ..initialize().then((value) {
-                                  _videoPlayerController.play();
-                                  previewStoryImage(
-                                      video: _video,
-                                      context: context,
-                                      videoPlayerController:
-                                          _videoPlayerController,
-                                      onCompleteCallback: ({String? videoUrl}) {
-                                        print('@@@@@@@@@@@@');
-                                        print(videoUrl);
-                                        Navigator.of(context).pop();
-                                        Navigator.of(context).pop();
-                                        Navigator.of(context).pop();
-                                        Navigator.push(
-                                            context,
-                                            PageTransition(
-                                                child: PostUploadScreen(
-                                                  multipleImages: [_video!],
-                                                  imagesList: [videoUrl!],
-                                                  postType: PostType.VIDEO,
-                                                ),
-                                                type: PageTransitionType
-                                                    .bottomToTop));
-                                      });
-                                });
+                              await _videoPlayerController.initialize();
+                              _videoPlayerController.play();
+                              previewStoryImage(
+                                  video: _video,
+                                  context: context,
+                                  videoPlayerController: _videoPlayerController,
+                                  onCompleteCallback: ({String? videoUrl}) {
+                                    print('@@@@@@@@@@@@');
+                                    print(videoUrl);
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+                                    Navigator.of(context).pop();
+
+                                    pushNewScreen(
+                                      context,
+                                      screen: PostUploadScreen(
+                                        multipleImages: [_video!],
+                                        imagesList: [videoUrl!],
+                                        postType: PostType.VIDEO,
+                                      ),
+                                      withNavBar:
+                                          false, // OPTIONAL VALUE. True by default.
+                                      pageTransitionAnimation:
+                                          PageTransitionAnimation.cupertino,
+                                    );
+                                  });
                               // Navigator.push(
                               //     context,
                               //     PageTransition(
@@ -155,40 +156,30 @@ class UploadPost with ChangeNotifier {
                             _videoPlayerController =
                                 VideoPlayerController.file(File(_video!.path));
 
-                            _videoPlayerController
-                              ..initialize().then((value) {
-                                _videoPlayerController.play();
-                                previewStoryImage(
-                                    video: _video,
-                                    context: context,
-                                    videoPlayerController:
-                                        _videoPlayerController,
-                                    onCompleteCallback: ({String? videoUrl}) {
-                                      Navigator.of(context).pop();
-                                      Navigator.of(context).pop();
-                                      Navigator.of(context).pop();
-                                      Navigator.push(
-                                          context,
-                                          PageTransition(
-                                              child: PostUploadScreen(
-                                                multipleImages: [_video!],
-                                                imagesList: [videoUrl!],
-                                                postType: PostType.VIDEO,
-                                              ),
-                                              type: PageTransitionType
-                                                  .bottomToTop));
-                                    });
-                              });
-                            // Navigator.push(
-                            //     context,
-                            //     PageTransition(
-                            //         child: PostUploadScreen(
-                            //           multipleImages: multipleImages,
-                            //           imagesList: imagesList,
-                            //         ),
-                            //         type: PageTransitionType.bottomToTop));
+                            await _videoPlayerController.initialize();
+                            _videoPlayerController.play();
+                            previewStoryImage(
+                                video: _video,
+                                context: context,
+                                videoPlayerController: _videoPlayerController,
+                                onCompleteCallback: ({String? videoUrl}) {
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pop();
+                                  Navigator.of(context).pop();
 
-                            // showPostCameraImage(context);
+                                  pushNewScreen(
+                                    context,
+                                    screen: PostUploadScreen(
+                                      multipleImages: [_video!],
+                                      imagesList: [videoUrl!],
+                                      postType: PostType.VIDEO,
+                                    ),
+                                    withNavBar:
+                                        false, // OPTIONAL VALUE. True by default.
+                                    pageTransitionAnimation:
+                                        PageTransitionAnimation.cupertino,
+                                  );
+                                });
                           }
                         }
                       },
@@ -356,33 +347,24 @@ class UploadPost with ChangeNotifier {
                           ),
                         ),
                         onPressed: () async {
-                          if (_selectedSource == ImageSource.camera) {
-                            uploadPostImageUrl = await FirebaseFileUploadService
-                                .uploadPostCameraImageToFirebase(
-                                    uploadPostImage);
+                          imagesList = await FirebaseFileUploadService
+                              .uploadMultipleImagesToFirebase(
+                                  multipleImages:
+                                      _selectedSource == ImageSource.camera
+                                          ? [XFile(uploadPostImage.path)]
+                                          : multipleImages);
 
-                            Navigator.push(
-                                context,
-                                PageTransition(
-                                    child: PostUploadCameraScreen(
-                                      uploadPostImage: uploadPostImage,
-                                      uploadPostImageUrl: uploadPostImageUrl,
-                                    ),
-                                    type: PageTransitionType.bottomToTop));
-                          } else {
-                            imagesList = await FirebaseFileUploadService
-                                .uploadMultipleImagesToFirebase(
-                                    multipleImages: multipleImages);
-
-                            Navigator.push(
-                                context,
-                                PageTransition(
-                                    child: PostUploadScreen(
-                                      multipleImages: multipleImages,
-                                      imagesList: imagesList,
-                                    ),
-                                    type: PageTransitionType.bottomToTop));
-                          }
+                          pushNewScreen(
+                            context,
+                            screen: PostUploadScreen(
+                              multipleImages: multipleImages,
+                              imagesList: imagesList,
+                            ),
+                            withNavBar:
+                                false, // OPTIONAL VALUE. True by default.
+                            pageTransitionAnimation:
+                                PageTransitionAnimation.cupertino,
+                          );
 
                           // editPostCameraSheet(context);
                           // print("image uploaded");

@@ -4,10 +4,10 @@ import 'package:mared_social/constants/text_styles.dart';
 
 import 'colors.dart';
 
-InputDecoration getAuthInputDecoration({
-  IconData? prefixIcon,
-  required String hintText,
-}) {
+InputDecoration getAuthInputDecoration(
+    {IconData? prefixIcon,
+    required String hintText,
+    Color backGroundColor = AppColors.authInputFillColor}) {
   return InputDecoration(
     prefixIcon: prefixIcon != null
         ? Icon(
@@ -19,7 +19,7 @@ InputDecoration getAuthInputDecoration({
     hintText: hintText,
     hintStyle: regularTextStyle(
         fontSize: 12.sp, textColor: AppColors.darkGrayTextColor),
-    fillColor: AppColors.authInputFillColor,
+    fillColor: backGroundColor,
     filled: true,
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(6),
