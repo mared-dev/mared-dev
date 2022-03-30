@@ -18,11 +18,11 @@ class _StoriesSectionState extends State<StoriesSection> {
       // margin: EdgeInsets.only(top: 27, bottom: 20),
       height: 100,
       width: MediaQuery.of(context).size.width,
-      child: FutureBuilder<QuerySnapshot>(
-        future: FirebaseFirestore.instance
+      child: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance
             .collection("stories")
             .orderBy('time', descending: true)
-            .get(),
+            .snapshots(),
         builder: (context, storiesSnaps) {
           if (storiesSnaps.hasData && storiesSnaps.data!.docs.isEmpty) {
             return Center(
@@ -35,9 +35,7 @@ class _StoriesSectionState extends State<StoriesSection> {
                 ),
               ),
             );
-          } else if (storiesSnaps.connectionState == ConnectionState.done &&
-              storiesSnaps.hasData &&
-              storiesSnaps.data != null) {
+          } else if (storiesSnaps.hasData && storiesSnaps.data != null) {
             return ListView.builder(
               itemCount: storiesSnaps.data!.docs.length,
               scrollDirection: Axis.horizontal,
