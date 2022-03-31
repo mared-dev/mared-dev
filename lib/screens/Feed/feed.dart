@@ -13,6 +13,7 @@ import 'package:mared_social/widgets/reusable/home_app_bar.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
+import 'package:share_plus/share_plus.dart';
 
 class Feed extends StatelessWidget {
   @override

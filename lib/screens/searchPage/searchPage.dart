@@ -91,37 +91,38 @@ class _SearchPageState extends State<SearchPage> {
                       pageController: pageController,
                     )),
               ),
-              SizedBox(
-                height: size.height * 0.7,
-                width: size.width,
-                child: PageView(
-                  controller: pageController,
-                  children: [
-                    UserSearchResultBody(
-                      isVendor: false,
-                      searchQuery: textController.text,
-                      searchIndexName: 'usersearchindex',
-                      collectionName: 'users',
-                    ),
-                    UserSearchResultBody(
-                      isVendor: true,
-                      searchQuery: textController.text,
-                      searchIndexName: 'usersearchindex',
-                      collectionName: 'users',
-                    ),
-                    PostSearch(
-                      postSearchVal: textController.text,
-                    ),
-                    // AuctionSearch(
-                    //   auctionSearchVal: textController.text,
-                    // ),
-                  ],
-                  physics: const NeverScrollableScrollPhysics(),
-                  onPageChanged: (page) {
-                    setState(() {
-                      pageIndex = page;
-                    });
-                  },
+              Expanded(
+                child: SizedBox(
+                  width: size.width,
+                  child: PageView(
+                    controller: pageController,
+                    children: [
+                      UserSearchResultBody(
+                        isVendor: false,
+                        searchQuery: textController.text,
+                        searchIndexName: 'usersearchindex',
+                        collectionName: 'users',
+                      ),
+                      UserSearchResultBody(
+                        isVendor: true,
+                        searchQuery: textController.text,
+                        searchIndexName: 'usersearchindex',
+                        collectionName: 'users',
+                      ),
+                      PostSearch(
+                        postSearchVal: textController.text,
+                      ),
+                      // AuctionSearch(
+                      //   auctionSearchVal: textController.text,
+                      // ),
+                    ],
+                    physics: const NeverScrollableScrollPhysics(),
+                    onPageChanged: (page) {
+                      setState(() {
+                        pageIndex = page;
+                      });
+                    },
+                  ),
                 ),
               ),
             ],

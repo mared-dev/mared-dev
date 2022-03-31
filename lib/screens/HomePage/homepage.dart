@@ -22,6 +22,7 @@ import 'package:mared_social/screens/isAnon/isAnon.dart';
 import 'package:mared_social/screens/mapscreen/mapscreen.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
+import 'package:mared_social/utils/dynamic_link_service.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
@@ -101,6 +102,11 @@ class _HomePageState extends State<HomePage> {
           iconPath: 'assets/icons/navbar_profile_icon.svg',
           index: 4),
     ];
+    //put it before super for some reason
+
+    WidgetsBinding.instance!.addPostFrameCallback(
+        (_) => DynamicLinkService.retrieveDynamicLink(context));
+
     super.initState();
   }
 
@@ -116,8 +122,8 @@ class _HomePageState extends State<HomePage> {
         sound: true,
       );
     } else {
-      SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
-          overlays: [SystemUiOverlay.top]);
+      // SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
+      //     overlays: [SystemUiOverlay.top]);
     }
 
     _fcm.getAPNSToken().then((value) => print("APN Token === $value"));

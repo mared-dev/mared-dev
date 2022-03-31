@@ -183,7 +183,7 @@ class _FeedPostItemState extends State<FeedPostItem> {
             likes: documentSnapshot['likes'],
           ),
           PostCommentsPart(documentSnapshot: documentSnapshot),
-          PostSharePart(),
+          PostSharePart(postId: documentSnapshot['postid']),
           const Spacer(),
           Provider.of<Authentication>(context, listen: false).getUserId ==
                   documentSnapshot['useruid']
