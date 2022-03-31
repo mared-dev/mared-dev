@@ -75,9 +75,9 @@ class _HomePageState extends State<HomePage> {
     _screens = [
       Feed(),
       CategoryScreen(),
-      !isAnon ? Chatroom() : IsAnonMsg(),
+      // !isAnon ? Chatroom() : IsAnonMsg(),
       MapScreen(),
-      !isAnon ? Profile() : IsAnonMsg(),
+      // !isAnon ? Profile() : IsAnonMsg(),
     ];
 
     _navBarItems = [
@@ -89,18 +89,18 @@ class _HomePageState extends State<HomePage> {
           itemText: 'menu',
           iconPath: 'assets/icons/navbar_menu_icon.svg',
           index: 1),
-      _navBarItem(
-          itemText: 'chat',
-          iconPath: 'assets/icons/navbar_chat_icon.svg',
-          index: 2),
+      // _navBarItem(
+      //     itemText: 'chat',
+      //     iconPath: 'assets/icons/navbar_chat_icon.svg',
+      //     index: 2),
       _navBarItem(
           itemText: 'map',
           iconPath: 'assets/icons/navbar_map_icon.svg',
-          index: 3),
-      _navBarItem(
-          itemText: 'profile',
-          iconPath: 'assets/icons/navbar_profile_icon.svg',
-          index: 4),
+          index: 2),
+      // _navBarItem(
+      //     itemText: 'profile',
+      //     iconPath: 'assets/icons/navbar_profile_icon.svg',
+      //     index: 4),
     ];
     //put it before super for some reason
 
@@ -155,7 +155,7 @@ class _HomePageState extends State<HomePage> {
           navBarHeight: 85.h,
           padding: NavBarPadding.only(bottom: 15.h),
           backgroundColor: Colors.black,
-          navBarStyle: NavBarStyle.style3),
+          navBarStyle: NavBarStyle.style6),
     );
   }
 

@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/screens/Feed/feed_body.dart';
+import 'package:mared_social/screens/Profile/profile.dart';
 import 'package:mared_social/screens/Profile/profileHelpers.dart';
 import 'package:mared_social/screens/searchPage/searchPage.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
@@ -38,15 +39,20 @@ class Feed extends StatelessWidget {
           );
         },
         actionIcon: SvgPicture.asset(
-          'assets/icons/camera_icon.svg',
-          width: 20.w,
-          height: 18.h,
+          'assets/icons/user_result_icon.svg',
+          color: AppColors.commentButtonColor,
+          width: 21.w,
+          height: 21.h,
         ),
         actionCallback: () {
           if (Provider.of<Authentication>(context, listen: false).getIsAnon ==
               false) {
-            Provider.of<ProfileHelpers>(context, listen: false)
-                .postSelectType(context: context);
+            pushNewScreen(
+              context,
+              screen: Profile(),
+              withNavBar: false, // OPTIONAL VALUE. True by default.
+              pageTransitionAnimation: PageTransitionAnimation.cupertino,
+            );
           } else {
             IsAnonBottomSheet(context);
           }

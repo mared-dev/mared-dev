@@ -37,16 +37,13 @@ class _ProfileState extends State<Profile> {
         context,
         title: 'MY PROFILE',
         leadingIcon: SvgPicture.asset(
-          'assets/icons/settings_icon.svg',
-          width: 18.w,
-          height: 18.h,
+          'assets/icons/back_icon.svg',
+          fit: BoxFit.fill,
+          width: 22.w,
+          height: 22.h,
         ),
         leadingCallback: () {
-          Navigator.push(
-              context,
-              PageTransition(
-                  child: UserSettingsPage(),
-                  type: PageTransitionType.leftToRight));
+          Navigator.of(context).pop();
         },
         actionIcon: SvgPicture.asset(
           'assets/icons/logout_icon.svg',

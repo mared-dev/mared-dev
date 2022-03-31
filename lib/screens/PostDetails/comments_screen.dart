@@ -107,7 +107,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                     .toList()),
           ),
           Padding(
-            padding: EdgeInsets.only(bottom: 60.h, left: 28.w, right: 28.w),
+            padding: EdgeInsets.only(bottom: 36.h, left: 28.w, right: 28.w),
             child: TextField(
               controller: commentController,
               decoration: InputDecoration(
