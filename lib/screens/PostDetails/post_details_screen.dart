@@ -47,8 +47,6 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
         padding: EdgeInsets.only(top: 16.h),
         child: StreamBuilder<DocumentSnapshot>(
           stream: FirebaseFirestore.instance
-              .collection("users")
-              .doc(widget.userId ?? UserInfoManger.getUserId())
               .collection("posts")
               .doc(widget.postId)
               .snapshots(),

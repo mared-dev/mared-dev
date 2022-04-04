@@ -303,114 +303,120 @@ class _StoriesState extends State<Stories> {
                           ),
                         ),
                       ),
-                      Visibility(
-                        visible:
-                            Provider.of<Authentication>(context, listen: false)
-                                    .getUserId ==
-                                widget.querySnapshot.data!
-                                    .docs[widget.snapIndex]['useruid'],
-                        child: IconButton(
-                          onPressed: () {
-                            showModalBottomSheet(
-                              context: context,
-                              builder: (context) {
-                                return SafeArea(
-                                  bottom: true,
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                      color: constantColors.blueGreyColor,
-                                      borderRadius: const BorderRadius.only(
-                                        topLeft: Radius.circular(12),
-                                        topRight: Radius.circular(12),
-                                      ),
+                      IconButton(
+                        onPressed: () {
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) {
+                              return SafeArea(
+                                bottom: true,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: constantColors.blueGreyColor,
+                                    borderRadius: const BorderRadius.only(
+                                      topLeft: Radius.circular(12),
+                                      topRight: Radius.circular(12),
                                     ),
-                                    height: MediaQuery.of(context).size.height *
-                                        0.2,
-                                    width: MediaQuery.of(context).size.width,
-                                    child: Column(
-                                      children: [
-                                        Padding(
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 150),
-                                          child: Divider(
-                                            thickness: 4,
-                                            color: constantColors.whiteColor,
-                                          ),
+                                  ),
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.2,
+                                  width: MediaQuery.of(context).size.width,
+                                  child: Column(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 150),
+                                        child: Divider(
+                                          thickness: 4,
+                                          color: constantColors.whiteColor,
                                         ),
-                                        const SizedBox(
-                                          height: 5,
-                                        ),
-                                        Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            TextButton.icon(
-                                              style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStateProperty.all<
-                                                            Color>(
-                                                        constantColors
-                                                            .blueColor),
-                                              ),
-                                              icon: Icon(
-                                                FontAwesomeIcons.archive,
+                                      ),
+                                      const SizedBox(
+                                        height: 5,
+                                      ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          TextButton.icon(
+                                            style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all<
+                                                          Color>(
+                                                      constantColors.blueColor),
+                                            ),
+                                            icon: Icon(
+                                              FontAwesomeIcons.archive,
+                                              color: constantColors.whiteColor,
+                                            ),
+                                            onPressed: () {
+                                              storyWidgets.addToHighlights(
+                                                context: context,
+                                                storyImage: widget
+                                                        .querySnapshot
+                                                        .data!
+                                                        .docs[widget.snapIndex]
+                                                    ['image'],
+                                                storyId: widget
+                                                    .querySnapshot
+                                                    .data!
+                                                    .docs[widget.snapIndex]
+                                                    .id,
+                                              );
+                                            },
+                                            label: Text(
+                                              "Add to highlights",
+                                              style: TextStyle(
                                                 color:
                                                     constantColors.whiteColor,
-                                              ),
-                                              onPressed: () {
-                                                storyWidgets.addToHighlights(
-                                                  context: context,
-                                                  storyImage: widget
-                                                              .querySnapshot
-                                                              .data!
-                                                              .docs[
-                                                          widget.snapIndex]
-                                                      ['image'],
-                                                  storyId: widget
-                                                      .querySnapshot
-                                                      .data!
-                                                      .docs[widget.snapIndex]
-                                                      .id,
-                                                );
-                                              },
-                                              label: Text(
-                                                "Add to highlights",
-                                                style: TextStyle(
-                                                  color:
-                                                      constantColors.whiteColor,
-                                                  fontSize: 16,
-                                                ),
+                                                fontSize: 16,
                                               ),
                                             ),
-                                            TextButton.icon(
-                                              style: ButtonStyle(
-                                                backgroundColor:
-                                                    MaterialStateProperty.all<
-                                                            Color>(
-                                                        constantColors
-                                                            .redColor),
-                                              ),
-                                              icon: Icon(
-                                                FontAwesomeIcons.trashAlt,
-                                                color:
-                                                    constantColors.whiteColor,
-                                              ),
-                                              onPressed: () {
-                                                CoolAlert.show(
-                                                  context: context,
-                                                  type: CoolAlertType.warning,
-                                                  title: "Delete Story?",
-                                                  text:
-                                                      "Are you sure you want to delete this story?",
-                                                  showCancelBtn: true,
-                                                  cancelBtnText: "No",
-                                                  confirmBtnText: "Yes",
-                                                  onCancelBtnTap: () =>
-                                                      Navigator.pop(context),
-                                                  onConfirmBtnTap: () async {
-                                                    try {
+                                          ),
+                                          TextButton.icon(
+                                            style: ButtonStyle(
+                                              backgroundColor:
+                                                  MaterialStateProperty.all<
+                                                          Color>(
+                                                      constantColors.redColor),
+                                            ),
+                                            icon: Icon(
+                                              FontAwesomeIcons.trashAlt,
+                                              color: constantColors.whiteColor,
+                                            ),
+                                            onPressed: () {
+                                              CoolAlert.show(
+                                                context: context,
+                                                type: CoolAlertType.warning,
+                                                title: "Delete Story?",
+                                                text:
+                                                    "Are you sure you want to delete this story?",
+                                                showCancelBtn: true,
+                                                cancelBtnText: "No",
+                                                confirmBtnText: "Yes",
+                                                onCancelBtnTap: () =>
+                                                    Navigator.pop(context),
+                                                onConfirmBtnTap: () async {
+                                                  try {
+                                                    await FirebaseFirestore
+                                                        .instance
+                                                        .collection("stories")
+                                                        .doc(widget
+                                                            .querySnapshot
+                                                            .data!
+                                                            .docs[widget
+                                                                .snapIndex]
+                                                            .id)
+                                                        .delete()
+                                                        .whenComplete(() async {
                                                       await FirebaseFirestore
                                                           .instance
+                                                          .collection("users")
+                                                          .doc(Provider.of<
+                                                                      Authentication>(
+                                                                  context,
+                                                                  listen: false)
+                                                              .getUserId)
                                                           .collection("stories")
                                                           .doc(widget
                                                               .querySnapshot
@@ -419,73 +425,50 @@ class _StoriesState extends State<Stories> {
                                                                   .snapIndex]
                                                               .id)
                                                           .delete()
-                                                          .whenComplete(
-                                                              () async {
-                                                        await FirebaseFirestore
-                                                            .instance
-                                                            .collection("users")
-                                                            .doc(Provider.of<
-                                                                        Authentication>(
-                                                                    context,
-                                                                    listen:
-                                                                        false)
-                                                                .getUserId)
-                                                            .collection(
-                                                                "stories")
-                                                            .doc(widget
-                                                                .querySnapshot
-                                                                .data!
-                                                                .docs[widget
-                                                                    .snapIndex]
-                                                                .id)
-                                                            .delete()
-                                                            .whenComplete(() {
-                                                          Navigator
-                                                              .pushReplacement(
-                                                            context,
-                                                            PageTransition(
-                                                                child:
-                                                                    HomePage(),
-                                                                type: PageTransitionType
-                                                                    .topToBottom),
-                                                          );
-                                                        });
+                                                          .whenComplete(() {
+                                                        Navigator
+                                                            .pushReplacement(
+                                                          context,
+                                                          PageTransition(
+                                                              child: HomePage(),
+                                                              type: PageTransitionType
+                                                                  .topToBottom),
+                                                        );
                                                       });
-                                                    } catch (e) {
-                                                      CoolAlert.show(
-                                                        context: context,
-                                                        type:
-                                                            CoolAlertType.error,
-                                                        title:
-                                                            "Delete Story Failed",
-                                                        text: e.toString(),
-                                                      );
-                                                    }
-                                                  },
-                                                );
-                                              },
-                                              label: Text(
-                                                "Delete Story",
-                                                style: TextStyle(
-                                                  color:
-                                                      constantColors.whiteColor,
-                                                  fontSize: 16,
-                                                ),
+                                                    });
+                                                  } catch (e) {
+                                                    CoolAlert.show(
+                                                      context: context,
+                                                      type: CoolAlertType.error,
+                                                      title:
+                                                          "Delete Story Failed",
+                                                      text: e.toString(),
+                                                    );
+                                                  }
+                                                },
+                                              );
+                                            },
+                                            label: Text(
+                                              "Delete Story",
+                                              style: TextStyle(
+                                                color:
+                                                    constantColors.whiteColor,
+                                                fontSize: 16,
                                               ),
                                             ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                );
-                              },
-                            );
-                          },
-                          icon: Icon(
-                            EvaIcons.moreVertical,
-                            color: constantColors.whiteColor,
-                          ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                        icon: Icon(
+                          EvaIcons.moreVertical,
+                          color: constantColors.whiteColor,
                         ),
                       ),
                     ],

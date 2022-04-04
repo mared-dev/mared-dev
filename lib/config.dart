@@ -13,8 +13,8 @@ late final appleSignInAvailable;
 final getIt = GetIt.instance;
 
 config() async {
-  SystemChrome.setEnabledSystemUIOverlays([]);
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIOverlays([]);
   await Firebase.initializeApp();
   const AndroidNotificationChannel channel = AndroidNotificationChannel(
     'high_importance_channel', // id
