@@ -12,8 +12,10 @@ import 'package:lottie/lottie.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/constants/text_styles.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/screens/Categories/category.dart';
 import 'package:mared_social/screens/Chatroom/chatroom.dart';
+import 'package:mared_social/screens/Feed/admin_posts_feed.dart';
 import 'package:mared_social/screens/Feed/feed.dart';
 import 'package:mared_social/screens/HomePage/homepageHelpers.dart';
 import 'package:mared_social/screens/LandingPage/landingpage.dart';
@@ -72,36 +74,58 @@ class _HomePageState extends State<HomePage> {
 
     _controller = PersistentTabController(initialIndex: 0);
 
-    _screens = [
-      Feed(),
-      CategoryScreen(),
-      // !isAnon ? Chatroom() : IsAnonMsg(),
-      MapScreen(),
-      // !isAnon ? Profile() : IsAnonMsg(),
-    ];
+    _screens = UserInfoManger.isAdmin()
+        ? [
+            AdminPostsFeed(
+              screenTitle: "Review posts",
+              collectionName: 'posts',
+            ),
+            AdminPostsFeed(
+              screenTitle: "Review stories",
+              collectionName: 'stories',
+            ),
+          ]
+        : [
+            Feed(),
+            CategoryScreen(),
+            // !isAnon ? Chatroom() : IsAnonMsg(),
+            MapScreen(),
+            // !isAnon ? Profile() : IsAnonMsg(),
+          ];
 
-    _navBarItems = [
-      _navBarItem(
-          itemText: 'home',
-          iconPath: 'assets/icons/navbar_home_icon.svg',
-          index: 0),
-      _navBarItem(
-          itemText: 'menu',
-          iconPath: 'assets/icons/navbar_menu_icon.svg',
-          index: 1),
-      // _navBarItem(
-      //     itemText: 'chat',
-      //     iconPath: 'assets/icons/navbar_chat_icon.svg',
-      //     index: 2),
-      _navBarItem(
-          itemText: 'map',
-          iconPath: 'assets/icons/navbar_map_icon.svg',
-          index: 2),
-      // _navBarItem(
-      //     itemText: 'profile',
-      //     iconPath: 'assets/icons/navbar_profile_icon.svg',
-      //     index: 4),
-    ];
+    _navBarItems = UserInfoManger.isAdmin()
+        ? [
+            _navBarItem(
+                itemText: 'posts',
+                iconPath: 'assets/icons/post_result_icon.svg',
+                index: 0),
+            _navBarItem(
+                itemText: 'stories',
+                iconPath: 'assets/icons/add_story_icon.svg',
+                index: 0),
+          ]
+        : [
+            _navBarItem(
+                itemText: 'home',
+                iconPath: 'assets/icons/navbar_home_icon.svg',
+                index: 0),
+            _navBarItem(
+                itemText: 'menu',
+                iconPath: 'assets/icons/navbar_menu_icon.svg',
+                index: 1),
+            // _navBarItem(
+            //     itemText: 'chat',
+            //     iconPath: 'assets/icons/navbar_chat_icon.svg',
+            //     index: 2),
+            _navBarItem(
+                itemText: 'map',
+                iconPath: 'assets/icons/navbar_map_icon.svg',
+                index: 2),
+            // _navBarItem(
+            //     itemText: 'profile',
+            //     iconPath: 'assets/icons/navbar_profile_icon.svg',
+            //     index: 4),
+          ];
     //put it before super for some reason
 
     WidgetsBinding.instance!.addPostFrameCallback(

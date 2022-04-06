@@ -79,11 +79,12 @@ class ProfileHelpers with ChangeNotifier {
       showCancelBtn: true,
       title: "Are you sure you want to log out?",
       confirmBtnText: "Log Out",
-      onConfirmBtnTap: () {
+      onConfirmBtnTap: () async {
+        await UserInfoManger.clearUserInfo();
         Provider.of<Authentication>(context, listen: false).signOutWithGoogle();
         Provider.of<Authentication>(context, listen: false)
             .logOutViaEmail()
-            .whenComplete(() {
+            .whenComplete(() async {
           Navigator.of(context, rootNavigator: true).pushAndRemoveUntil(
             MaterialPageRoute(builder: (_) => LandingPage()),
             (Route<dynamic> route) => false,

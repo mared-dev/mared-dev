@@ -119,6 +119,11 @@ class PostFunctions with ChangeNotifier {
                                         showCancelBtn: true,
                                         title: "Delete this post?",
                                         onConfirmBtnTap: () async {
+                                          Navigator.of(context,
+                                                  rootNavigator: true)
+                                              .pop();
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).pop();
                                           await Provider.of<FirebaseOperations>(
                                                   context,
                                                   listen: false)
@@ -127,10 +132,6 @@ class PostFunctions with ChangeNotifier {
                                                 postDocSnap.data!['useruid'],
                                             postId: postId,
                                           );
-                                          Navigator.of(context,
-                                                  rootNavigator: true)
-                                              .pop();
-                                          Navigator.of(context).pop();
                                         },
                                         onCancelBtnTap: () {
                                           Navigator.of(context,

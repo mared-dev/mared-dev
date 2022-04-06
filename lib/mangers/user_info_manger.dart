@@ -48,4 +48,14 @@ class UserInfoManger {
       return false;
     }
   }
+
+  static saveRole(value) async {
+    print('***************');
+    print(value);
+    await SharedPreferencesHelper.setString('role', value);
+  }
+
+  static bool isAdmin() {
+    return SharedPreferencesHelper.getString('role') == 'admin';
+  }
 }

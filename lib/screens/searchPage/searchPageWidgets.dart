@@ -6,6 +6,7 @@ import 'package:lottie/lottie.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/constants/text_styles.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/AltProfile/altProfileHelper.dart';
@@ -116,6 +117,8 @@ class PostSearch extends StatelessWidget {
         : StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
                 .collection("posts")
+                .where('approvedForPosting',
+                    isEqualTo: !UserInfoManger.isAdmin())
                 .where('searchindex',
                     arrayContains: postSearchVal.toLowerCase())
                 .snapshots(),

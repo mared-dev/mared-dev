@@ -237,14 +237,13 @@ class StoryWidgets {
                                   'userimage': userModel.photoUrl,
                                   'useremail': userModel.email,
                                   'useruid': userModel.uid,
+                                  'approvedForPosting': false,
                                   'time': Timestamp.now(),
                                 });
 
                                 await FirebaseFirestore.instance
                                     .collection("users")
-                                    .doc(Provider.of<Authentication>(context,
-                                            listen: false)
-                                        .getUserId)
+                                    .doc(UserInfoManger.getUserId())
                                     .collection("stories")
                                     .doc(storyId)
                                     .set({
@@ -255,6 +254,7 @@ class StoryWidgets {
                                   'userimage': userModel.photoUrl,
                                   'useremail': userModel.email,
                                   'useruid': userModel.uid,
+                                  'approvedForPosting': false,
                                   'time': Timestamp.now(),
                                 });
                                 Navigator.of(context, rootNavigator: true)

@@ -310,6 +310,8 @@ class AltProfileHelper with ChangeNotifier {
                                   .collection("users")
                                   .doc(userDocSnap.data!['useruid'])
                                   .collection("posts")
+                                  .where('approvedForPosting',
+                                      isEqualTo: !UserInfoManger.isAdmin())
                                   .snapshots(),
                               builder: (context, userPostSnaps) {
                                 if (!userPostSnaps.hasData) {
@@ -827,6 +829,7 @@ class AltProfileHelper with ChangeNotifier {
             .doc(userUid)
             .collection("posts")
             .orderBy("time", descending: true)
+            .where('approvedForPosting', isEqualTo: !UserInfoManger.isAdmin())
             .snapshots(),
         builder: (context, userPostSnap) {
           if (!userPostSnap.hasData) {

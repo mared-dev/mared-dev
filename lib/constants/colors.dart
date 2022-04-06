@@ -12,4 +12,6 @@ class AppColors {
   static const commentButtonColor = Colors.black;
   static const notActiveNavItemColor = Color(0xFFBCBCBC);
   static const addPostInputBackground = Color(0xFFF5F5F5);
+  static const acceptColor = Color(0xFF10B132);
+  static const rejectColor = Color(0xFFF21E31);
 }

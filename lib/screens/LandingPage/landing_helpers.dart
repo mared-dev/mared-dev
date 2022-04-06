@@ -194,8 +194,6 @@ class LandingHelpers {
   }
 
   static loginWithEmail({context, email, password}) async {
-    print('(((((((((((((((((');
-
     try {
       await Provider.of<Authentication>(context, listen: false)
           .loginIntoAccount(email, password);
@@ -217,6 +215,11 @@ class LandingHelpers {
           photoUrl: userSnapShot.data()!['userimage'],
           fcmToken: ''));
       await UserInfoManger.saveAnonFlag(0);
+
+      await UserInfoManger.saveRole((userSnapShot.data()!['role'] != null)
+          ? userSnapShot.data()!['role']
+          : "");
+      print(UserInfoManger.isAdmin());
 
       Navigator.pushReplacement(
         context,

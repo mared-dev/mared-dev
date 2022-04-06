@@ -1,3 +1,4 @@
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
@@ -5,12 +6,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/constants/text_styles.dart';
 import 'package:mared_social/helpers/post_helpers.dart';
 import 'package:mared_social/helpers/time_helpers.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/isAnon/isAnon.dart';
@@ -18,6 +21,7 @@ import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/utils/postoptions.dart';
 import 'package:mared_social/widgets/bottom_sheets/show_comments_section.dart';
 import 'package:mared_social/widgets/items/post_share_part.dart';
+import 'package:mared_social/widgets/items/review_post_options.dart';
 import 'package:mared_social/widgets/items/video_post_item.dart';
 import 'package:mared_social/widgets/reusable/feed_item_body_with_like.dart';
 import 'package:mared_social/widgets/reusable/feed_post_item_body.dart';
@@ -28,17 +32,17 @@ import 'package:mared_social/widgets/reusable/post_likes_part.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
-class FeedPostItem extends StatefulWidget {
+class ReviewStoryItem extends StatefulWidget {
   final documentSnapshot;
 
-  const FeedPostItem({Key? key, required this.documentSnapshot})
+  const ReviewStoryItem({Key? key, required this.documentSnapshot})
       : super(key: key);
 
   @override
-  State<FeedPostItem> createState() => _FeedPostItemState();
+  _ReviewStoryItemState createState() => _ReviewStoryItemState();
 }
 
-class _FeedPostItemState extends State<FeedPostItem> {
+class _ReviewStoryItemState extends State<ReviewStoryItem> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -56,8 +60,7 @@ class _FeedPostItemState extends State<FeedPostItem> {
                     GestureDetector(
                       onTap: () {
                         if (widget.documentSnapshot['useruid'] !=
-                            Provider.of<Authentication>(context, listen: false)
-                                .getUserId) {
+                            UserInfoManger.getUserId()) {
                           Navigator.push(
                               context,
                               PageTransition(
@@ -85,7 +88,7 @@ class _FeedPostItemState extends State<FeedPostItem> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(100),
                           child: CachedNetworkImage(
-                            fit: BoxFit.contain,
+                            fit: BoxFit.cover,
                             imageUrl: widget.documentSnapshot['userimage'],
                             progressIndicatorBuilder: (context, url,
                                     downloadProgress) =>
@@ -99,114 +102,72 @@ class _FeedPostItemState extends State<FeedPostItem> {
                     Expanded(
                       child: _postHeader(
                           userName: widget.documentSnapshot['username'],
-                          address: widget.documentSnapshot['address'],
+                          address: widget.documentSnapshot['useremail'],
                           userId: widget.documentSnapshot['useruid']),
                     )
                   ],
                 ),
               ),
-              FeedItemBodyWithLike(
-                imageList: widget.documentSnapshot['imageslist'],
-                userId: widget.documentSnapshot['useruid'],
-                postId: widget.documentSnapshot['postid'],
-                likes: widget.documentSnapshot['likes'],
+              SizedBox(
+                height: 16.h,
               ),
-              _postFooter(documentSnapshot: widget.documentSnapshot),
+              Container(
+                  padding: EdgeInsets.symmetric(horizontal: 15.w),
+                  height: 0.6.sh,
+                  child: VideoPostItem(
+                      videoUrl: widget.documentSnapshot['videourl'])),
               Padding(
-                padding: EdgeInsets.only(
-                  left: 18.w,
-                ),
-                child: Column(
-                  children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: Text(
-                        widget.documentSnapshot['caption'],
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: regularTextStyle(
-                          textColor: AppColors.commentButtonColor,
-                          fontSize: 14.sp,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 8.h,
-                    ),
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: Text(
-                        widget.documentSnapshot['description'],
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: lightTextStyle(
-                          textColor: AppColors.commentButtonColor,
-                          fontSize: 11.sp,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          TimeHelper.getElpasedTime(
-                              widget.documentSnapshot['time']),
-                          textAlign: TextAlign.start,
-                          style: lightTextStyle(
-                              textColor: AppColors.accentColor,
-                              fontSize: 11.sp),
-                        ),
-                      ],
-                    ),
-                  ],
+                padding: EdgeInsets.symmetric(horizontal: 15.w),
+                child: ReviewPostOptions(
+                  acceptCallback: () {
+                    FirebaseFirestore.instance
+                        .collection('stories')
+                        .doc(widget.documentSnapshot['storyid'])
+                        .update({'approvedForPosting': true});
+                  },
+                  rejectCallback: () {
+                    CoolAlert.show(
+                      context: context,
+                      type: CoolAlertType.warning,
+                      title: "Reject Story?",
+                      text: "Are you sure you want to reject this story?",
+                      showCancelBtn: true,
+                      cancelBtnText: "No",
+                      confirmBtnText: "Yes",
+                      onCancelBtnTap: () =>
+                          Navigator.of(context, rootNavigator: true).pop(),
+                      onConfirmBtnTap: () async {
+                        try {
+                          Navigator.of(context, rootNavigator: true).pop();
+                          FirebaseFirestore.instance
+                              .collection("stories")
+                              .doc(widget.documentSnapshot['storyid'])
+                              .delete()
+                              .whenComplete(() async {
+                            FirebaseFirestore.instance
+                                .collection("users")
+                                .doc(widget.documentSnapshot['useruid'])
+                                .collection("stories")
+                                .doc(widget.documentSnapshot['storyid'])
+                                .delete()
+                                .whenComplete(() {});
+                          });
+                        } catch (e) {
+                          CoolAlert.show(
+                            context: context,
+                            type: CoolAlertType.error,
+                            title: "Operation Failed",
+                            text: e.toString(),
+                          );
+                        }
+                      },
+                    );
+                  },
                 ),
               ),
             ],
           ),
         ));
-  }
-
-  Widget _postFooter({
-    required documentSnapshot,
-  }) {
-    return Container(
-      height: 22.h,
-      margin: EdgeInsets.only(left: 10.w, top: 18.h, bottom: 16.h),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          PostLikesPart(
-            postId: documentSnapshot['postid'],
-            likes: documentSnapshot['likes'],
-          ),
-          PostCommentsPart(documentSnapshot: documentSnapshot),
-          PostSharePart(postId: documentSnapshot['postid']),
-          const Spacer(),
-          Provider.of<Authentication>(context, listen: false).getUserId ==
-                  documentSnapshot['useruid']
-              ? IconButton(
-                  onPressed: () {
-                    Provider.of<PostFunctions>(context, listen: false)
-                        .showPostOptions(
-                            context: context,
-                            postId: documentSnapshot['postid']);
-
-                    Provider.of<PostFunctions>(context, listen: false)
-                        .getImageDescription(documentSnapshot['description']);
-                  },
-                  icon: Icon(EvaIcons.moreVertical,
-                      color: AppColors.commentButtonColor),
-                )
-              : const SizedBox(
-                  height: 0,
-                  width: 0,
-                ),
-        ],
-      ),
-    );
   }
 
   Widget _postHeader(
@@ -258,23 +219,6 @@ class _FeedPostItemState extends State<FeedPostItem> {
           ],
         ),
       ),
-    );
-  }
-
-  //move to a seprate file later
-  IsAnonBottomSheet(BuildContext context) {
-    return showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (context) {
-        return SafeArea(
-          bottom: true,
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height * 0.9,
-            child: IsAnonMsg(),
-          ),
-        );
-      },
     );
   }
 }

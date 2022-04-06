@@ -38,8 +38,6 @@ class _VideoPostItemState extends State<VideoPostItem> {
 
   @override
   Widget build(BuildContext context) {
-    print('!!!!!!!!!!!!');
-    print(widget.videoUrl);
     return Chewie(
       controller: _chewieController,
     );

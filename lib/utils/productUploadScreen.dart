@@ -451,6 +451,7 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
         await Provider.of<FirebaseOperations>(context, listen: false)
             .uploadPostData(postId, {
           'postid': postId,
+          'approvedForPosting': false,
           'searchindex': indexList,
           'likes': [],
           'comments': [],
@@ -480,6 +481,7 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
             .doc(postId)
             .set({
           'postid': postId,
+          'approvedForPosting': false,
           'likes': [],
           'comments': [],
           'searchindex': indexList,

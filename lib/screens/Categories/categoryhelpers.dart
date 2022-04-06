@@ -4,6 +4,7 @@ import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/screens/CategoryFeed/categoryfeed.dart';
 import 'package:mared_social/screens/CategoryFeed/categoryfeedhelper.dart';
 import 'package:mared_social/screens/SearchFeed/searchfeed.dart';
@@ -82,6 +83,8 @@ class CategoryHelper with ChangeNotifier {
                         child: StreamBuilder<QuerySnapshot>(
                           stream: FirebaseFirestore.instance
                               .collection("posts")
+                              .where('approvedForPosting',
+                                  isEqualTo: !UserInfoManger.isAdmin())
                               .where('searchindex',
                                   arrayContains:
                                       searchController.text.toLowerCase())

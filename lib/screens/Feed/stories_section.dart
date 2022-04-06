@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/widgets/items/feed_story_item.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -21,6 +22,7 @@ class _StoriesSectionState extends State<StoriesSection> {
       child: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection("stories")
+            .where('approvedForPosting', isEqualTo: !UserInfoManger.isAdmin())
             .orderBy('time', descending: true)
             .snapshots(),
         builder: (context, storiesSnaps) {

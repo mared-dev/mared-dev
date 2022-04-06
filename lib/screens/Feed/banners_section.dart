@@ -36,8 +36,8 @@ class _BannersSectionState extends State<BannersSection> {
             !bannerSnap.hasData ||
             bannerSnap.data == null) {
           return LoadingWidget(constantColors: constantColors);
-        } else {
-          if (selectedUserId.isEmpty) {
+        } else if (bannerSnap.hasData && bannerSnap.data!.docs.isNotEmpty) {
+          if (selectedUserId.isNotEmpty) {
             var bannerItem = bannerSnap.data!.docs[0];
             selectedUserId = bannerItem['useruid'];
             selectedPostId = bannerItem['postid'];
@@ -115,6 +115,8 @@ class _BannersSectionState extends State<BannersSection> {
               ],
             ),
           );
+        } else {
+          return Container();
         }
       },
     );

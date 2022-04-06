@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/screens/CategoryFeed/categoryfeedhelper.dart';
 import 'package:mared_social/widgets/reusable/feed_post_item.dart';
 import 'package:mared_social/widgets/reusable/paginate_firestore_edited.dart';
@@ -42,6 +43,7 @@ class CategoryFeed extends StatelessWidget {
           // orderBy is compulsory to enable pagination
           query: FirebaseFirestore.instance
               .collection("posts")
+              .where('approvedForPosting', isEqualTo: !UserInfoManger.isAdmin())
               .where('postcategory', isEqualTo: categoryName)
               .orderBy('time', descending: true),
           //Change types accordingly

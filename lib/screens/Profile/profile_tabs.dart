@@ -57,6 +57,7 @@ class PostsProfile extends StatelessWidget {
                   .collection("users")
                   .doc(userId ?? UserInfoManger.getUserId())
                   .collection("posts")
+                  .where('approvedForPosting', isEqualTo: true)
                   .orderBy("time", descending: true)
                   .snapshots(),
               builder: (context, userPostSnap) {
@@ -217,6 +218,8 @@ class PostsProfile extends StatelessWidget {
                 .collection("users")
                 .doc(userModel.uid)
                 .collection("posts")
+                .where('approvedForPosting',
+                    isEqualTo: !UserInfoManger.isAdmin())
                 .snapshots(),
             builder: (context, userPostSnaps) {
               if (!userPostSnaps.hasData) {
