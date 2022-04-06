@@ -77,6 +77,7 @@ class AuctionStarted extends StatelessWidget {
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(5),
                       child: Swiper(
+                        loop: false,
                         autoplay: true,
                         itemBuilder: (BuildContext context, int index) {
                           return CachedNetworkImage(
@@ -785,6 +786,7 @@ class AuctionPending extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(5),
                     child: Swiper(
+                      loop: false,
                       autoplay: true,
                       itemBuilder: (BuildContext context, int index) {
                         return CachedNetworkImage(

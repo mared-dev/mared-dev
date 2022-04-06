@@ -84,6 +84,7 @@ class _PostDetailsState extends State<PostDetails> {
                         videoUrl: widget.documentSnapshot['imageslist'][0],
                       )
                     : Swiper(
+                        loop: false,
                         itemBuilder: (BuildContext context, int index) {
                           return CachedNetworkImage(
                             fit: BoxFit.contain,

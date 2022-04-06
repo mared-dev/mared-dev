@@ -176,6 +176,7 @@ class PromotePostHelper with ChangeNotifier {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(5),
                         child: Swiper(
+                          loop: false,
                           itemBuilder: (BuildContext context, int index) {
                             return CachedNetworkImage(
                               fit: BoxFit.cover,

@@ -246,6 +246,7 @@ class AuctionFeedHelper with ChangeNotifier {
                                               0.44,
                                       width: MediaQuery.of(context).size.width,
                                       child: Swiper(
+                                        loop: false,
                                         itemBuilder:
                                             (BuildContext context, int index) {
                                           return CachedNetworkImage(

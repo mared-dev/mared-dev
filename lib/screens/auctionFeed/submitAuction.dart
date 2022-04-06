@@ -221,6 +221,7 @@ class _SubmitAuctionScreenState extends State<SubmitAuctionScreen> {
                         ],
                       )
                     : Swiper(
+                        loop: false,
                         autoplay: true,
                         itemBuilder: (BuildContext context, int index) {
                           return Image.file(

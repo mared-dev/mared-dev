@@ -33,6 +33,7 @@ class _ProfilePostItemState extends State<ProfilePostItem> {
                   errorWidget: (context, url, error) => const Icon(Icons.error),
                 )
               : Swiper(
+                  loop: false,
                   itemBuilder: (BuildContext context, int index) {
                     return CachedNetworkImage(
                       fit: BoxFit.cover,

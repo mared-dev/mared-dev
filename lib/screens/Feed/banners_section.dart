@@ -58,6 +58,7 @@ class _BannersSectionState extends State<BannersSection> {
             child: Stack(
               children: [
                 Swiper(
+                  loop: false,
                   onIndexChanged: (newIndex) {
                     var bannerItem = bannerSnap.data!.docs[newIndex];
                     selectedUser = UserModel(

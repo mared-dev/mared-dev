@@ -172,6 +172,7 @@ class AuctionMapHelper with ChangeNotifier {
                           height: MediaQuery.of(context).size.height * 0.44,
                           width: MediaQuery.of(context).size.width,
                           child: Swiper(
+                            loop: false,
                             itemBuilder: (BuildContext context, int index) {
                               return CachedNetworkImage(
                                 fit: BoxFit.cover,
