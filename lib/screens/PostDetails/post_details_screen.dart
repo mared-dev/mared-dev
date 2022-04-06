@@ -31,10 +31,6 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('---------------------');
-    print(widget.documentSnapshot['approvedForPosting']);
-    print('@@@@@@@@@@@@@@@');
-    print(widget.documentSnapshot['postid']);
     return Scaffold(
       backgroundColor: AppColors.backGroundColor,
       appBar: simpleAppBarWithBack(context,

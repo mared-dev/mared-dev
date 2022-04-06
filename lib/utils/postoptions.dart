@@ -122,8 +122,9 @@ class PostFunctions with ChangeNotifier {
                                           Navigator.of(context,
                                                   rootNavigator: true)
                                               .pop();
+                                          // Navigator.of(context).pop();
                                           Navigator.of(context).pop();
-                                          Navigator.of(context).pop();
+
                                           await Provider.of<FirebaseOperations>(
                                                   context,
                                                   listen: false)

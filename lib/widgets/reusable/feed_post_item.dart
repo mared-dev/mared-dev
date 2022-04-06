@@ -27,6 +27,7 @@ import 'package:mared_social/widgets/reusable/post_item_image.dart';
 import 'package:mared_social/widgets/reusable/post_likes_part.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:readmore/readmore.dart';
 
 class FeedPostItem extends StatefulWidget {
   final documentSnapshot;
@@ -124,7 +125,7 @@ class _FeedPostItemState extends State<FeedPostItem> {
                         widget.documentSnapshot['caption'],
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: regularTextStyle(
+                        style: semiBoldTextStyle(
                           textColor: AppColors.commentButtonColor,
                           fontSize: 14.sp,
                         ),
@@ -133,16 +134,23 @@ class _FeedPostItemState extends State<FeedPostItem> {
                     SizedBox(
                       height: 8.h,
                     ),
-                    SizedBox(
+                    Container(
                       width: MediaQuery.of(context).size.width,
-                      child: Text(
+                      child: ReadMoreText(
                         widget.documentSnapshot['description'],
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: lightTextStyle(
+                        textAlign: TextAlign.start,
+                        trimLines: 2,
+                        trimMode: TrimMode.Line,
+                        trimCollapsedText: 'Show more',
+                        trimExpandedText: 'Show less',
+                        style: regularTextStyle(
                           textColor: AppColors.commentButtonColor,
                           fontSize: 11.sp,
                         ),
+                        lessStyle: regularTextStyle(
+                            textColor: Colors.black26, fontSize: 11.sp),
+                        moreStyle: regularTextStyle(
+                            textColor: Colors.black26, fontSize: 11.sp),
                       ),
                     ),
                     SizedBox(

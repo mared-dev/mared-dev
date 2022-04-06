@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/helpers/post_helpers.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/utils/postoptions.dart';
 import 'package:mared_social/widgets/bottom_sheets/is_anon_bottom_sheet.dart';
@@ -154,8 +155,7 @@ class _PostDetailsState extends State<PostDetails> {
                       const Spacer(),
 
                       ///change here if you want the posts to be deleted by anyone
-                      Provider.of<Authentication>(context, listen: false)
-                                  .getUserId ==
+                      UserInfoManger.getUserId() ==
                               widget.documentSnapshot['useruid']
                           ? IconButton(
                               onPressed: () {

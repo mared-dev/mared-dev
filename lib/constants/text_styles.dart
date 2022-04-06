@@ -35,3 +35,15 @@ TextStyle semiBoldTextStyle(
       fontFamily: "Montserrat",
       fontWeight: FontWeight.w600);
 }
+
+TextStyle boldTextStyle(
+    {required double fontSize,
+    required Color textColor,
+    TextOverflow overflow = TextOverflow.ellipsis}) {
+  return TextStyle(
+      color: textColor,
+      fontSize: fontSize,
+      overflow: overflow,
+      fontFamily: "Montserrat",
+      fontWeight: FontWeight.w700);
+}

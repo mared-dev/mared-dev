@@ -85,6 +85,7 @@ dependencies:
   auto_size_text: ^3.0.0
   firebase_dynamic_links: ^4.1.1
   share_plus: ^4.0.3
+  readmore: ^2.1.0
 
 dev_dependencies:
   flutter_launcher_icons: "^0.9.2"
@@ -133,3 +134,5 @@ flutter:
           weight: 300
         - asset: assets/fonts/Montserrat/Montserrat-SemiBold.ttf
           weight: 600
+        - asset: assets/fonts/Montserrat/Montserrat-Bold.ttf
+          weight: 700

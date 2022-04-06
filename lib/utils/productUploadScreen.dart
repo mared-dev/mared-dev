@@ -146,10 +146,11 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
                     ),
                   ),
                   TextFormField(
-                    keyboardType: TextInputType.text,
-                    maxLines: 4,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
                     textCapitalization: TextCapitalization.words,
                     maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                    minLines: 3,
                     cursorColor: Colors.black,
                     decoration: getAuthInputDecoration(
                         hintText: "Give your picture a caption...",
