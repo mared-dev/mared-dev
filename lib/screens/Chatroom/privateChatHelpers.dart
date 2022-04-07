@@ -96,7 +96,7 @@ class PrivateChatHelpers with ChangeNotifier {
                       PageTransition(
                           child: PrivateMessage(
                               documentSnapshot: documentSnapshot),
-                          type: PageTransitionType.leftToRight));
+                          type: PageTransitionType.rightToLeft));
                 },
                 onLongPress: () {},
                 title: Text(

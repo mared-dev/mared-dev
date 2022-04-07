@@ -282,7 +282,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   context,
                                   PageTransition(
                                       child: const HomePage(),
-                                      type: PageTransitionType.bottomToTop),
+                                      type: PageTransitionType.rightToLeft),
                                 );
                               } catch (e) {
                                 CoolAlert.show(

@@ -74,7 +74,7 @@ class MyBids extends StatelessWidget {
                                 child: AuctionPage(
                                   auctionId: bidData['auctionid'],
                                 ),
-                                type: PageTransitionType.bottomToTop));
+                                type: PageTransitionType.rightToLeft));
                       },
                       trailing: StreamBuilder<QuerySnapshot>(
                         stream: FirebaseFirestore.instance

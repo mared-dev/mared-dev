@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
@@ -20,8 +21,7 @@ class UserResultItem extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8.0),
       child: ListTile(
         onTap: () {
-          if (userData['useruid'] !=
-              Provider.of<Authentication>(context, listen: false).getUserId) {
+          if (userData['useruid'] != UserInfoManger.getUserId()) {
             Navigator.push(
                 context,
                 PageTransition(
@@ -37,7 +37,7 @@ class UserResultItem extends StatelessWidget {
                           store: false),
                       userUid: userData['useruid'],
                     ),
-                    type: PageTransitionType.bottomToTop));
+                    type: PageTransitionType.rightToLeft));
           } else {
             IsAnonBottomSheet(context);
           }

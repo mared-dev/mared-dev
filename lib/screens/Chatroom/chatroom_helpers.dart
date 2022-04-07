@@ -435,7 +435,7 @@ class ChatroomHelpers with ChangeNotifier {
                       PageTransition(
                           child:
                               GroupMessage(documentSnapshot: documentSnapshot),
-                          type: PageTransitionType.leftToRight));
+                          type: PageTransitionType.rightToLeft));
                 },
                 onLongPress: () {
                   showChatroomDetails(

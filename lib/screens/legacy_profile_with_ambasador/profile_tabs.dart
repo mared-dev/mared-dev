@@ -43,7 +43,7 @@ class PostsProfile extends StatelessWidget {
                 context,
                 PageTransition(
                     child: UserSettingsPage(),
-                    type: PageTransitionType.leftToRight));
+                    type: PageTransitionType.rightToLeft));
           },
           icon: Icon(
             FontAwesomeIcons.cogs,

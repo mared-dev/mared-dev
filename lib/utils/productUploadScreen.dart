@@ -64,6 +64,7 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
   @override
   void dispose() {
     super.dispose();
+    _videoPlayerController.dispose();
   }
 
   @override
@@ -71,7 +72,11 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
     _videoPlayerController =
         VideoPlayerController.file(File(widget.multipleImages[0].path));
 
-    _videoPlayerController.initialize();
+    _videoPlayerController.initialize().then((value) {
+      if (mounted) {
+        setState(() {});
+      }
+    });
     super.initState();
   }
 
@@ -189,7 +194,7 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
                                 hint: Container(
                                   margin: EdgeInsets.only(right: 6.w),
                                   alignment: Alignment.centerLeft,
-                                  child: Text('choose a Category',
+                                  child: Text('choose a category',
                                       style: regularTextStyle(
                                           fontSize: 11,
                                           textColor:
@@ -271,7 +276,9 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
   }
 
   bool _canSharePost() {
-    return captionController.text.isNotEmpty &&
+    return _selectedCategory != null &&
+        _selectedCategory!.isNotEmpty &&
+        captionController.text.isNotEmpty &&
         descriptionController.text.isNotEmpty;
   }
 
@@ -407,14 +414,23 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
               items: widget.multipleImages.map((e) {
                 return Image.file(
                   File(e.path),
-                  width: size.width - 40.w,
-                  fit: BoxFit.fill,
+                  // width: size.width - 40.w,
+                  fit: BoxFit.cover,
                 );
               }).toList(),
             )
           : _videoPlayerController.value.isInitialized
-              ? VideoPlayer(
-                  _videoPlayerController,
+              ? GestureDetector(
+                  onTap: () {
+                    if (_videoPlayerController.value.isPlaying) {
+                      _videoPlayerController.pause();
+                    } else {
+                      _videoPlayerController.play();
+                    }
+                  },
+                  child: VideoPlayer(
+                    _videoPlayerController,
+                  ),
                 )
               : LoadingWidget(constantColors: constantColors),
     );
@@ -423,7 +439,7 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
   _sharePost() async {
     //let's comment address and category and make them optional for now
 
-    if (_formKey.currentState!.validate()) {
+    if (_selectedCategory!.isNotEmpty && _formKey.currentState!.validate()) {
       try {
         LoadingHelper.startLoading();
         String postId = nanoid(14).toString();

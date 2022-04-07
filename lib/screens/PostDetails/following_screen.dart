@@ -16,6 +16,8 @@ import 'package:mared_social/widgets/reusable/simple_appbar_with_back.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
+import '../Profile/profile.dart';
+
 class FollowingScreen extends StatefulWidget {
   final followingSnap;
 
@@ -126,7 +128,13 @@ class _FollowingScreenState extends State<FollowingScreen> {
                                       store: false),
                                   userUid: followingItem['useruid'],
                                 ),
-                                type: PageTransitionType.bottomToTop));
+                                type: PageTransitionType.rightToLeft));
+                      } else {
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                child: Profile(),
+                                type: PageTransitionType.rightToLeft));
                       }
                     });
               }).toList());

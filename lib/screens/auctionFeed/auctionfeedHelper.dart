@@ -236,7 +236,7 @@ class AuctionFeedHelper with ChangeNotifier {
                                                 documentSnapshot['auctionid'],
                                           ),
                                           type:
-                                              PageTransitionType.bottomToTop));
+                                              PageTransitionType.rightToLeft));
                                 },
                                 child: Stack(
                                   children: [

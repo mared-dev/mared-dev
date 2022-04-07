@@ -32,6 +32,8 @@ import 'package:mared_social/widgets/reusable/post_likes_part.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
+import '../../screens/Profile/profile.dart';
+
 class ReviewStoryItem extends StatefulWidget {
   final documentSnapshot;
 
@@ -79,7 +81,13 @@ class _ReviewStoryItemState extends State<ReviewStoryItem> {
                                         store: false),
                                     userUid: widget.documentSnapshot['useruid'],
                                   ),
-                                  type: PageTransitionType.bottomToTop));
+                                  type: PageTransitionType.rightToLeft));
+                        } else {
+                          Navigator.push(
+                              context,
+                              PageTransition(
+                                  child: Profile(),
+                                  type: PageTransitionType.rightToLeft));
                         }
                       },
                       child: SizedBox(
@@ -182,9 +190,7 @@ class _ReviewStoryItemState extends State<ReviewStoryItem> {
           children: [
             GestureDetector(
                 onTap: () {
-                  if (userId !=
-                      Provider.of<Authentication>(context, listen: false)
-                          .getUserId) {
+                  if (userId != UserInfoManger.getUserId()) {
                     Navigator.push(
                         context,
                         PageTransition(
@@ -201,7 +207,13 @@ class _ReviewStoryItemState extends State<ReviewStoryItem> {
                                   store: false),
                               userUid: userId,
                             ),
-                            type: PageTransitionType.bottomToTop));
+                            type: PageTransitionType.rightToLeft));
+                  } else {
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            child: Profile(),
+                            type: PageTransitionType.rightToLeft));
                   }
                 },
                 child: Text(userName,

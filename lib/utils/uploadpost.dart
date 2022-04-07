@@ -8,11 +8,11 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/models/enums/post_type.dart';
+import 'package:mared_social/screens/Stories/preview_picked_video.dart';
 import 'package:mared_social/services/firebase/firebase_file_upload_service.dart';
 import 'package:mared_social/utils/pick_files_helper.dart';
 import 'package:mared_social/utils/productUploadCameraScreen.dart';
 import 'package:mared_social/utils/productUploadScreen.dart';
-import 'package:mared_social/widgets/bottom_sheets.dart';
 import 'package:mared_social/widgets/bottom_sheets/confirm_post_image_video.dart';
 import 'package:mared_social/widgets/reusable/bottom_sheet_top_divider.dart';
 import 'package:mared_social/widgets/reusable/simple_button_icon.dart';
@@ -98,30 +98,31 @@ class UploadPost with ChangeNotifier {
                               //START HERE
                               await _videoPlayerController.initialize();
                               _videoPlayerController.play();
-                              previewStoryImage(
-                                  video: _video,
-                                  context: context,
-                                  videoPlayerController: _videoPlayerController,
-                                  onCompleteCallback: ({String? videoUrl}) {
-                                    print('@@@@@@@@@@@@');
-                                    print(videoUrl);
-                                    Navigator.of(context).pop();
-                                    Navigator.of(context).pop();
-                                    Navigator.of(context).pop();
+                              pushNewScreen(context,
+                                  screen: PreviewPickedVideo(
+                                      video: _video!,
+                                      videoPlayerController:
+                                          _videoPlayerController,
+                                      onCompleteCallback: ({String? videoUrl}) {
+                                        print('@@@@@@@@@@@@');
+                                        print(videoUrl);
+                                        Navigator.of(context).pop();
+                                        Navigator.of(context).pop();
+                                        Navigator.of(context).pop();
 
-                                    pushNewScreen(
-                                      context,
-                                      screen: PostUploadScreen(
-                                        multipleImages: [_video!],
-                                        imagesList: [videoUrl!],
-                                        postType: PostType.VIDEO,
-                                      ),
-                                      withNavBar:
-                                          false, // OPTIONAL VALUE. True by default.
-                                      pageTransitionAnimation:
-                                          PageTransitionAnimation.cupertino,
-                                    );
-                                  });
+                                        pushNewScreen(
+                                          context,
+                                          screen: PostUploadScreen(
+                                            multipleImages: [_video!],
+                                            imagesList: [videoUrl!],
+                                            postType: PostType.VIDEO,
+                                          ),
+                                          withNavBar:
+                                              false, // OPTIONAL VALUE. True by default.
+                                          pageTransitionAnimation:
+                                              PageTransitionAnimation.cupertino,
+                                        );
+                                      }));
                               // Navigator.push(
                               //     context,
                               //     PageTransition(
@@ -158,28 +159,29 @@ class UploadPost with ChangeNotifier {
 
                             await _videoPlayerController.initialize();
                             _videoPlayerController.play();
-                            previewStoryImage(
-                                video: _video,
-                                context: context,
-                                videoPlayerController: _videoPlayerController,
-                                onCompleteCallback: ({String? videoUrl}) {
-                                  Navigator.of(context).pop();
-                                  Navigator.of(context).pop();
-                                  Navigator.of(context).pop();
+                            pushNewScreen(context,
+                                screen: PreviewPickedVideo(
+                                    video: _video!,
+                                    videoPlayerController:
+                                        _videoPlayerController,
+                                    onCompleteCallback: ({String? videoUrl}) {
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
 
-                                  pushNewScreen(
-                                    context,
-                                    screen: PostUploadScreen(
-                                      multipleImages: [_video!],
-                                      imagesList: [videoUrl!],
-                                      postType: PostType.VIDEO,
-                                    ),
-                                    withNavBar:
-                                        false, // OPTIONAL VALUE. True by default.
-                                    pageTransitionAnimation:
-                                        PageTransitionAnimation.cupertino,
-                                  );
-                                });
+                                      pushNewScreen(
+                                        context,
+                                        screen: PostUploadScreen(
+                                          multipleImages: [_video!],
+                                          imagesList: [videoUrl!],
+                                          postType: PostType.VIDEO,
+                                        ),
+                                        withNavBar:
+                                            false, // OPTIONAL VALUE. True by default.
+                                        pageTransitionAnimation:
+                                            PageTransitionAnimation.cupertino,
+                                      );
+                                    }));
                           }
                         }
                       },

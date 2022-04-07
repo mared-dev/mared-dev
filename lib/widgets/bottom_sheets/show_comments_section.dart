@@ -14,6 +14,8 @@ import 'package:nanoid/async.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
+import '../../screens/Profile/profile.dart';
+
 //move later to constants file
 final FCMNotificationService _fcmNotificationService = FCMNotificationService();
 
@@ -104,9 +106,7 @@ class _CommentsSectionState extends State<CommentsSection> {
                                   child: InkWell(
                                     onTap: () {
                                       if (commentDocSnap['useruid'] !=
-                                          Provider.of<Authentication>(context,
-                                                  listen: false)
-                                              .getUserId) {
+                                          UserInfoManger.getUserId()) {
                                         Navigator.pushReplacement(
                                             context,
                                             PageTransition(
@@ -127,6 +127,13 @@ class _CommentsSectionState extends State<CommentsSection> {
                                                   userUid:
                                                       commentDocSnap['useruid'],
                                                 ),
+                                                type: PageTransitionType
+                                                    .bottomToTop));
+                                      } else {
+                                        Navigator.pushReplacement(
+                                            context,
+                                            PageTransition(
+                                                child: Profile(),
                                                 type: PageTransitionType
                                                     .bottomToTop));
                                       }

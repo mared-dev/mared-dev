@@ -9,6 +9,7 @@ import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/PostDetails/post_details_screen.dart';
+import 'package:mared_social/screens/Profile/profile.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:get/get.dart';
@@ -195,6 +196,13 @@ class SwiperIndicator extends StatelessWidget {
                     context,
                     screen: AltProfile(
                         userUid: selectedUserId, userModel: userModel),
+                    withNavBar: false, // OPTIONAL VALUE. True by default.
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
+                } else {
+                  pushNewScreen(
+                    context,
+                    screen: Profile(),
                     withNavBar: false, // OPTIONAL VALUE. True by default.
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                   );

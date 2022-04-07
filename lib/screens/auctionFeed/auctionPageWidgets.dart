@@ -623,7 +623,7 @@ class AuctionStarted extends StatelessWidget {
                                     child: AuctionProductMapScreen(
                                         docSnap: auctionDocSnap,
                                         docSnapId: auctionDocSnap.id),
-                                    type: PageTransitionType.leftToRight));
+                                    type: PageTransitionType.rightToLeft));
                           },
                           child: Stack(
                             children: [

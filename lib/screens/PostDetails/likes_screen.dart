@@ -16,6 +16,8 @@ import 'package:mared_social/widgets/reusable/simple_appbar_with_back.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
+import '../Profile/profile.dart';
+
 class LikesScreen extends StatefulWidget {
   final likes;
 
@@ -124,7 +126,13 @@ class _LikesScreenState extends State<LikesScreen> {
                                       store: false),
                                   userUid: likeItem['useruid'],
                                 ),
-                                type: PageTransitionType.bottomToTop));
+                                type: PageTransitionType.rightToLeft));
+                      } else {
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                child: Profile(),
+                                type: PageTransitionType.rightToLeft));
                       }
                     });
               }).toList());

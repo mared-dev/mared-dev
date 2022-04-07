@@ -21,6 +21,8 @@ import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:video_player/video_player.dart';
 
+import '../Profile/profile.dart';
+
 class Stories extends StatefulWidget {
   final AsyncSnapshot<QuerySnapshot> querySnapshot;
   int snapIndex;
@@ -72,11 +74,7 @@ class _StoriesState extends State<Stories> {
           },
           onPanUpdate: (update) {
             if (update.delta.dx > 0) {
-              Navigator.pushReplacement(
-                context,
-                PageTransition(
-                    child: HomePage(), type: PageTransitionType.topToBottom),
-              );
+              Navigator.of(context).pop();
             }
           },
           onLongPress: () {
@@ -117,12 +115,7 @@ class _StoriesState extends State<Stories> {
                     if (indexCheck ==
                         widget.querySnapshot.data!.docs.length - 1) {
                       _controller!.dispose();
-                      Navigator.pushReplacement(
-                        context,
-                        PageTransition(
-                            child: HomePage(),
-                            type: PageTransitionType.topToBottom),
-                      );
+                      Navigator.of(context).pop();
                     }
 
                     _controller!.dispose();
@@ -150,12 +143,7 @@ class _StoriesState extends State<Stories> {
                   onTap: () async {
                     if (indexCheck == 0) {
                       _controller!.dispose();
-                      Navigator.pushReplacement(
-                        context,
-                        PageTransition(
-                            child: HomePage(),
-                            type: PageTransitionType.topToBottom),
-                      );
+                      Navigator.of(context).pop();
                     }
 
                     _controller!.dispose();
@@ -215,7 +203,13 @@ class _StoriesState extends State<Stories> {
                                       userUid: widget.querySnapshot.data!
                                           .docs[widget.snapIndex]['useruid'],
                                     ),
-                                    type: PageTransitionType.bottomToTop));
+                                    type: PageTransitionType.rightToLeft));
+                          } else {
+                            Navigator.push(
+                                context,
+                                PageTransition(
+                                    child: Profile(),
+                                    type: PageTransitionType.rightToLeft));
                           }
                         },
                         child: SizedBox(
@@ -426,14 +420,8 @@ class _StoriesState extends State<Stories> {
                                                               .id)
                                                           .delete()
                                                           .whenComplete(() {
-                                                        Navigator
-                                                            .pushReplacement(
-                                                          context,
-                                                          PageTransition(
-                                                              child: HomePage(),
-                                                              type: PageTransitionType
-                                                                  .topToBottom),
-                                                        );
+                                                        Navigator.of(context)
+                                                            .pop();
                                                       });
                                                     });
                                                   } catch (e) {
@@ -486,11 +474,7 @@ class _StoriesState extends State<Stories> {
     while (_controller!.value.position == _controller!.value.duration) {
       if (indexCheck == widget.querySnapshot.data!.docs.length - 1) {
         _controller!.dispose();
-        Navigator.pushReplacement(
-          context,
-          PageTransition(
-              child: HomePage(), type: PageTransitionType.topToBottom),
-        );
+        Navigator.of(context).pop();
       }
 
       _controller!.dispose();

@@ -9,6 +9,7 @@ import 'package:mared_social/constants/text_styles.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
+import 'package:mared_social/screens/Profile/profile.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:mared_social/widgets/reusable/interacted_user_item.dart';
@@ -126,7 +127,13 @@ class _FollowersScreenState extends State<FollowersScreen> {
                                       store: false),
                                   userUid: followerItem['useruid'],
                                 ),
-                                type: PageTransitionType.bottomToTop));
+                                type: PageTransitionType.rightToLeft));
+                      } else {
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                child: Profile(),
+                                type: PageTransitionType.rightToLeft));
                       }
                     });
               }).toList());

@@ -77,7 +77,7 @@ class IsAnonHelper with ChangeNotifier {
                 context,
                 PageTransition(
                     child: LandingPage(),
-                    type: PageTransitionType.bottomToTop));
+                    type: PageTransitionType.rightToLeft));
           });
         },
         child: Container(

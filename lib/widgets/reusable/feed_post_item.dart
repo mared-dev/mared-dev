@@ -11,8 +11,10 @@ import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/constants/text_styles.dart';
 import 'package:mared_social/helpers/post_helpers.dart';
 import 'package:mared_social/helpers/time_helpers.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
+import 'package:mared_social/screens/Profile/profile.dart';
 import 'package:mared_social/screens/isAnon/isAnon.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/utils/postoptions.dart';
@@ -57,8 +59,7 @@ class _FeedPostItemState extends State<FeedPostItem> {
                     GestureDetector(
                       onTap: () {
                         if (widget.documentSnapshot['useruid'] !=
-                            Provider.of<Authentication>(context, listen: false)
-                                .getUserId) {
+                            UserInfoManger.getUserId()) {
                           Navigator.push(
                               context,
                               PageTransition(
@@ -77,7 +78,13 @@ class _FeedPostItemState extends State<FeedPostItem> {
                                         store: false),
                                     userUid: widget.documentSnapshot['useruid'],
                                   ),
-                                  type: PageTransitionType.bottomToTop));
+                                  type: PageTransitionType.rightToLeft));
+                        } else {
+                          Navigator.push(
+                              context,
+                              PageTransition(
+                                  child: Profile(),
+                                  type: PageTransitionType.rightToLeft));
                         }
                       },
                       child: SizedBox(
@@ -229,9 +236,7 @@ class _FeedPostItemState extends State<FeedPostItem> {
           children: [
             GestureDetector(
                 onTap: () {
-                  if (userId !=
-                      Provider.of<Authentication>(context, listen: false)
-                          .getUserId) {
+                  if (userId != UserInfoManger.getUserId()) {
                     Navigator.push(
                         context,
                         PageTransition(
@@ -248,7 +253,13 @@ class _FeedPostItemState extends State<FeedPostItem> {
                                   store: false),
                               userUid: userId,
                             ),
-                            type: PageTransitionType.bottomToTop));
+                            type: PageTransitionType.rightToLeft));
+                  } else {
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            child: Profile(),
+                            type: PageTransitionType.rightToLeft));
                   }
                 },
                 child: Text(userName,

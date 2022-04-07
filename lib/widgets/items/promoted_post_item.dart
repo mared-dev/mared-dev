@@ -42,7 +42,7 @@ class PromotedPostItem extends StatelessWidget {
               context,
               PageTransition(
                   child: SeeVideo(documentSnapshot: workData),
-                  type: PageTransitionType.bottomToTop));
+                  type: PageTransitionType.rightToLeft));
         },
         child: Stack(
           children: [

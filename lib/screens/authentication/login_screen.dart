@@ -116,7 +116,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       PageTransition(
                                           child: ForgotPasswordScreen(),
                                           type:
-                                              PageTransitionType.bottomToTop));
+                                              PageTransitionType.rightToLeft));
                                 },
                                 child: Padding(
                                   padding:

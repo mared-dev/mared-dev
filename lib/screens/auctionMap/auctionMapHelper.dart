@@ -164,7 +164,7 @@ class AuctionMapHelper with ChangeNotifier {
                               child: AuctionPage(
                                 auctionId: documentSnapshot['auctionid'],
                               ),
-                              type: PageTransitionType.bottomToTop));
+                              type: PageTransitionType.rightToLeft));
                     },
                     child: Stack(
                       children: [

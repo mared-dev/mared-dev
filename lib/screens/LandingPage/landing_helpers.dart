@@ -223,7 +223,7 @@ class LandingHelpers {
 
       Navigator.pushReplacement(
         context,
-        PageTransition(child: HomePage(), type: PageTransitionType.bottomToTop),
+        PageTransition(child: HomePage(), type: PageTransitionType.rightToLeft),
       );
     } catch (e) {
       CoolAlert.show(

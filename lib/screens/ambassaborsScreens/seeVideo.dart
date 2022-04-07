@@ -157,7 +157,7 @@ class _SeeVideoState extends State<SeeVideo> {
                                         userUid:
                                             widget.documentSnapshot['useruid'],
                                       ),
-                                      type: PageTransitionType.bottomToTop));
+                                      type: PageTransitionType.rightToLeft));
                             },
                             child: SizedBox(
                               height: 50,

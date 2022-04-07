@@ -12,6 +12,7 @@ import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/constants/text_styles.dart';
 import 'package:mared_social/helpers/post_helpers.dart';
 import 'package:mared_social/helpers/time_helpers.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/isAnon/isAnon.dart';
@@ -30,6 +31,8 @@ import 'package:mared_social/widgets/reusable/post_item_image.dart';
 import 'package:mared_social/widgets/reusable/post_likes_part.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+
+import '../../screens/Profile/profile.dart';
 
 class ReviewPostItem extends StatefulWidget {
   final documentSnapshot;
@@ -59,8 +62,7 @@ class _ReviewPostItemState extends State<ReviewPostItem> {
                   GestureDetector(
                     onTap: () {
                       if (widget.documentSnapshot['useruid'] !=
-                          Provider.of<Authentication>(context, listen: false)
-                              .getUserId) {
+                          UserInfoManger.getUserId()) {
                         Navigator.push(
                             context,
                             PageTransition(
@@ -79,7 +81,13 @@ class _ReviewPostItemState extends State<ReviewPostItem> {
                                       store: false),
                                   userUid: widget.documentSnapshot['useruid'],
                                 ),
-                                type: PageTransitionType.bottomToTop));
+                                type: PageTransitionType.rightToLeft));
+                      } else {
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                child: Profile(),
+                                type: PageTransitionType.rightToLeft));
                       }
                     },
                     child: SizedBox(
@@ -225,9 +233,7 @@ class _ReviewPostItemState extends State<ReviewPostItem> {
           children: [
             GestureDetector(
                 onTap: () {
-                  if (userId !=
-                      Provider.of<Authentication>(context, listen: false)
-                          .getUserId) {
+                  if (userId != UserInfoManger.getUserId()) {
                     Navigator.push(
                         context,
                         PageTransition(
@@ -244,7 +250,13 @@ class _ReviewPostItemState extends State<ReviewPostItem> {
                                   store: false),
                               userUid: userId,
                             ),
-                            type: PageTransitionType.bottomToTop));
+                            type: PageTransitionType.rightToLeft));
+                  } else {
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            child: Profile(),
+                            type: PageTransitionType.rightToLeft));
                   }
                 },
                 child: Text(userName,

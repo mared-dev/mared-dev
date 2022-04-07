@@ -7,8 +7,10 @@ import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/constants/text_styles.dart';
 import 'package:mared_social/helpers/loading_helper.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
+import 'package:mared_social/screens/Profile/profile.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:mared_social/widgets/bottom_sheets/is_anon_bottom_sheet.dart';
@@ -83,9 +85,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                         ),
                         leadingCallback: () {
                           if (commentItem['useruid'] !=
-                              Provider.of<Authentication>(context,
-                                      listen: false)
-                                  .getUserId) {
+                              UserInfoManger.getUserId()) {
                             Navigator.push(
                                 context,
                                 PageTransition(
@@ -101,7 +101,13 @@ class _CommentsScreenState extends State<CommentsScreen> {
                                           store: false),
                                       userUid: commentItem['useruid'],
                                     ),
-                                    type: PageTransitionType.bottomToTop));
+                                    type: PageTransitionType.rightToLeft));
+                          } else {
+                            Navigator.push(
+                                context,
+                                PageTransition(
+                                    child: Profile(),
+                                    type: PageTransitionType.rightToLeft));
                           }
                         }))
                     .toList()),

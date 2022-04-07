@@ -43,7 +43,7 @@ class GroupMessageHelper with ChangeNotifier {
           Navigator.pushReplacement(
               context,
               PageTransition(
-                  child: HomePage(), type: PageTransitionType.bottomToTop));
+                  child: HomePage(), type: PageTransitionType.rightToLeft));
         });
       },
     );
@@ -319,7 +319,7 @@ class GroupMessageHelper with ChangeNotifier {
                     context,
                     PageTransition(
                         child: HomePage(),
-                        type: PageTransitionType.bottomToTop));
+                        type: PageTransitionType.rightToLeft));
               },
               child: Text(
                 "No",

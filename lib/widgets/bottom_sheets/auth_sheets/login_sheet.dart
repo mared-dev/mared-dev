@@ -151,7 +151,7 @@ LoginSheet(BuildContext context) {
                                   context,
                                   PageTransition(
                                       child: HomePage(),
-                                      type: PageTransitionType.bottomToTop),
+                                      type: PageTransitionType.rightToLeft),
                                 );
                               } catch (e) {
                                 CoolAlert.show(
