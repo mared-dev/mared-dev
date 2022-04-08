@@ -151,7 +151,6 @@ class StoryWidgets {
         return SafeArea(
           bottom: true,
           child: Container(
-            height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               color: constantColors.darkColor,
@@ -169,13 +168,17 @@ class StoryWidgets {
                     height: MediaQuery.of(context).size.height,
                     width: MediaQuery.of(context).size.width,
                     color: constantColors.whiteColor,
-                    child: AspectRatio(
-                      aspectRatio: 16 / 9,
-                      child: _videoPlayerController!.value.isInitialized
-                          ? VideoPlayer(
-                              _videoPlayerController!,
-                            )
-                          : LoadingWidget(constantColors: constantColors),
+                    child: FittedBox(
+                      fit: BoxFit.cover,
+                      child: SizedBox(
+                        height: _videoPlayerController!.value.size.height,
+                        width: _videoPlayerController!.value.size.width,
+                        child: _videoPlayerController!.value.isInitialized
+                            ? VideoPlayer(
+                                _videoPlayerController!,
+                              )
+                            : LoadingWidget(constantColors: constantColors),
+                      ),
                     ),
                     // child: Image.file(storyImage),
                   ),
