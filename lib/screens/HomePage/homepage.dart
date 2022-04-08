@@ -30,6 +30,8 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../Profile/profileHelpers.dart';
+
 class HomePage extends StatefulWidget {
   const HomePage({
     Key? key,
@@ -168,6 +170,13 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: AppColors.backGroundColor,
       body: PersistentTabView(context,
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Provider.of<ProfileHelpers>(context, listen: false)
+                  .postSelectType(context: context);
+            },
+            child: SvgPicture.asset('assets/icons/home_add_post_button.svg'),
+          ),
           stateManagement: true,
           margin: EdgeInsets.only(top: 10.h),
           controller: _controller,

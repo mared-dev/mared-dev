@@ -84,6 +84,8 @@ class PostsProfile extends StatelessWidget {
                             );
                           },
                           child: ProfilePostItem(
+                            isVideo: PostHelpers.checkIfPostIsVideo(
+                                item['imageslist']),
                             urls: PostHelpers.checkIfPostIsVideo(
                                     item['imageslist'])
                                 ? [item['thumbnail']]

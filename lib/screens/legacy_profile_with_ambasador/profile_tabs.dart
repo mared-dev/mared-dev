@@ -153,6 +153,8 @@ class PostsProfile extends StatelessWidget {
                                   documentSnapshot: userPostDocSnap);
                             },
                             child: ProfilePostItem(
+                              isVideo: PostHelpers.checkIfPostIsVideo(
+                                  userPostDocSnap['imageslist']),
                               urls: PostHelpers.checkIfPostIsVideo(
                                       userPostDocSnap['imageslist'])
                                   ? [userPostDocSnap['thumbnail']]
