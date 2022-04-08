@@ -151,7 +151,7 @@ class _StoriesState extends State<Stories> {
                       indexCheck = indexCheck - 1;
                     });
 
-                    _controller = await VideoPlayerController.network(
+                    _controller = VideoPlayerController.network(
                         widget.querySnapshot.data!.docs[indexCheck]['videourl'])
                       ..initialize().then((_) {
                         // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
