@@ -61,12 +61,14 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
 
   PickResult? selectedPlace;
 
-  late VideoPlayerController _videoPlayerController;
+  VideoPlayerController? _videoPlayerController;
 
   @override
   void dispose() {
     super.dispose();
-    _videoPlayerController.dispose();
+    if (_videoPlayerController != null) {
+      _videoPlayerController!.dispose();
+    }
   }
 
   @override
@@ -75,7 +77,7 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
       _videoPlayerController =
           VideoPlayerController.file(File(widget.multipleImages[0].path));
 
-      _videoPlayerController.initialize().then((value) {
+      _videoPlayerController!.initialize().then((value) {
         if (mounted) {
           setState(() {});
         }
