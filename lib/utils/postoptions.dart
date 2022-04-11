@@ -2,9 +2,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/constants/colors.dart';
+import 'package:mared_social/constants/general_styles.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
@@ -13,6 +16,7 @@ import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart'
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/fcm_notification_Service.dart';
 import 'package:mared_social/widgets/bottom_sheets/is_anon_bottom_sheet.dart';
+import 'package:mared_social/widgets/reusable/bottom_sheet_top_divider.dart';
 import 'package:nanoid/nanoid.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -25,6 +29,7 @@ class PostFunctions with ChangeNotifier {
   late String imageTimePosted;
   String get getImageTimePosted => imageTimePosted;
   TextEditingController updateDescriptionController = TextEditingController();
+  TextEditingController updateTitleController = TextEditingController();
 
   getImageDescription(dynamic description) {
     updateDescriptionController.text = description;
@@ -184,84 +189,82 @@ class PostFunctions with ChangeNotifier {
     );
   }
 
-  Future<dynamic> editCaptionText(BuildContext context,
-      AsyncSnapshot<DocumentSnapshot<Object?>> postDocSnap, String postId) {
+  Future<dynamic> editCaptionText(
+      BuildContext context, postDocSnap, String postId) {
+    updateDescriptionController.text = postDocSnap['description'];
+    updateTitleController.text = postDocSnap['caption'];
     return showModalBottomSheet(
+      //to show it on top of the persistent bottom navbar and its components
+      useRootNavigator: true,
+      isScrollControlled: true,
       context: context,
       builder: (context) {
-        return SafeArea(
-          bottom: true,
-          child: Padding(
-            padding: EdgeInsets.only(
-                bottom: MediaQuery.of(context).viewInsets.bottom),
-            child: Container(
-              height: MediaQuery.of(context).size.height * 0.3,
-              width: MediaQuery.of(context).size.width,
-              decoration: BoxDecoration(
-                color: constantColors.blueGreyColor,
-                borderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(12),
-                  topRight: Radius.circular(12),
+        return Padding(
+          padding:
+              EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+          child: Container(
+            height: MediaQuery.of(context).size.height * 0.45,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              color: AppColors.commentButtonColor,
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+            ),
+            child: Column(
+              children: [
+                BottomSheetTopDivider(),
+                SizedBox(
+                  height: 34.h,
                 ),
-              ),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 150),
-                    child: Divider(
-                      thickness: 4,
-                      color: constantColors.whiteColor,
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 38.w),
+                  child: TextField(
+                    maxLines: 1,
+                    controller: updateTitleController,
+                    decoration: getAuthInputDecoration(
+                      verticalContentPadding: 11.h,
+                      hintText: 'Title',
                     ),
                   ),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.05,
-                  ),
-                  Center(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: SizedBox(
-                            width: 300,
-                            height: 50,
-                            child: TextField(
-                              maxLines: 5,
-                              controller: updateDescriptionController,
-                              style: TextStyle(
-                                color: constantColors.whiteColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 16,
-                              ),
-                            ),
-                          ),
-                        ),
-                        FloatingActionButton(
-                          backgroundColor: constantColors.greenColor,
-                          child: Icon(
-                            FontAwesomeIcons.fileUpload,
-                            color: constantColors.whiteColor,
-                          ),
-                          onPressed: () {
-                            Provider.of<FirebaseOperations>(context,
-                                    listen: false)
-                                .updateDescription(
-                                    postDoc: postDocSnap,
-                                    context: context,
-                                    postId: postId,
-                                    description:
-                                        updateDescriptionController.text)
-                                .whenComplete(() {
-                              Navigator.pop(context);
-                              Navigator.pop(context);
-                            });
-                          },
-                        ),
-                      ],
+                ),
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 38.w, vertical: 25.h),
+                  child: TextField(
+                    maxLines: 3,
+                    minLines: 3,
+                    controller: updateDescriptionController,
+                    decoration: getAuthInputDecoration(
+                      verticalContentPadding: 11.h,
+                      hintText: 'Description',
                     ),
                   ),
-                ],
-              ),
+                ),
+                ElevatedButton(
+                  onPressed: () async {
+                    Provider.of<FirebaseOperations>(context, listen: false)
+                        .updateDescription(
+                            postDoc: postDocSnap,
+                            context: context,
+                            postId: postId,
+                            title: updateTitleController.text,
+                            description: updateDescriptionController.text)
+                        .whenComplete(() {
+                      Navigator.pop(context);
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 22.w, vertical: 14.h),
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(6)),
+                      ),
+                      primary: AppColors.accentColor),
+                  child: Text('Save changes'),
+                ),
+              ],
             ),
           ),
         );

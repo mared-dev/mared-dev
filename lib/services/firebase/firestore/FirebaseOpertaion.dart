@@ -368,10 +368,11 @@ class FirebaseOperations with ChangeNotifier {
 
   Future updateDescription(
       {required String postId,
-      required AsyncSnapshot<DocumentSnapshot> postDoc,
-      String? description,
+      required var postDoc,
+      required String description,
+      required String title,
       required BuildContext context}) async {
-    String name = "${postDoc.data!['caption']} ${description}";
+    String name = "${postDoc['caption']} ${description}";
 
     List<String> splitList = name.split(" ");
     List<String> indexList = [];
@@ -385,12 +386,13 @@ class FirebaseOperations with ChangeNotifier {
         .collection("posts")
         .doc(postId)
         .update({
+      'caption': title,
       'description': description,
       'searchindex': indexList,
     }).whenComplete(() async {
       return await FirebaseFirestore.instance
           .collection("users")
-          .doc(Provider.of<Authentication>(context, listen: false).getUserId)
+          .doc(UserInfoManger.getUserId())
           .collection("posts")
           .doc(postId)
           .update({

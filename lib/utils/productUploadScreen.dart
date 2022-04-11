@@ -336,8 +336,22 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
                           onPlacePicked: (result) {
                             selectedPlace = result;
 
+                            String addressToShow = "";
+                            int numOfComponents =
+                                result.addressComponents!.length;
+                            try {
+                              addressToShow = 'UAE, ' +
+                                  result.addressComponents![numOfComponents - 2]
+                                      .shortName +
+                                  ', ' +
+                                  result.addressComponents![numOfComponents - 4]
+                                      .shortName;
+                            } catch (e) {
+                              addressToShow = 'UAE, Dubai';
+                            }
+
                             Navigator.pop(context, {
-                              "address": result.formattedAddress,
+                              "address": addressToShow,
                               "lat": result.geometry!.location.lat,
                               "lng": result.geometry!.location.lng
                             });

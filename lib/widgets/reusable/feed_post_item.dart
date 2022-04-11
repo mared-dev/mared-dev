@@ -1,3 +1,5 @@
+import 'package:cool_alert/cool_alert.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
@@ -17,6 +19,7 @@ import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/Profile/profile.dart';
 import 'package:mared_social/screens/isAnon/isAnon.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
+import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:mared_social/utils/postoptions.dart';
 import 'package:mared_social/widgets/bottom_sheets/show_comments_section.dart';
 import 'package:mared_social/widgets/items/post_share_part.dart';
@@ -42,6 +45,7 @@ class FeedPostItem extends StatefulWidget {
 }
 
 class _FeedPostItemState extends State<FeedPostItem> {
+  List<String> _editPostOptions = ['Edit post', 'Delete post'];
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -105,10 +109,24 @@ class _FeedPostItemState extends State<FeedPostItem> {
                       ),
                     ),
                     Expanded(
-                      child: _postHeader(
-                          userName: widget.documentSnapshot['username'],
-                          address: widget.documentSnapshot['address'],
-                          userId: widget.documentSnapshot['useruid']),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: _postHeader(
+                                userName: widget.documentSnapshot['username'],
+                                address: widget.documentSnapshot['address'],
+                                userId: widget.documentSnapshot['useruid']),
+                          ),
+                          UserInfoManger.getUserId() ==
+                                  widget.documentSnapshot['useruid']
+                              ? _editPostSection()
+                              : const SizedBox(
+                                  height: 0,
+                                  width: 0,
+                                ),
+                        ],
+                      ),
                     )
                   ],
                 ),
@@ -184,6 +202,69 @@ class _FeedPostItemState extends State<FeedPostItem> {
         ));
   }
 
+  Widget _editPostSection() {
+    return DropdownButtonHideUnderline(
+      child: DropdownButton2(
+        customButton:
+            Icon(EvaIcons.moreVertical, color: AppColors.commentButtonColor),
+        customItemsHeight: 8,
+        items: [
+          ..._editPostOptions.map(
+            (item) => DropdownMenuItem<String>(
+              value: item,
+              child: Text(item),
+            ),
+          ),
+        ],
+        onChanged: (String? value) {
+          if (value == _editPostOptions[0]) {
+            // Provider.of<PostFunctions>(context, listen: false).showPostOptions(
+            //     context: context, postId: widget.documentSnapshot['postid']);
+
+            Provider.of<PostFunctions>(context, listen: false).editCaptionText(
+                context,
+                widget.documentSnapshot,
+                widget.documentSnapshot['postid']);
+          } else if (value == _editPostOptions[1]) {
+            CoolAlert.show(
+              context: context,
+              type: CoolAlertType.warning,
+              confirmBtnText: "Delete",
+              cancelBtnText: "Keep Post",
+              showCancelBtn: true,
+              title: "Delete this post?",
+              onConfirmBtnTap: () async {
+                Navigator.of(context, rootNavigator: true).pop();
+                // Navigator.of(context).pop();
+                Navigator.of(context).pop();
+
+                await Provider.of<FirebaseOperations>(context, listen: false)
+                    .deletePostData(
+                  userUid: widget.documentSnapshot['useruid'],
+                  postId: widget.documentSnapshot['postid'],
+                );
+              },
+              onCancelBtnTap: () {
+                Navigator.of(context, rootNavigator: true).pop();
+              },
+            );
+          }
+          // MenuItems.onChanged(context, value as MenuItem);
+        },
+        itemHeight: 48,
+        itemPadding: const EdgeInsets.only(left: 16, right: 16),
+        dropdownWidth: 160,
+        dropdownPadding: const EdgeInsets.symmetric(vertical: 6),
+        dropdownDecoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4),
+          color: Colors.white,
+        ),
+        dropdownElevation: 8,
+        offset: const Offset(0, 8),
+      ),
+    );
+  }
+
   Widget _postFooter({
     required documentSnapshot,
   }) {
@@ -200,25 +281,6 @@ class _FeedPostItemState extends State<FeedPostItem> {
           PostCommentsPart(documentSnapshot: documentSnapshot),
           PostSharePart(postId: documentSnapshot['postid']),
           const Spacer(),
-          Provider.of<Authentication>(context, listen: false).getUserId ==
-                  documentSnapshot['useruid']
-              ? IconButton(
-                  onPressed: () {
-                    Provider.of<PostFunctions>(context, listen: false)
-                        .showPostOptions(
-                            context: context,
-                            postId: documentSnapshot['postid']);
-
-                    Provider.of<PostFunctions>(context, listen: false)
-                        .getImageDescription(documentSnapshot['description']);
-                  },
-                  icon: Icon(EvaIcons.moreVertical,
-                      color: AppColors.commentButtonColor),
-                )
-              : const SizedBox(
-                  height: 0,
-                  width: 0,
-                ),
         ],
       ),
     );
@@ -297,3 +359,49 @@ class _FeedPostItemState extends State<FeedPostItem> {
     );
   }
 }
+
+// class MenuItem {
+//   final String text;
+//   final IconData icon;
+//
+//   const MenuItem({
+//     required this.text,
+//     required this.icon,
+//   });
+// }
+//
+// class MenuItems {
+//   static const List<MenuItem> firstItems = [home, share, settings];
+//   static const List<MenuItem> secondItems = [logout];
+//
+//   static const home = MenuItem(text: 'Home', icon: Icons.home);
+//   static const share = MenuItem(text: 'Share', icon: Icons.share);
+//   static const settings = MenuItem(text: 'Settings', icon: Icons.settings);
+//   static const logout = MenuItem(text: 'Log Out', icon: Icons.logout);
+//
+//   static Widget buildItem(MenuItem item) {
+//     return Text(
+//       item.text,
+//       style: const TextStyle(
+//         color: Colors.white,
+//       ),
+//     );
+//   }
+//
+//   static onChanged(BuildContext context, MenuItem item) {
+//     switch (item) {
+//       case MenuItems.home:
+//         //Do something
+//         break;
+//       case MenuItems.settings:
+//         //Do something
+//         break;
+//       case MenuItems.share:
+//         //Do something
+//         break;
+//       case MenuItems.logout:
+//         //Do something
+//         break;
+//     }
+//   }
+// }
