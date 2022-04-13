@@ -40,6 +40,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   late TextEditingController _emailController;
   late TextEditingController _phoneNumberController;
   late TextEditingController _passwordController;
+  late TextEditingController _confirmPasswordController;
 
   bool isStore = false;
 
@@ -50,6 +51,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _emailController = TextEditingController();
     _phoneNumberController = TextEditingController();
     _passwordController = TextEditingController();
+    _confirmPasswordController = TextEditingController();
   }
 
   @override
@@ -172,6 +174,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             return 'This field is required';
                           } else if (value.length < 6) {
                             return "password should be at least 6 characters";
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(
+                        height: 18.h,
+                      ),
+                      TextFormField(
+                        cursorColor: Colors.black,
+                        obscureText: true,
+                        enableSuggestions: false,
+                        autocorrect: false,
+                        decoration: getAuthInputDecoration(
+                          hintText: 'Confirm password',
+                        ),
+                        controller: _confirmPasswordController,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'This field is required';
+                          } else if (value != _passwordController.text) {
+                            return "Passwords need to match";
                           }
                           return null;
                         },
