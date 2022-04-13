@@ -9,6 +9,7 @@ import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/fcm_notification_Service.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
+import 'package:mared_social/utils/firebase_general_helpers.dart';
 import 'package:mared_social/widgets/bottom_sheets/is_anon_bottom_sheet.dart';
 import 'package:nanoid/async.dart';
 import 'package:page_transition/page_transition.dart';
@@ -112,6 +113,18 @@ class _CommentsSectionState extends State<CommentsSection> {
                                             PageTransition(
                                                 child: AltProfile(
                                                   userModel: UserModel(
+                                                      websiteLink:
+                                                          GeneralFirebaseHelpers
+                                                              .getStringSafely(
+                                                                  key:
+                                                                      'websiteLink',
+                                                                  doc:
+                                                                      commentDocSnap),
+                                                      bio: GeneralFirebaseHelpers
+                                                          .getStringSafely(
+                                                              key: 'bio',
+                                                              doc:
+                                                                  commentDocSnap),
                                                       uid: commentDocSnap[
                                                           'useruid'],
                                                       userName: commentDocSnap[

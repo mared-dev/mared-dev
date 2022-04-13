@@ -33,6 +33,8 @@ class UserInfoManger {
           photoUrl: '',
           fcmToken: '',
           store: false,
+          bio: '',
+          websiteLink: '',
           uid: '');
     }
   }

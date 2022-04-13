@@ -133,6 +133,8 @@ class _HomePageState extends State<HomePage> {
     WidgetsBinding.instance!.addPostFrameCallback(
         (_) => DynamicLinkService.retrieveDynamicLink(context));
 
+    Provider.of<FirebaseOperations>(context, listen: false)
+        .initUserData(context);
     super.initState();
   }
 

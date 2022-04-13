@@ -12,6 +12,7 @@ import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/Profile/profile.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
+import 'package:mared_social/utils/firebase_general_helpers.dart';
 import 'package:mared_social/widgets/reusable/interacted_user_item.dart';
 import 'package:mared_social/widgets/reusable/simple_appbar_with_back.dart';
 import 'package:page_transition/page_transition.dart';
@@ -117,6 +118,13 @@ class _FollowersScreenState extends State<FollowersScreen> {
                             PageTransition(
                                 child: AltProfile(
                                   userModel: UserModel(
+                                      websiteLink: GeneralFirebaseHelpers
+                                          .getStringSafely(
+                                              key: 'websiteLink',
+                                              doc: followerItem),
+                                      bio: GeneralFirebaseHelpers
+                                          .getStringSafely(
+                                              key: 'bio', doc: followerItem),
                                       uid: followerItem['useruid'],
                                       userName: followerItem['username'],
                                       photoUrl: followerItem['userimage'],

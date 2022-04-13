@@ -20,6 +20,7 @@ import 'package:mared_social/screens/Profile/profile.dart';
 import 'package:mared_social/screens/isAnon/isAnon.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
+import 'package:mared_social/utils/firebase_general_helpers.dart';
 import 'package:mared_social/utils/postoptions.dart';
 import 'package:mared_social/widgets/bottom_sheets/show_comments_section.dart';
 import 'package:mared_social/widgets/items/post_share_part.dart';
@@ -69,6 +70,14 @@ class _FeedPostItemState extends State<FeedPostItem> {
                               PageTransition(
                                   child: AltProfile(
                                     userModel: UserModel(
+                                        websiteLink: GeneralFirebaseHelpers
+                                            .getStringSafely(
+                                                key: 'websiteLink',
+                                                doc: widget.documentSnapshot),
+                                        bio: GeneralFirebaseHelpers
+                                            .getStringSafely(
+                                                key: 'bio',
+                                                doc: widget.documentSnapshot),
                                         uid: widget.documentSnapshot['useruid'],
                                         userName:
                                             widget.documentSnapshot['username'],
@@ -235,8 +244,6 @@ class _FeedPostItemState extends State<FeedPostItem> {
               title: "Delete this post?",
               onConfirmBtnTap: () async {
                 Navigator.of(context, rootNavigator: true).pop();
-                // Navigator.of(context).pop();
-                Navigator.of(context).pop();
 
                 await Provider.of<FirebaseOperations>(context, listen: false)
                     .deletePostData(
@@ -304,6 +311,12 @@ class _FeedPostItemState extends State<FeedPostItem> {
                         PageTransition(
                             child: AltProfile(
                               userModel: UserModel(
+                                  websiteLink:
+                                      GeneralFirebaseHelpers.getStringSafely(
+                                          key: 'websiteLink',
+                                          doc: widget.documentSnapshot),
+                                  bio: GeneralFirebaseHelpers.getStringSafely(
+                                      key: 'bio', doc: widget.documentSnapshot),
                                   uid: widget.documentSnapshot['useruid'],
                                   userName: widget.documentSnapshot['username'],
                                   photoUrl:

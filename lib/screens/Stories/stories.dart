@@ -16,6 +16,7 @@ import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/screens/Stories/stories_helper.dart';
 import 'package:mared_social/screens/Stories/stories_widget.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
+import 'package:mared_social/utils/firebase_general_helpers.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -184,6 +185,17 @@ class _StoriesState extends State<Stories> {
                                 PageTransition(
                                     child: AltProfile(
                                       userModel: UserModel(
+                                          websiteLink:
+                                              GeneralFirebaseHelpers.getStringSafely(
+                                                  key: 'websiteLink',
+                                                  doc: widget
+                                                      .querySnapshot
+                                                      .data!
+                                                      .docs[widget.snapIndex]),
+                                          bio: GeneralFirebaseHelpers.getStringSafely(
+                                              key: 'bio',
+                                              doc: widget.querySnapshot.data!
+                                                  .docs[widget.snapIndex]),
                                           uid: widget.querySnapshot.data!
                                                   .docs[widget.snapIndex]
                                               ['useruid'],
@@ -191,11 +203,8 @@ class _StoriesState extends State<Stories> {
                                                   .docs[widget.snapIndex]
                                               ['username'],
                                           photoUrl: widget.querySnapshot.data!
-                                                  .docs[widget.snapIndex]
-                                              ['userimage'],
-                                          email: widget.querySnapshot.data!
-                                                  .docs[widget.snapIndex]
-                                              ['useremail'],
+                                              .docs[widget.snapIndex]['userimage'],
+                                          email: widget.querySnapshot.data!.docs[widget.snapIndex]['useremail'],
                                           fcmToken: "",
 
                                           ///later you have to give this the right value

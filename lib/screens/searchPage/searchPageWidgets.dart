@@ -11,6 +11,7 @@ import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/auctionFeed/auctionpage.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
+import 'package:mared_social/utils/firebase_general_helpers.dart';
 import 'package:mared_social/widgets/reusable/empty_search_result.dart';
 import 'package:mared_social/widgets/reusable/interacted_user_item.dart';
 import 'package:mared_social/widgets/reusable/post_result_item.dart';
@@ -79,6 +80,13 @@ class UserSearchResultBody extends StatelessWidget {
                                     screen: AltProfile(
                                       userUid: userData['useruid'],
                                       userModel: UserModel(
+                                          websiteLink: GeneralFirebaseHelpers
+                                              .getStringSafely(
+                                                  key: 'websiteLink',
+                                                  doc: userData),
+                                          bio: GeneralFirebaseHelpers
+                                              .getStringSafely(
+                                                  key: 'bio', doc: userData),
                                           uid: userData['useruid'],
                                           userName: userData['username'],
                                           photoUrl: userData['userimage'],

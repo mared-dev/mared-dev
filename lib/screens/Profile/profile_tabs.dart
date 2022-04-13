@@ -14,6 +14,7 @@ import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/PostDetails/followers_screen.dart';
 import 'package:mared_social/screens/PostDetails/following_screen.dart';
 import 'package:mared_social/screens/PostDetails/post_details_screen.dart';
+import 'package:mared_social/screens/Profile/edit_profile_screen.dart';
 import 'package:mared_social/screens/Profile/profileHelpers.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
@@ -22,7 +23,7 @@ import 'package:mared_social/widgets/items/profile_post_item.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
-class PostsProfile extends StatelessWidget {
+class PostsProfile extends StatefulWidget {
   const PostsProfile(
       {Key? key, required this.size, this.userId, this.userModel})
       : super(key: key);
@@ -32,6 +33,11 @@ class PostsProfile extends StatelessWidget {
   final UserModel? userModel;
 
   @override
+  State<PostsProfile> createState() => _PostsProfileState();
+}
+
+class _PostsProfileState extends State<PostsProfile> {
+  @override
   Widget build(BuildContext context) {
     UserModel _storedUserInfo = UserInfoManger.getUserInfo();
     return Container(
@@ -40,13 +46,13 @@ class PostsProfile extends StatelessWidget {
         physics: NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         padding: EdgeInsets.symmetric(
-            horizontal: 20.w, vertical: userId == null ? 27.h : 0),
+            horizontal: 20.w, vertical: widget.userId == null ? 27.h : 0),
         children: [
-          _profileHeader(userModel ?? _storedUserInfo, context),
-          _userStatsSection(userModel ?? _storedUserInfo, context),
-          _otherProfileSection(userModel, context),
+          _profileHeader(widget.userModel ?? _storedUserInfo, context),
+          _userStatsSection(widget.userModel ?? _storedUserInfo, context),
+          _otherProfileSection(widget.userModel, context),
           SizedBox(
-            height: userModel == null ? 47.h : 32.h,
+            height: widget.userModel == null ? 47.h : 32.h,
           ),
 
           ///I can only exapand to the height of my parent
@@ -55,7 +61,7 @@ class PostsProfile extends StatelessWidget {
             child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection("users")
-                  .doc(userId ?? UserInfoManger.getUserId())
+                  .doc(widget.userId ?? UserInfoManger.getUserId())
                   .collection("posts")
                   .where('approvedForPosting', isEqualTo: true)
                   .orderBy("time", descending: true)
@@ -73,7 +79,7 @@ class PostsProfile extends StatelessWidget {
                             pushNewScreen(
                               context,
                               screen: PostDetailsScreen(
-                                userId: userId,
+                                userId: widget.userId,
                                 postId: item['postid'],
                                 documentSnapshot: item,
                               ),
@@ -116,7 +122,7 @@ class PostsProfile extends StatelessWidget {
             StreamBuilder<DocumentSnapshot>(
                 stream: FirebaseFirestore.instance
                     .collection("users")
-                    .doc(userId)
+                    .doc(widget.userId)
                     .collection("followers")
                     .doc(UserInfoManger.getUserId())
                     .snapshots(),
@@ -147,7 +153,7 @@ class PostsProfile extends StatelessWidget {
                             UserInfoManger.getUserInfo();
                         Provider.of<FirebaseOperations>(context, listen: false)
                             .followUser(
-                          followingUid: userId!,
+                          followingUid: widget.userId!,
                           followingDocId: currentUserInfo.uid,
                           followingData: {
                             'username': currentUserInfo.userName,
@@ -157,7 +163,7 @@ class PostsProfile extends StatelessWidget {
                             'time': Timestamp.now(),
                           },
                           followerUid: currentUserInfo.uid,
-                          followerDocId: userId!,
+                          followerDocId: widget.userId!,
                           followerData: {
                             'username': userModel.userName,
                             'userimage': userModel.photoUrl,
@@ -169,10 +175,10 @@ class PostsProfile extends StatelessWidget {
                       } else {
                         Provider.of<FirebaseOperations>(context, listen: false)
                             .unfollowUser(
-                          followingUid: userId!,
+                          followingUid: widget.userId!,
                           followingDocId: UserInfoManger.getUserId(),
                           followerUid: UserInfoManger.getUserId(),
-                          followerDocId: userId!,
+                          followerDocId: widget.userId!,
                         );
                       }
                     },
@@ -327,80 +333,119 @@ class PostsProfile extends StatelessWidget {
   }
 
   Widget _profileHeader(UserModel userModel, BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        GestureDetector(
-          onTap: () {
-            if (userModel.uid == UserInfoManger.getUserId()) {
-              Provider.of<ProfileHelpers>(context, listen: false)
-                  .postSelectType(context: context);
-            }
-          },
-          child: Container(
-            alignment: Alignment.center,
-            child: Stack(
-              children: [
-                CircleAvatar(
-                    backgroundColor: Colors.transparent,
-                    foregroundColor: Colors.transparent,
-                    radius: 70.h,
-                    backgroundImage:
-                        CachedNetworkImageProvider(userModel.photoUrl)),
-                (userModel.uid != UserInfoManger.getUserId())
-                    ? const SizedBox(
-                        width: 0,
-                        height: 0,
-                      )
-                    : Positioned(
-                        bottom: 0,
-                        right: 0,
-                        child: SvgPicture.asset(
-                          'assets/icons/add_picture_icon.svg',
-                          width: 50.h,
-                          height: 50.h,
-                        ))
-              ],
-            ),
-          ),
-        ),
-        SizedBox(
-          height: 13.h,
-        ),
-        Text(
-          userModel.userName,
-          textAlign: TextAlign.center,
-          style: semiBoldTextStyle(
-              fontSize: 17.sp, textColor: AppColors.accentColor),
-        ),
-        SizedBox(
-          height: 6.h,
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+    return StreamBuilder(
+      stream: FirebaseFirestore.instance
+          .collection("users")
+          .doc(widget.userId ?? UserInfoManger.getUserId())
+          .collection("extrainfo")
+          .snapshots(),
+      builder: (context,
+          AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>>
+              extraInfoSnapshot) {
+        String bio = "", websiteLink = "", imageUrl = "";
+
+        if (extraInfoSnapshot.hasData &&
+            extraInfoSnapshot.data!.docs.isNotEmpty) {
+          bio = extraInfoSnapshot.data!.docs[0]['bio'];
+          websiteLink = extraInfoSnapshot.data!.docs[0]['websiteLink'];
+          imageUrl = extraInfoSnapshot.data!.docs[0]['userimage'];
+        }
+        return Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              EvaIcons.email,
-              color: AppColors.accentColor,
-              size: 16.w,
-            ),
-            Flexible(
+            GestureDetector(
+              onTap: () {
+                if (userModel.uid == UserInfoManger.getUserId()) {
+                  userModel = UserInfoManger.getUserInfo();
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(
+                          builder: (_) => EditProfileScreen(
+                                userModel: userModel,
+                              )))
+                      .then((value) {
+                    setState(() {});
+                  });
+                }
+              },
               child: Container(
-                padding: const EdgeInsets.only(left: 8.0),
-                child: Text(
-                  userModel.email,
-                  textAlign: TextAlign.center,
-                  style: regularTextStyle(
-                      fontSize: 10.sp, textColor: AppColors.commentButtonColor),
+                alignment: Alignment.center,
+                child: Stack(
+                  children: [
+                    CircleAvatar(
+                        backgroundColor: Colors.transparent,
+                        foregroundColor: Colors.transparent,
+                        radius: 65.h,
+                        backgroundImage: CachedNetworkImageProvider(
+                            imageUrl.isNotEmpty
+                                ? imageUrl
+                                : userModel.photoUrl)),
+                    (userModel.uid != UserInfoManger.getUserId())
+                        ? const SizedBox(
+                            width: 0,
+                            height: 0,
+                          )
+                        : Positioned(
+                            bottom: 0,
+                            right: 0,
+                            child: SvgPicture.asset(
+                              'assets/icons/add_picture_icon.svg',
+                              width: 50.h,
+                              height: 50.h,
+                            ))
+                  ],
                 ),
               ),
             ),
+            SizedBox(
+              height: 13.h,
+            ),
+            Text(
+              userModel.userName,
+              textAlign: TextAlign.center,
+              style: semiBoldTextStyle(
+                  fontSize: 17.sp, textColor: AppColors.accentColor),
+            ),
+            SizedBox(
+              height: 6.h,
+            ),
+            Text(
+              bio.isNotEmpty ? bio : userModel.bio,
+              textAlign: TextAlign.center,
+              style: regularTextStyle(
+                  fontSize: 9.sp, textColor: AppColors.commentButtonColor),
+            ),
+            if (userModel.bio.isNotEmpty)
+              SizedBox(
+                height: 12.h,
+              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  EvaIcons.email,
+                  color: AppColors.accentColor,
+                  size: 12.w,
+                ),
+                Flexible(
+                  child: Container(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Text(
+                      userModel.email,
+                      textAlign: TextAlign.center,
+                      style: semiBoldTextStyle(
+                          fontSize: 8.sp,
+                          textColor: AppColors.commentButtonColor),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 16.h,
+            ),
           ],
-        ),
-        SizedBox(
-          height: 16.h,
-        ),
-      ],
+        );
+      },
     );
   }
 }

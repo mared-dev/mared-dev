@@ -8,6 +8,7 @@ import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
+import 'package:mared_social/utils/firebase_general_helpers.dart';
 import 'package:mared_social/widgets/bottom_sheets/auth_sheets/forgot_password_sheet.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -138,6 +139,12 @@ LoginSheet(BuildContext context) {
 
                                 await UserInfoManger.saveAnonFlag(0);
                                 await UserInfoManger.saveUserInfo(UserModel(
+                                    websiteLink:
+                                        GeneralFirebaseHelpers.getStringSafely(
+                                            key: 'websiteLink',
+                                            doc: userSnapShot),
+                                    bio: GeneralFirebaseHelpers.getStringSafely(
+                                        key: 'bio', doc: userSnapShot),
                                     uid: Provider.of<Authentication>(context,
                                             listen: false)
                                         .getUserId,

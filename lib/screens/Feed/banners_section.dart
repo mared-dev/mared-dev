@@ -10,6 +10,7 @@ import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/PostDetails/post_details_screen.dart';
 import 'package:mared_social/screens/Profile/profile.dart';
+import 'package:mared_social/utils/firebase_general_helpers.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:get/get.dart';
@@ -48,6 +49,10 @@ class _BannersSectionState extends State<BannersSection> {
                 photoUrl: bannerItem['userimage'],
                 fcmToken: '',
                 store: false,
+                websiteLink: GeneralFirebaseHelpers.getStringSafely(
+                    key: 'websiteLink', doc: bannerItem),
+                bio: GeneralFirebaseHelpers.getStringSafely(
+                    key: 'bio', doc: bannerItem),
                 uid: bannerItem['useruid']);
           }
 
@@ -66,6 +71,10 @@ class _BannersSectionState extends State<BannersSection> {
                         userName: bannerItem['username'],
                         email: bannerItem['useremail'],
                         photoUrl: bannerItem['userimage'],
+                        websiteLink: GeneralFirebaseHelpers.getStringSafely(
+                            key: 'websiteLink', doc: bannerItem),
+                        bio: GeneralFirebaseHelpers.getStringSafely(
+                            key: 'bio', doc: bannerItem),
                         fcmToken: '',
                         store: false,
                         uid: bannerItem['useruid']);

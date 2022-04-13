@@ -32,6 +32,7 @@ class _SplashScreenState extends State<SplashScreen> {
             .returningUserLogin(FirebaseAuth.instance.currentUser!.uid);
         await Provider.of<FirebaseOperations>(context, listen: false)
             .initUserData(context);
+
         Navigator.pushReplacement(context,
             PageTransition(child: HomePage(), type: PageTransitionType.fade));
         // signed in

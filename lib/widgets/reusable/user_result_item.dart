@@ -6,6 +6,7 @@ import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
+import 'package:mared_social/utils/firebase_general_helpers.dart';
 import 'package:mared_social/widgets/bottom_sheets/is_anon_bottom_sheet.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +28,10 @@ class UserResultItem extends StatelessWidget {
                 PageTransition(
                     child: AltProfile(
                       userModel: UserModel(
+                          websiteLink: GeneralFirebaseHelpers.getStringSafely(
+                              key: 'websiteLink', doc: userData),
+                          bio: GeneralFirebaseHelpers.getStringSafely(
+                              key: 'bio', doc: userData),
                           uid: userData['useruid'],
                           userName: userData['username'],
                           photoUrl: userData['userimage'],

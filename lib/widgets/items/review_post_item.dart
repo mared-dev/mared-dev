@@ -18,6 +18,7 @@ import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/isAnon/isAnon.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
+import 'package:mared_social/utils/firebase_general_helpers.dart';
 import 'package:mared_social/utils/postoptions.dart';
 import 'package:mared_social/widgets/bottom_sheets/show_comments_section.dart';
 import 'package:mared_social/widgets/items/post_share_part.dart';
@@ -68,6 +69,14 @@ class _ReviewPostItemState extends State<ReviewPostItem> {
                             PageTransition(
                                 child: AltProfile(
                                   userModel: UserModel(
+                                      websiteLink: GeneralFirebaseHelpers
+                                          .getStringSafely(
+                                              key: 'websiteLink',
+                                              doc: widget.documentSnapshot),
+                                      bio: GeneralFirebaseHelpers
+                                          .getStringSafely(
+                                              key: 'bio',
+                                              doc: widget.documentSnapshot),
                                       uid: widget.documentSnapshot['useruid'],
                                       userName:
                                           widget.documentSnapshot['username'],
@@ -239,6 +248,12 @@ class _ReviewPostItemState extends State<ReviewPostItem> {
                         PageTransition(
                             child: AltProfile(
                               userModel: UserModel(
+                                  websiteLink:
+                                      GeneralFirebaseHelpers.getStringSafely(
+                                          key: 'websiteLink',
+                                          doc: widget.documentSnapshot),
+                                  bio: GeneralFirebaseHelpers.getStringSafely(
+                                      key: 'bio', doc: widget.documentSnapshot),
                                   uid: widget.documentSnapshot['useruid'],
                                   userName: widget.documentSnapshot['username'],
                                   photoUrl:

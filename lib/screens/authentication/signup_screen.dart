@@ -242,6 +242,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     email: _emailController.text,
                                     userName: _nameController.text,
                                     photoUrl: _uploadedImageLink,
+                                    websiteLink: '',
+                                    bio: '',
                                     fcmToken: ''));
 
                                 await UserInfoManger.saveAnonFlag(0);
