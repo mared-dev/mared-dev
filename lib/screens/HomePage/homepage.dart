@@ -17,7 +17,6 @@ import 'package:mared_social/screens/Categories/category.dart';
 import 'package:mared_social/screens/Chatroom/chatroom.dart';
 import 'package:mared_social/screens/Feed/admin_posts_feed.dart';
 import 'package:mared_social/screens/Feed/feed.dart';
-import 'package:mared_social/screens/HomePage/homepageHelpers.dart';
 import 'package:mared_social/screens/LandingPage/landingpage.dart';
 import 'package:mared_social/screens/Profile/profile.dart';
 import 'package:mared_social/screens/isAnon/isAnon.dart';
@@ -172,13 +171,16 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: AppColors.backGroundColor,
       body: PersistentTabView(context,
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Provider.of<ProfileHelpers>(context, listen: false)
-                  .postSelectType(context: context);
-            },
-            child: SvgPicture.asset('assets/icons/home_add_post_button.svg'),
-          ),
+          floatingActionButton: UserInfoManger.getAnonFlag()
+              ? null
+              : FloatingActionButton(
+                  onPressed: () {
+                    Provider.of<ProfileHelpers>(context, listen: false)
+                        .postSelectType(context: context);
+                  },
+                  child:
+                      SvgPicture.asset('assets/icons/home_add_post_button.svg'),
+                ),
           stateManagement: true,
           margin: EdgeInsets.only(top: 10.h),
           controller: _controller,

@@ -183,7 +183,7 @@ class FirebaseOperations with ChangeNotifier {
         .then((doc) async {
       initUserName = doc['username'];
       initUserEmail = doc['useremail'];
-      initUserImage = doc['userimage'];
+      initUserImage = userImage.isNotEmpty ? userImage : doc['userimage'];
       store = doc['store'];
       fcmToken = doc['fcmToken'];
 

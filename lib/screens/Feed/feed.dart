@@ -22,8 +22,7 @@ class Feed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     print('(((((((((((((((((');
-    print(UserInfoManger.getUserInfo().email);
-    print(UserInfoManger.getUserInfo().userName);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.backGroundColor,

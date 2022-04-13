@@ -27,9 +27,8 @@ class _SearchPageHeaderTabsState extends State<SearchPageHeaderTabs> {
     // TODO: implement initState
     super.initState();
     itemsToShow = [
-      {'label': 'USERS', 'imagePath': 'assets/icons/user_result_icon.svg'},
-      {'label': 'VENDORS', 'imagePath': 'assets/icons/verndor_result_icon.svg'},
       {'label': 'POSTS', 'imagePath': 'assets/icons/post_result_icon.svg'},
+      {'label': 'VENDORS', 'imagePath': 'assets/icons/verndor_result_icon.svg'},
     ];
     currentlySelectedIndex = 0;
   }
@@ -79,7 +78,10 @@ class _SearchPageHeaderTabsState extends State<SearchPageHeaderTabs> {
                     BorderSide(width: 2, color: AppColors.commentButtonColor)),
       ),
       child: Row(
+        mainAxisAlignment:
+            index == 0 ? MainAxisAlignment.end : MainAxisAlignment.start,
         children: [
+          if (index == 0) Spacer(),
           SvgPicture.asset(
             imagePath,
             width: 18,
@@ -91,18 +93,20 @@ class _SearchPageHeaderTabsState extends State<SearchPageHeaderTabs> {
           SizedBox(
             width: 10.w,
           ),
-          Expanded(
-              child: AutoSizeText(
-            label,
-            style: semiBoldTextStyle(
-                fontSize: 13,
-                textColor: index == currentlySelectedIndex
-                    ? AppColors.accentColor
-                    : AppColors.commentButtonColor),
-            maxLines: 1,
-            minFontSize: 10,
-            maxFontSize: 13,
-          )),
+          Flexible(
+            flex: 2,
+            child: AutoSizeText(
+              label,
+              style: semiBoldTextStyle(
+                  fontSize: 13,
+                  textColor: index == currentlySelectedIndex
+                      ? AppColors.accentColor
+                      : AppColors.commentButtonColor),
+              maxLines: 1,
+              minFontSize: 10,
+              maxFontSize: 13,
+            ),
+          ),
         ],
       ),
     );

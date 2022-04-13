@@ -21,10 +21,15 @@ class _VideoPostItemState extends State<VideoPostItem> {
 
     _chewieController = ChewieController(
       videoPlayerController: _videoPlayerController,
+      showOptions: false,
       // aspectRatio:5/8,
       autoInitialize: true,
+      showControls: true,
       autoPlay: false,
       looping: false,
+      customControls: MaterialControls(
+        showPlayButton: true,
+      ),
       errorBuilder: (context, errorMessage) {
         return Center(
           child: Text(

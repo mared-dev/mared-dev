@@ -387,10 +387,16 @@ class _PostsProfileState extends State<PostsProfile> {
                         : Positioned(
                             bottom: 0,
                             right: 0,
-                            child: SvgPicture.asset(
-                              'assets/icons/add_picture_icon.svg',
-                              width: 50.h,
-                              height: 50.h,
+                            child: Container(
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                  color: AppColors.accentColor,
+                                  borderRadius: BorderRadius.circular(50)),
+                              child: Icon(
+                                Icons.edit,
+                                color: Colors.white,
+                                size: 22.h,
+                              ),
                             ))
                   ],
                 ),

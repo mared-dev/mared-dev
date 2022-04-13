@@ -31,6 +31,7 @@ class ProfileVideoItemThumb extends StatelessWidget {
             'assets/icons/profile_video_thumb.svg',
             width: 30,
             height: 30,
+            color: Colors.white,
           ),
         ),
       ],

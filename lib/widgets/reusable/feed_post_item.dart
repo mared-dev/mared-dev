@@ -300,7 +300,7 @@ class _FeedPostItemState extends State<FeedPostItem> {
       child: Container(
         width: MediaQuery.of(context).size.width,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             GestureDetector(
@@ -340,81 +340,20 @@ class _FeedPostItemState extends State<FeedPostItem> {
                 child: Text(userName,
                     style: semiBoldTextStyle(
                         fontSize: 15.sp, textColor: AppColors.accentColor))),
-            SizedBox(
-              height: 5.h,
-            ),
-            Text(
-              address,
-              softWrap: true,
-              overflow: TextOverflow.ellipsis,
-              style: lightTextStyle(fontSize: 11.sp, textColor: Colors.black),
-            ),
+            if (address.isNotEmpty)
+              SizedBox(
+                height: 5.h,
+              ),
+            if (address.isNotEmpty)
+              Text(
+                address,
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+                style: lightTextStyle(fontSize: 11.sp, textColor: Colors.black),
+              ),
           ],
         ),
       ),
     );
   }
-
-  //move to a seprate file later
-  IsAnonBottomSheet(BuildContext context) {
-    return showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (context) {
-        return SafeArea(
-          bottom: true,
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height * 0.9,
-            child: IsAnonMsg(),
-          ),
-        );
-      },
-    );
-  }
 }
-
-// class MenuItem {
-//   final String text;
-//   final IconData icon;
-//
-//   const MenuItem({
-//     required this.text,
-//     required this.icon,
-//   });
-// }
-//
-// class MenuItems {
-//   static const List<MenuItem> firstItems = [home, share, settings];
-//   static const List<MenuItem> secondItems = [logout];
-//
-//   static const home = MenuItem(text: 'Home', icon: Icons.home);
-//   static const share = MenuItem(text: 'Share', icon: Icons.share);
-//   static const settings = MenuItem(text: 'Settings', icon: Icons.settings);
-//   static const logout = MenuItem(text: 'Log Out', icon: Icons.logout);
-//
-//   static Widget buildItem(MenuItem item) {
-//     return Text(
-//       item.text,
-//       style: const TextStyle(
-//         color: Colors.white,
-//       ),
-//     );
-//   }
-//
-//   static onChanged(BuildContext context, MenuItem item) {
-//     switch (item) {
-//       case MenuItems.home:
-//         //Do something
-//         break;
-//       case MenuItems.settings:
-//         //Do something
-//         break;
-//       case MenuItems.share:
-//         //Do something
-//         break;
-//       case MenuItems.logout:
-//         //Do something
-//         break;
-//     }
-//   }
-// }

@@ -27,6 +27,8 @@ class _FeedBodyState extends State<FeedBody> {
 
   @override
   Widget build(BuildContext context) {
+    print('####################');
+    print(UserInfoManger.getAnonFlag());
     //temp changing StreamBuilder to FutureBuilder and .snapshot to .get
     return CustomPaginateFirestore(
       header: SliverList(
