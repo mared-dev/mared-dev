@@ -79,11 +79,6 @@ class DynamicLinkService {
       url = await FirebaseDynamicLinks.instance.buildLink(parameters);
     }
 
-    print('%%%%%%%%%%%%%%%%%%');
-    print(url.toString());
-    print(url.path);
-    print(url.data);
-
     return url;
   }
 }

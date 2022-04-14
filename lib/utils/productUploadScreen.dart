@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
 import 'package:google_place/google_place.dart';
@@ -18,6 +19,7 @@ import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/constants/general_styles.dart';
 import 'package:mared_social/constants/text_styles.dart';
+import 'package:mared_social/controllers/global_messages_controller.dart';
 import 'package:mared_social/helpers/loading_helper.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/enums/post_type.dart';
@@ -62,6 +64,7 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
   PickResult? selectedPlace;
 
   VideoPlayerController? _videoPlayerController;
+  late GlobalMessagesController _globalMessagesController;
 
   @override
   void dispose() {
@@ -83,6 +86,7 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
         }
       });
     }
+    _globalMessagesController = Get.find();
 
     super.initState();
   }
@@ -141,7 +145,8 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
                     height: 104.h,
                     child: Row(
                       children: [
-                        _displayImagePart(),
+                        if (widget.multipleImages.isNotEmpty)
+                          _displayImagePart(),
                         SizedBox(
                           width: 16.w,
                         ),
@@ -535,18 +540,12 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
           'lat': lat,
           'lng': lng,
         });
-
-        setState(() {
-          widget.imagesList.clear();
-          widget.multipleImages.clear();
-        });
         Navigator.of(context).pop();
-        // Navigator.push(
-        //     context,
-        //     PageTransition(
-        //         child: HomePage(),
-        //         type: PageTransitionType.bottomToTop));
+        _globalMessagesController.displayNewMessage(
+            {'title': 'Success', 'body': 'Your post in under review !'});
       } catch (e) {
+        print('&&&&&&&&&&&&&');
+        print(e);
         CoolAlert.show(
           context: context,
           type: CoolAlertType.error,

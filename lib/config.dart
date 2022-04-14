@@ -4,8 +4,10 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mared_social/constants/appleSignInCheck.dart';
+import 'package:mared_social/controllers/global_messages_controller.dart';
 import 'package:mared_social/services/get_http_client.dart';
 import 'package:mared_social/services/shared_preferences_helper.dart';
 
@@ -41,6 +43,11 @@ config() async {
   appleSignInAvailable = await AppleSignInAvailable.check();
   getIt.registerSingleton<Dio>(getHttpClient());
   SharedPreferencesHelper.initSharedPrefs();
+  _defineGetxControllers();
+}
+
+_defineGetxControllers() {
+  Get.put(GlobalMessagesController());
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {

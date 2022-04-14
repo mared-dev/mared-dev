@@ -167,7 +167,6 @@ class FirebaseOperations with ChangeNotifier {
         .doc(userId)
         .get();
 
-    print('%%%%%%%%%%%%%%%%');
     if (extraInfo.data() != null) {
       bio = extraInfo.data()!['bio'];
       websiteLink = extraInfo.data()!['websiteLink'];

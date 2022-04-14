@@ -8,10 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/constants/text_styles.dart';
+import 'package:mared_social/controllers/global_messages_controller.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/screens/Categories/category.dart';
 import 'package:mared_social/screens/Chatroom/chatroom.dart';
@@ -24,6 +26,7 @@ import 'package:mared_social/screens/mapscreen/mapscreen.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/utils/dynamic_link_service.dart';
+import 'package:mared_social/utils/popup_utils.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
@@ -53,6 +56,8 @@ class _HomePageState extends State<HomePage> {
   late List<Widget> _screens;
   late List<PersistentBottomNavBarItem> _navBarItems;
   int currentIndex = 0;
+
+  late GlobalMessagesController _globalMessagesController;
 
   @override
   void initState() {
@@ -89,9 +94,7 @@ class _HomePageState extends State<HomePage> {
         : [
             Feed(),
             CategoryScreen(),
-            // !isAnon ? Chatroom() : IsAnonMsg(),
             MapScreen(),
-            // !isAnon ? Profile() : IsAnonMsg(),
           ];
 
     _navBarItems = UserInfoManger.isAdmin()
@@ -114,18 +117,10 @@ class _HomePageState extends State<HomePage> {
                 itemText: 'menu',
                 iconPath: 'assets/icons/navbar_menu_icon.svg',
                 index: 1),
-            // _navBarItem(
-            //     itemText: 'chat',
-            //     iconPath: 'assets/icons/navbar_chat_icon.svg',
-            //     index: 2),
             _navBarItem(
                 itemText: 'map',
                 iconPath: 'assets/icons/navbar_map_icon.svg',
                 index: 2),
-            // _navBarItem(
-            //     itemText: 'profile',
-            //     iconPath: 'assets/icons/navbar_profile_icon.svg',
-            //     index: 4),
           ];
     //put it before super for some reason
 
@@ -134,40 +129,24 @@ class _HomePageState extends State<HomePage> {
 
     Provider.of<FirebaseOperations>(context, listen: false)
         .initUserData(context);
-    super.initState();
-  }
 
-  Future<void> load() async {
-    if (Platform.isIOS) {
-      NotificationSettings settings = await _fcm.requestPermission(
-        alert: true,
-        announcement: false,
-        badge: true,
-        carPlay: true,
-        criticalAlert: true,
-        provisional: false,
-        sound: true,
-      );
-    } else {
-      // SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
-      //     overlays: [SystemUiOverlay.top]);
-    }
-
-    _fcm.getAPNSToken().then((value) => print("APN Token === $value"));
-
-    String? token = await _fcm.getToken();
-    assert(token != null);
-
-    await FirebaseFirestore.instance
-        .collection("users")
-        .doc(Provider.of<Authentication>(context, listen: false).getUserId)
-        .update({
-      'fcmToken': token,
+    _globalMessagesController = Get.find();
+    _globalMessagesController.messageToShow.listen((newValue) {
+      //find a better way later
+      if (newValue.isNotEmpty) {
+        PopupUtils.showSuccessPopup(
+            title: newValue['title']!,
+            body: newValue['body']!,
+            context: context);
+      }
     });
+
+    super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    print('))))))))))))))))))))');
     return Scaffold(
       backgroundColor: AppColors.backGroundColor,
       body: PersistentTabView(context,
@@ -246,5 +225,34 @@ class _HomePageState extends State<HomePage> {
       inactiveColorPrimary: Colors.grey,
       inactiveColorSecondary: Colors.purple,
     );
+  }
+
+  Future<void> load() async {
+    if (Platform.isIOS) {
+      NotificationSettings settings = await _fcm.requestPermission(
+        alert: true,
+        announcement: false,
+        badge: true,
+        carPlay: true,
+        criticalAlert: true,
+        provisional: false,
+        sound: true,
+      );
+    } else {
+      // SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge,
+      //     overlays: [SystemUiOverlay.top]);
+    }
+
+    _fcm.getAPNSToken().then((value) => print("APN Token === $value"));
+
+    String? token = await _fcm.getToken();
+    assert(token != null);
+
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(Provider.of<Authentication>(context, listen: false).getUserId)
+        .update({
+      'fcmToken': token,
+    });
   }
 }
