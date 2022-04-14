@@ -60,7 +60,10 @@ class _StoriesState extends State<Stories> {
 
   @override
   void dispose() {
-    _controller!.dispose();
+    if (_controller != null) {
+      _controller!.dispose();
+    }
+
     super.dispose();
   }
 
@@ -117,20 +120,20 @@ class _StoriesState extends State<Stories> {
                         widget.querySnapshot.data!.docs.length - 1) {
                       _controller!.dispose();
                       Navigator.of(context).pop();
-                    }
-
-                    _controller!.dispose();
-                    setState(() {
-                      indexCheck = indexCheck + 1;
-                    });
-
-                    _controller = await VideoPlayerController.network(
-                        widget.querySnapshot.data!.docs[indexCheck]['videourl'])
-                      ..initialize().then((_) {
-                        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-                        setState(() {});
-                        _controller!.play();
+                    } else {
+                      _controller!.dispose();
+                      setState(() {
+                        indexCheck = indexCheck + 1;
                       });
+
+                      _controller = await VideoPlayerController.network(widget
+                          .querySnapshot.data!.docs[indexCheck]['videourl'])
+                        ..initialize().then((_) {
+                          // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+                          setState(() {});
+                          _controller!.play();
+                        });
+                    }
                   },
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height,
@@ -145,20 +148,20 @@ class _StoriesState extends State<Stories> {
                     if (indexCheck == 0) {
                       _controller!.dispose();
                       Navigator.of(context).pop();
-                    }
-
-                    _controller!.dispose();
-                    setState(() {
-                      indexCheck = indexCheck - 1;
-                    });
-
-                    _controller = VideoPlayerController.network(
-                        widget.querySnapshot.data!.docs[indexCheck]['videourl'])
-                      ..initialize().then((_) {
-                        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
-                        setState(() {});
-                        _controller!.play();
+                    } else {
+                      _controller!.dispose();
+                      setState(() {
+                        indexCheck = indexCheck - 1;
                       });
+
+                      _controller = VideoPlayerController.network(widget
+                          .querySnapshot.data!.docs[indexCheck]['videourl'])
+                        ..initialize().then((_) {
+                          // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+                          setState(() {});
+                          _controller!.play();
+                        });
+                    }
                   },
                   child: Container(
                     height: MediaQuery.of(context).size.height,
@@ -188,29 +191,26 @@ class _StoriesState extends State<Stories> {
                                           websiteLink:
                                               GeneralFirebaseHelpers.getStringSafely(
                                                   key: 'websiteLink',
-                                                  doc: widget
-                                                      .querySnapshot
-                                                      .data!
-                                                      .docs[widget.snapIndex]),
+                                                  doc: widget.querySnapshot
+                                                      .data!.docs[indexCheck]),
                                           bio: GeneralFirebaseHelpers.getStringSafely(
                                               key: 'bio',
                                               doc: widget.querySnapshot.data!
-                                                  .docs[widget.snapIndex]),
+                                                  .docs[indexCheck]),
                                           uid: widget.querySnapshot.data!
-                                                  .docs[widget.snapIndex]
-                                              ['useruid'],
+                                              .docs[indexCheck]['useruid'],
                                           userName: widget.querySnapshot.data!
-                                                  .docs[widget.snapIndex]
-                                              ['username'],
+                                              .docs[indexCheck]['username'],
                                           photoUrl: widget.querySnapshot.data!
-                                              .docs[widget.snapIndex]['userimage'],
-                                          email: widget.querySnapshot.data!.docs[widget.snapIndex]['useremail'],
+                                              .docs[indexCheck]['userimage'],
+                                          email: widget.querySnapshot.data!
+                                              .docs[indexCheck]['useremail'],
                                           fcmToken: "",
 
                                           ///later you have to give this the right value
                                           store: false),
                                       userUid: widget.querySnapshot.data!
-                                          .docs[widget.snapIndex]['useruid'],
+                                          .docs[indexCheck]['useruid'],
                                     ),
                                     type: PageTransitionType.rightToLeft));
                           } else {
@@ -229,7 +229,7 @@ class _StoriesState extends State<Stories> {
                             child: CachedNetworkImage(
                               fit: BoxFit.cover,
                               imageUrl: widget.querySnapshot.data!
-                                  .docs[widget.snapIndex]['userimage'],
+                                  .docs[indexCheck]['userimage'],
                               progressIndicatorBuilder: (context, url,
                                       downloadProgress) =>
                                   LoadingWidget(constantColors: constantColors),
@@ -251,8 +251,8 @@ class _StoriesState extends State<Stories> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                widget.querySnapshot.data!
-                                    .docs[widget.snapIndex]['username'],
+                                widget.querySnapshot.data!.docs[indexCheck]
+                                    ['username'],
                                 style: TextStyle(
                                   color: constantColors.whiteColor,
                                   fontWeight: FontWeight.bold,
@@ -261,8 +261,7 @@ class _StoriesState extends State<Stories> {
                               ),
                               Text(
                                 timeago.format((widget.querySnapshot.data!
-                                            .docs[widget.snapIndex]['time']
-                                        as Timestamp)
+                                        .docs[indexCheck]['time'] as Timestamp)
                                     .toDate()),
                                 style: TextStyle(
                                   color: constantColors.greenColor,
@@ -275,11 +274,9 @@ class _StoriesState extends State<Stories> {
                         ),
                       ),
                       Visibility(
-                        visible:
-                            Provider.of<Authentication>(context, listen: false)
-                                    .getUserId ==
-                                widget.querySnapshot.data!
-                                    .docs[widget.snapIndex]['useruid'],
+                        visible: UserInfoManger.getUserId() ==
+                            widget.querySnapshot.data!.docs[indexCheck]
+                                ['useruid'],
                         child: InkWell(
                           onTap: () {},
                           child: SizedBox(
