@@ -16,6 +16,7 @@ import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/screens/authentication/login_screen.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
+import 'package:mared_social/utils/firebase_general_helpers.dart';
 import 'package:mared_social/widgets/bottom_sheets/auth_sheets/select_avatar_options_sheet.dart';
 import 'package:mared_social/widgets/bottom_sheets/confirm_profile_pic_sheet.dart';
 import 'package:mared_social/widgets/items/pick_image_avatar.dart';
@@ -311,11 +312,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 );
                               } catch (e) {
                                 CoolAlert.show(
-                                  context: context,
-                                  type: CoolAlertType.error,
-                                  title: "Sign In Failed",
-                                  text: e.toString(),
-                                );
+                                    context: context,
+                                    type: CoolAlertType.error,
+                                    title: "Sign Up Failed",
+                                    text: GeneralFirebaseHelpers
+                                        .getFormattedAuthError(e));
                               } finally {
                                 LoadingHelper.endLoading();
                               }

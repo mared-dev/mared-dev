@@ -238,11 +238,10 @@ class LandingHelpers {
       );
     } catch (e) {
       CoolAlert.show(
-        context: context,
-        type: CoolAlertType.error,
-        title: "Sign In Failed",
-        text: e.toString(),
-      );
+          context: context,
+          type: CoolAlertType.error,
+          title: "Sign In Failed",
+          text: GeneralFirebaseHelpers.getFormattedAuthError(e));
     }
   }
 }
