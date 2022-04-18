@@ -74,7 +74,7 @@ class MyBids extends StatelessWidget {
                                 child: AuctionPage(
                                   auctionId: bidData['auctionid'],
                                 ),
-                                type: PageTransitionType.bottomToTop));
+                                type: PageTransitionType.rightToLeft));
                       },
                       trailing: StreamBuilder<QuerySnapshot>(
                         stream: FirebaseFirestore.instance
@@ -118,6 +118,7 @@ class MyBids extends StatelessWidget {
                         height: MediaQuery.of(context).size.height * 0.1,
                         width: MediaQuery.of(context).size.width * 0.2,
                         child: Swiper(
+                          loop: false,
                           autoplay: true,
                           itemBuilder: (BuildContext context, int index) {
                             return ClipRRect(

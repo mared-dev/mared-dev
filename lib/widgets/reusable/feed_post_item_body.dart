@@ -30,6 +30,7 @@ class FeedPostItemBody extends StatelessWidget {
           width: MediaQuery.of(context).size.width,
           child: !PostHelpers.checkIfPostIsVideo(imageList)
               ? Swiper(
+                  loop: false,
                   key: UniqueKey(),
                   itemBuilder: (BuildContext context, int index) {
                     // return Image.network(

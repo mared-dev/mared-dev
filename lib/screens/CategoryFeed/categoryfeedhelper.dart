@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/screens/mapscreen/categorymapscreen.dart';
@@ -86,6 +87,8 @@ class CatgeoryFeedHelper with ChangeNotifier {
           child: StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
                 .collection("posts")
+                .where('approvedForPosting',
+                    isEqualTo: !UserInfoManger.isAdmin())
                 .where('postcategory', isEqualTo: category)
                 .orderBy('time', descending: true)
                 .snapshots(),

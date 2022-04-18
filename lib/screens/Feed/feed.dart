@@ -16,9 +16,13 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../mangers/user_info_manger.dart';
+
 class Feed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    print('(((((((((((((((((');
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.backGroundColor,
@@ -35,7 +39,7 @@ class Feed extends StatelessWidget {
             context,
             screen: SearchPage(),
             withNavBar: false, // OPTIONAL VALUE. True by default.
-            pageTransitionAnimation: PageTransitionAnimation.cupertino,
+            pageTransitionAnimation: PageTransitionAnimation.slideRight,
           );
         },
         actionIcon: SvgPicture.asset(

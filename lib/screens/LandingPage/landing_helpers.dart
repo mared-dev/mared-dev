@@ -6,6 +6,7 @@ import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
+import 'package:mared_social/utils/firebase_general_helpers.dart';
 import 'package:mared_social/widgets/bottom_sheets/auth_sheets/warning_text.dart';
 import 'package:nanoid/nanoid.dart';
 import 'package:page_transition/page_transition.dart';
@@ -47,6 +48,8 @@ class LandingHelpers {
       );
 
       await UserInfoManger.saveUserInfo(UserModel(
+          websiteLink: '',
+          bio: '',
           uid: Provider.of<Authentication>(context, listen: false).getUserId,
           email: "$anonUsername@mared.ae",
           userName: "@$anonUsername",
@@ -91,6 +94,8 @@ class LandingHelpers {
       await UserInfoManger.setUserId(
           Provider.of<Authentication>(context, listen: false).getUserId);
       await UserInfoManger.saveUserInfo(UserModel(
+          bio: '',
+          websiteLink: '',
           uid: Provider.of<Authentication>(context, listen: false).getUserId,
           store: false,
           email: Provider.of<Authentication>(context, listen: false)
@@ -167,6 +172,8 @@ class LandingHelpers {
         await UserInfoManger.setUserId(
             Provider.of<Authentication>(context, listen: false).getUserId);
         await UserInfoManger.saveUserInfo(UserModel(
+            websiteLink: '',
+            bio: '',
             uid: Provider.of<Authentication>(context, listen: false).getUserId,
             store: false,
             email: Provider.of<Authentication>(context, listen: false)
@@ -194,8 +201,6 @@ class LandingHelpers {
   }
 
   static loginWithEmail({context, email, password}) async {
-    print('(((((((((((((((((');
-
     try {
       await Provider.of<Authentication>(context, listen: false)
           .loginIntoAccount(email, password);
@@ -212,23 +217,31 @@ class LandingHelpers {
       await UserInfoManger.saveUserInfo(UserModel(
           uid: Provider.of<Authentication>(context, listen: false).getUserId,
           store: userSnapShot['store'],
+          bio: GeneralFirebaseHelpers.getStringSafely(
+              key: 'bio', doc: userSnapShot),
+          websiteLink: GeneralFirebaseHelpers.getStringSafely(
+              key: 'websiteLink', doc: userSnapShot),
           email: email,
           userName: userSnapShot['username'],
           photoUrl: userSnapShot.data()!['userimage'],
           fcmToken: ''));
       await UserInfoManger.saveAnonFlag(0);
 
+      await UserInfoManger.saveRole((userSnapShot.data()!['role'] != null)
+          ? userSnapShot.data()!['role']
+          : "");
+      print(UserInfoManger.isAdmin());
+
       Navigator.pushReplacement(
         context,
-        PageTransition(child: HomePage(), type: PageTransitionType.bottomToTop),
+        PageTransition(child: HomePage(), type: PageTransitionType.rightToLeft),
       );
     } catch (e) {
       CoolAlert.show(
-        context: context,
-        type: CoolAlertType.error,
-        title: "Sign In Failed",
-        text: e.toString(),
-      );
+          context: context,
+          type: CoolAlertType.error,
+          title: "Sign In Failed",
+          text: GeneralFirebaseHelpers.getFormattedAuthError(e));
     }
   }
 }

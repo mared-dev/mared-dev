@@ -43,7 +43,7 @@ class PostsProfile extends StatelessWidget {
                 context,
                 PageTransition(
                     child: UserSettingsPage(),
-                    type: PageTransitionType.leftToRight));
+                    type: PageTransitionType.rightToLeft));
           },
           icon: Icon(
             FontAwesomeIcons.cogs,
@@ -153,6 +153,8 @@ class PostsProfile extends StatelessWidget {
                                   documentSnapshot: userPostDocSnap);
                             },
                             child: ProfilePostItem(
+                              isVideo: PostHelpers.checkIfPostIsVideo(
+                                  userPostDocSnap['imageslist']),
                               urls: PostHelpers.checkIfPostIsVideo(
                                       userPostDocSnap['imageslist'])
                                   ? [userPostDocSnap['thumbnail']]

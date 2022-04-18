@@ -11,10 +11,13 @@ import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
+import 'package:mared_social/utils/firebase_general_helpers.dart';
 import 'package:mared_social/widgets/reusable/interacted_user_item.dart';
 import 'package:mared_social/widgets/reusable/simple_appbar_with_back.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+
+import '../Profile/profile.dart';
 
 class FollowingScreen extends StatefulWidget {
   final followingSnap;
@@ -116,6 +119,13 @@ class _FollowingScreenState extends State<FollowingScreen> {
                             PageTransition(
                                 child: AltProfile(
                                   userModel: UserModel(
+                                      websiteLink: GeneralFirebaseHelpers
+                                          .getStringSafely(
+                                              key: 'websiteLink',
+                                              doc: followingItem),
+                                      bio: GeneralFirebaseHelpers
+                                          .getStringSafely(
+                                              key: 'bio', doc: followingItem),
                                       uid: followingItem['useruid'],
                                       userName: followingItem['username'],
                                       photoUrl: followingItem['userimage'],
@@ -126,7 +136,13 @@ class _FollowingScreenState extends State<FollowingScreen> {
                                       store: false),
                                   userUid: followingItem['useruid'],
                                 ),
-                                type: PageTransitionType.bottomToTop));
+                                type: PageTransitionType.rightToLeft));
+                      } else {
+                        Navigator.push(
+                            context,
+                            PageTransition(
+                                child: Profile(),
+                                type: PageTransitionType.rightToLeft));
                       }
                     });
               }).toList());

@@ -236,7 +236,7 @@ class AuctionFeedHelper with ChangeNotifier {
                                                 documentSnapshot['auctionid'],
                                           ),
                                           type:
-                                              PageTransitionType.bottomToTop));
+                                              PageTransitionType.rightToLeft));
                                 },
                                 child: Stack(
                                   children: [
@@ -246,6 +246,7 @@ class AuctionFeedHelper with ChangeNotifier {
                                               0.44,
                                       width: MediaQuery.of(context).size.width,
                                       child: Swiper(
+                                        loop: false,
                                         itemBuilder:
                                             (BuildContext context, int index) {
                                           return CachedNetworkImage(

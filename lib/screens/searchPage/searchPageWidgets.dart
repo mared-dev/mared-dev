@@ -6,11 +6,12 @@ import 'package:lottie/lottie.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/constants/text_styles.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
-import 'package:mared_social/screens/AltProfile/altProfileHelper.dart';
 import 'package:mared_social/screens/auctionFeed/auctionpage.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
+import 'package:mared_social/utils/firebase_general_helpers.dart';
 import 'package:mared_social/widgets/reusable/empty_search_result.dart';
 import 'package:mared_social/widgets/reusable/interacted_user_item.dart';
 import 'package:mared_social/widgets/reusable/post_result_item.dart';
@@ -18,6 +19,8 @@ import 'package:mared_social/widgets/reusable/user_result_item.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
+
+import '../Profile/profile.dart';
 
 class UserSearchResultBody extends StatelessWidget {
   final String searchQuery;
@@ -70,25 +73,44 @@ class UserSearchResultBody extends StatelessWidget {
                               title: userData['username'],
                               subtitle: userData['useremail'],
                               leadingCallback: () {
-                                pushNewScreen(
-                                  context,
-                                  screen: AltProfile(
-                                    userUid: userData['useruid'],
-                                    userModel: UserModel(
-                                        uid: userData['useruid'],
-                                        userName: userData['username'],
-                                        photoUrl: userData['userimage'],
-                                        email: userData['useremail'],
-                                        fcmToken: "",
+                                if (userData['useruid'] !=
+                                    UserInfoManger.getUserId()) {
+                                  pushNewScreen(
+                                    context,
+                                    screen: AltProfile(
+                                      userUid: userData['useruid'],
+                                      userModel: UserModel(
+                                          websiteLink: GeneralFirebaseHelpers
+                                              .getStringSafely(
+                                                  key: 'websiteLink',
+                                                  doc: userData),
+                                          bio: GeneralFirebaseHelpers
+                                              .getStringSafely(
+                                                  key: 'bio', doc: userData),
+                                          uid: userData['useruid'],
+                                          userName: userData['username'],
+                                          photoUrl: userData['userimage'],
+                                          email: userData['useremail'],
+                                          fcmToken: "",
 
-                                        ///later you have to give this the right value
-                                        store: false),
-                                  ),
-                                  withNavBar:
-                                      false, // OPTIONAL VALUE. True by default.
-                                  pageTransitionAnimation:
-                                      PageTransitionAnimation.cupertino,
-                                );
+                                          ///later you have to give this the right value
+                                          store: false),
+                                    ),
+                                    withNavBar:
+                                        false, // OPTIONAL VALUE. True by default.
+                                    pageTransitionAnimation:
+                                        PageTransitionAnimation.cupertino,
+                                  );
+                                } else {
+                                  pushNewScreen(
+                                    context,
+                                    screen: Profile(),
+                                    withNavBar:
+                                        false, // OPTIONAL VALUE. True by default.
+                                    pageTransitionAnimation:
+                                        PageTransitionAnimation.cupertino,
+                                  );
+                                }
                               }),
                         );
                       },
@@ -116,6 +138,8 @@ class PostSearch extends StatelessWidget {
         : StreamBuilder<QuerySnapshot>(
             stream: FirebaseFirestore.instance
                 .collection("posts")
+                .where('approvedForPosting',
+                    isEqualTo: !UserInfoManger.isAdmin())
                 .where('searchindex',
                     arrayContains: postSearchVal.toLowerCase())
                 .snapshots(),
@@ -225,7 +249,7 @@ class AuctionSearch extends StatelessWidget {
                                     child: AuctionPage(
                                       auctionId: auctionData['auctionid'],
                                     ),
-                                    type: PageTransitionType.bottomToTop));
+                                    type: PageTransitionType.rightToLeft));
                           },
                           leading: SizedBox(
                             height: size.height * 0.2,
@@ -233,6 +257,7 @@ class AuctionSearch extends StatelessWidget {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(5),
                               child: Swiper(
+                                loop: false,
                                 itemBuilder: (BuildContext context, int index) {
                                   return CachedNetworkImage(
                                     fit: BoxFit.cover,

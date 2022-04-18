@@ -1,33 +1,21 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/appleSignInCheck.dart';
-import 'package:mared_social/screens/AltProfile/altProfileHelper.dart';
 import 'package:mared_social/screens/Categories/categoryHelpers.dart';
 import 'package:mared_social/screens/CategoryFeed/categoryfeedhelper.dart';
 import 'package:mared_social/screens/Chatroom/chatroom_helpers.dart';
 import 'package:mared_social/screens/Chatroom/privateChatHelpers.dart';
-import 'package:mared_social/screens/HomePage/homepageHelpers.dart';
-import 'package:mared_social/screens/LandingPage/landingpage.dart';
 import 'package:mared_social/screens/Messaging/groupmessagehelper.dart';
 import 'package:mared_social/screens/Messaging/privateMessageHelper.dart';
 import 'package:mared_social/screens/Profile/profileHelpers.dart';
 import 'package:mared_social/screens/SearchFeed/searchfeedhelper.dart';
 import 'package:mared_social/screens/Stories/stories_helper.dart';
-import 'package:mared_social/screens/ambassaborsScreens/previewVideoHelper.dart';
 import 'package:mared_social/screens/auctionFeed/auctionfeedHelper.dart';
 import 'package:mared_social/screens/auctionFeed/placebidhelper.dart';
 import 'package:mared_social/screens/auctionMap/auctionMapHelper.dart';
 import 'package:mared_social/screens/auctions/auctionPageHelper.dart';
-import 'package:mared_social/screens/authentication/forgot_password_screen.dart';
-import 'package:mared_social/screens/authentication/login_screen.dart';
-import 'package:mared_social/screens/authentication/signup_screen.dart';
 import 'package:mared_social/screens/isAnon/isAnonHelper.dart';
 import 'package:mared_social/screens/promotePost/promotePostHelper.dart';
 import 'package:mared_social/screens/searchPage/search_page_header_tabs.dart';
@@ -74,7 +62,6 @@ class MyApp extends StatelessWidget {
           ),
         ),
         providers: [
-          ChangeNotifierProvider(create: (_) => PreviewVideoHelper()),
           ChangeNotifierProvider(create: (_) => PromotePostHelper()),
           ChangeNotifierProvider(create: (_) => PlaceBidHelpers()),
           ChangeNotifierProvider(create: (_) => AuctionMapHelper()),
@@ -87,7 +74,6 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => ProfileHelpers()),
           ChangeNotifierProvider(create: (_) => UploadPost()),
           ChangeNotifierProvider(create: (_) => PostFunctions()),
-          ChangeNotifierProvider(create: (_) => AltProfileHelper()),
           ChangeNotifierProvider(create: (_) => ChatroomHelpers()),
           ChangeNotifierProvider(create: (_) => GroupMessageHelper()),
           ChangeNotifierProvider(create: (_) => CategoryHelper()),

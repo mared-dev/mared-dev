@@ -489,6 +489,8 @@ class AuctionFuctions with ChangeNotifier {
                                                     PageTransition(
                                                         child: AltProfile(
                                                           userModel: UserModel(
+                                                              websiteLink: '',
+                                                              bio: '',
                                                               uid: commentDocSnap[
                                                                   'useruid'],
                                                               userName:
@@ -805,6 +807,8 @@ class AuctionFuctions with ChangeNotifier {
                                         PageTransition(
                                             child: AltProfile(
                                               userModel: UserModel(
+                                                  websiteLink: '',
+                                                  bio: '',
                                                   uid: documentSnapshot[
                                                       'useruid'],
                                                   userName: documentSnapshot[

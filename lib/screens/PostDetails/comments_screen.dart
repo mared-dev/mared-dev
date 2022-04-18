@@ -7,10 +7,13 @@ import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/constants/text_styles.dart';
 import 'package:mared_social/helpers/loading_helper.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
+import 'package:mared_social/screens/Profile/profile.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
+import 'package:mared_social/utils/firebase_general_helpers.dart';
 import 'package:mared_social/widgets/bottom_sheets/is_anon_bottom_sheet.dart';
 import 'package:mared_social/widgets/bottom_sheets/show_comments_section.dart';
 import 'package:mared_social/widgets/reusable/interacted_user_item.dart';
@@ -83,14 +86,19 @@ class _CommentsScreenState extends State<CommentsScreen> {
                         ),
                         leadingCallback: () {
                           if (commentItem['useruid'] !=
-                              Provider.of<Authentication>(context,
-                                      listen: false)
-                                  .getUserId) {
+                              UserInfoManger.getUserId()) {
                             Navigator.push(
                                 context,
                                 PageTransition(
                                     child: AltProfile(
                                       userModel: UserModel(
+                                          websiteLink: GeneralFirebaseHelpers
+                                              .getStringSafely(
+                                                  key: 'websiteLink',
+                                                  doc: commentItem),
+                                          bio: GeneralFirebaseHelpers
+                                              .getStringSafely(
+                                                  key: 'bio', doc: commentItem),
                                           uid: commentItem['useruid'],
                                           userName: commentItem['username'],
                                           photoUrl: commentItem['userimage'],
@@ -101,13 +109,19 @@ class _CommentsScreenState extends State<CommentsScreen> {
                                           store: false),
                                       userUid: commentItem['useruid'],
                                     ),
-                                    type: PageTransitionType.bottomToTop));
+                                    type: PageTransitionType.rightToLeft));
+                          } else {
+                            Navigator.push(
+                                context,
+                                PageTransition(
+                                    child: Profile(),
+                                    type: PageTransitionType.rightToLeft));
                           }
                         }))
                     .toList()),
           ),
           Padding(
-            padding: EdgeInsets.only(bottom: 36.h, left: 28.w, right: 28.w),
+            padding: EdgeInsets.only(bottom: 56.h, left: 28.w, right: 28.w),
             child: TextField(
               controller: commentController,
               decoration: InputDecoration(

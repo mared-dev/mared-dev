@@ -5,6 +5,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
+///delete later when you get to ambassador logic
 class PreviewVideoHelper with ChangeNotifier {
   late UploadTask imagePostUploadTask;
 

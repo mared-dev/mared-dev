@@ -22,8 +22,8 @@ class AuthCheckboxItem extends StatelessWidget {
             isSelected
                 ? 'assets/icons/checked_box.svg'
                 : 'assets/icons/unchecked_box.svg',
-            width: 12.h,
-            height: 12.h,
+            width: 13.h,
+            height: 13.h,
             fit: BoxFit.fill,
           ),
           SizedBox(
@@ -32,7 +32,7 @@ class AuthCheckboxItem extends StatelessWidget {
           Text(
             optionText,
             style: regularTextStyle(
-                fontSize: 12, textColor: AppColors.darkGrayTextColor),
+                fontSize: 15, textColor: AppColors.darkGrayTextColor),
           ),
           SizedBox(
             width: 26.w,

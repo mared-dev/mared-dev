@@ -7,6 +7,7 @@ import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/fcm_notification_Service.dart';
+import 'package:mared_social/utils/firebase_general_helpers.dart';
 import 'package:provider/provider.dart';
 
 class FirebaseOperations with ChangeNotifier {
@@ -154,29 +155,83 @@ class FirebaseOperations with ChangeNotifier {
   }
 
   Future initUserData(BuildContext context) async {
+    var userId = Provider.of<Authentication>(context, listen: false).getUserId;
+    String bio = "";
+    String websiteLink = "";
+    String userImage = "";
+
+    var extraInfo = await FirebaseFirestore.instance
+        .collection("users")
+        .doc(userId)
+        .collection("extrainfo")
+        .doc(userId)
+        .get();
+
+    if (extraInfo.data() != null) {
+      bio = extraInfo.data()!['bio'];
+      websiteLink = extraInfo.data()!['websiteLink'];
+      userImage = extraInfo.data()!['userimage'];
+    }
+    print(bio);
+    print(websiteLink);
+
     return FirebaseFirestore.instance
         .collection("users")
         .doc(Provider.of<Authentication>(context, listen: false).getUserId)
         .get()
         .then((doc) async {
-      print("fetching user data");
       initUserName = doc['username'];
       initUserEmail = doc['useremail'];
-      initUserImage = doc['userimage'];
+      initUserImage = userImage.isNotEmpty ? userImage : doc['userimage'];
       store = doc['store'];
       fcmToken = doc['fcmToken'];
 
       await UserInfoManger.setUserId(
           Provider.of<Authentication>(context, listen: false).getUserId);
       await UserInfoManger.saveUserInfo(UserModel(
+          websiteLink: websiteLink,
+          bio: bio,
           email: initUserEmail,
           userName: initUserName,
           photoUrl: initUserImage,
           store: store,
           uid: Provider.of<Authentication>(context, listen: false).getUserId,
           fcmToken: fcmToken));
-      notifyListeners();
     });
+  }
+
+  Future updateUserProfile(
+      {required BuildContext context,
+      required String userUid,
+      required String photoUrl,
+      required String bio,
+      required String websiteLink}) async {
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(userUid)
+        .collection("extrainfo")
+        .doc(userUid)
+        .set(
+      {'websiteLink': websiteLink, 'bio': bio, 'userimage': photoUrl},
+    );
+    FirebaseFirestore.instance.collection("users").doc(userUid).update({
+      'userimage': photoUrl,
+    });
+
+    UserModel oldModel = UserInfoManger.getUserInfo();
+
+    print('@*******************');
+    print(bio);
+    print(websiteLink);
+    UserInfoManger.saveUserInfo(UserModel(
+        userName: oldModel.userName,
+        email: oldModel.email,
+        photoUrl: photoUrl,
+        fcmToken: fcmToken,
+        store: store,
+        bio: bio,
+        websiteLink: websiteLink,
+        uid: UserInfoManger.getUserId()));
   }
 
   Future initChatData(BuildContext context) async {
@@ -368,10 +423,11 @@ class FirebaseOperations with ChangeNotifier {
 
   Future updateDescription(
       {required String postId,
-      required AsyncSnapshot<DocumentSnapshot> postDoc,
-      String? description,
+      required var postDoc,
+      required String description,
+      required String title,
       required BuildContext context}) async {
-    String name = "${postDoc.data!['caption']} ${description}";
+    String name = "${postDoc['caption']} ${description}";
 
     List<String> splitList = name.split(" ");
     List<String> indexList = [];
@@ -385,12 +441,13 @@ class FirebaseOperations with ChangeNotifier {
         .collection("posts")
         .doc(postId)
         .update({
+      'caption': title,
       'description': description,
       'searchindex': indexList,
     }).whenComplete(() async {
       return await FirebaseFirestore.instance
           .collection("users")
-          .doc(Provider.of<Authentication>(context, listen: false).getUserId)
+          .doc(UserInfoManger.getUserId())
           .collection("posts")
           .doc(postId)
           .update({

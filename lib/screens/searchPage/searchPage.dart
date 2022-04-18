@@ -97,11 +97,8 @@ class _SearchPageState extends State<SearchPage> {
                   child: PageView(
                     controller: pageController,
                     children: [
-                      UserSearchResultBody(
-                        isVendor: false,
-                        searchQuery: textController.text,
-                        searchIndexName: 'usersearchindex',
-                        collectionName: 'users',
+                      PostSearch(
+                        postSearchVal: textController.text,
                       ),
                       UserSearchResultBody(
                         isVendor: true,
@@ -109,9 +106,7 @@ class _SearchPageState extends State<SearchPage> {
                         searchIndexName: 'usersearchindex',
                         collectionName: 'users',
                       ),
-                      PostSearch(
-                        postSearchVal: textController.text,
-                      ),
+
                       // AuctionSearch(
                       //   auctionSearchVal: textController.text,
                       // ),

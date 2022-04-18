@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/constants/text_styles.dart';
-import 'package:mared_social/screens/AltProfile/altProfileHelper.dart';
 import 'package:mared_social/screens/PostDetails/post_details_screen.dart';
 import 'package:mared_social/widgets/items/show_post_details.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -39,6 +38,7 @@ class PostResultData extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(5),
             child: Swiper(
+              loop: false,
               itemBuilder: (BuildContext context, int index) {
                 return CachedNetworkImage(
                   fit: BoxFit.cover,

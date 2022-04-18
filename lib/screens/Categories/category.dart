@@ -37,7 +37,7 @@ class CategoryScreen extends StatelessWidget {
             context,
             screen: SearchPage(),
             withNavBar: false, // OPTIONAL VALUE. True by default.
-            pageTransitionAnimation: PageTransitionAnimation.cupertino,
+            pageTransitionAnimation: PageTransitionAnimation.slideRight,
           );
         },
       ),

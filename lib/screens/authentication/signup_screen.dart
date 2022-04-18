@@ -16,6 +16,7 @@ import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/screens/authentication/login_screen.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
+import 'package:mared_social/utils/firebase_general_helpers.dart';
 import 'package:mared_social/widgets/bottom_sheets/auth_sheets/select_avatar_options_sheet.dart';
 import 'package:mared_social/widgets/bottom_sheets/confirm_profile_pic_sheet.dart';
 import 'package:mared_social/widgets/items/pick_image_avatar.dart';
@@ -40,6 +41,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   late TextEditingController _emailController;
   late TextEditingController _phoneNumberController;
   late TextEditingController _passwordController;
+  late TextEditingController _confirmPasswordController;
 
   bool isStore = false;
 
@@ -50,6 +52,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     _emailController = TextEditingController();
     _phoneNumberController = TextEditingController();
     _passwordController = TextEditingController();
+    _confirmPasswordController = TextEditingController();
   }
 
   @override
@@ -177,6 +180,27 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         },
                       ),
                       SizedBox(
+                        height: 18.h,
+                      ),
+                      TextFormField(
+                        cursorColor: Colors.black,
+                        obscureText: true,
+                        enableSuggestions: false,
+                        autocorrect: false,
+                        decoration: getAuthInputDecoration(
+                          hintText: 'Confirm password',
+                        ),
+                        controller: _confirmPasswordController,
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'This field is required';
+                          } else if (value != _passwordController.text) {
+                            return "Passwords need to match";
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(
                           width: screenSize.width,
                           child: AuthCheckBoxGroup(
                             changeSelectedItemCallback: (newIndex) {
@@ -242,6 +266,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     email: _emailController.text,
                                     userName: _nameController.text,
                                     photoUrl: _uploadedImageLink,
+                                    websiteLink: '',
+                                    bio: '',
                                     fcmToken: ''));
 
                                 await UserInfoManger.saveAnonFlag(0);
@@ -282,15 +308,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   context,
                                   PageTransition(
                                       child: const HomePage(),
-                                      type: PageTransitionType.bottomToTop),
+                                      type: PageTransitionType.rightToLeft),
                                 );
                               } catch (e) {
                                 CoolAlert.show(
-                                  context: context,
-                                  type: CoolAlertType.error,
-                                  title: "Sign In Failed",
-                                  text: e.toString(),
-                                );
+                                    context: context,
+                                    type: CoolAlertType.error,
+                                    title: "Sign Up Failed",
+                                    text: GeneralFirebaseHelpers
+                                        .getFormattedAuthError(e));
                               } finally {
                                 LoadingHelper.endLoading();
                               }

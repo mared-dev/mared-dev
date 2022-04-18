@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:google_maps_place_picker_mb/google_maps_place_picker.dart';
 import 'package:google_place/google_place.dart';
@@ -18,15 +19,18 @@ import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/constants/general_styles.dart';
 import 'package:mared_social/constants/text_styles.dart';
+import 'package:mared_social/controllers/global_messages_controller.dart';
 import 'package:mared_social/helpers/loading_helper.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/enums/post_type.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/HomePage/homepage.dart';
+import 'package:mared_social/screens/PostDetails/image_video_details.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/mux/mux_video_stream.dart';
 import 'package:mared_social/widgets/reusable/simple_appbar_with_back.dart';
+import 'package:mared_social/widgets/reusable/video_thumbnail_item.dart';
 import 'package:nanoid/nanoid.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -59,19 +63,31 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
 
   PickResult? selectedPlace;
 
-  late VideoPlayerController _videoPlayerController;
+  VideoPlayerController? _videoPlayerController;
+  late GlobalMessagesController _globalMessagesController;
 
   @override
   void dispose() {
     super.dispose();
+    if (_videoPlayerController != null) {
+      _videoPlayerController!.dispose();
+    }
   }
 
   @override
   void initState() {
-    _videoPlayerController =
-        VideoPlayerController.file(File(widget.multipleImages[0].path));
+    if (widget.postType == PostType.VIDEO) {
+      _videoPlayerController =
+          VideoPlayerController.file(File(widget.multipleImages[0].path));
 
-    _videoPlayerController.initialize();
+      _videoPlayerController!.initialize().then((value) {
+        if (mounted) {
+          setState(() {});
+        }
+      });
+    }
+    _globalMessagesController = Get.find();
+
     super.initState();
   }
 
@@ -124,32 +140,46 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
                   SizedBox(
                     height: 16.h,
                   ),
-                  _displayImagePart(),
-                  Padding(
-                    padding: EdgeInsets.only(top: 16.h, bottom: 26.h),
-                    child: TextFormField(
-                      keyboardType: TextInputType.text,
-                      maxLines: 1,
-                      textCapitalization: TextCapitalization.words,
-                      maxLengthEnforcement: MaxLengthEnforcement.enforced,
-                      cursorColor: Colors.black,
-                      decoration: getAuthInputDecoration(
-                          hintText: 'Give your picture a title...',
-                          backGroundColor: AppColors.addPostInputBackground),
-                      controller: captionController,
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'This field is required';
-                        }
-                        return null;
-                      },
+                  Container(
+                    margin: EdgeInsets.only(top: 16.h, bottom: 26.h),
+                    height: 104.h,
+                    child: Row(
+                      children: [
+                        if (widget.multipleImages.isNotEmpty)
+                          _displayImagePart(),
+                        SizedBox(
+                          width: 16.w,
+                        ),
+                        Expanded(
+                          child: TextFormField(
+                            keyboardType: TextInputType.text,
+                            maxLines: 1,
+                            textCapitalization: TextCapitalization.words,
+                            maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                            cursorColor: Colors.black,
+                            decoration: getAuthInputDecoration(
+                                verticalContentPadding: 13,
+                                hintText: 'Give your picture a title...',
+                                backGroundColor:
+                                    AppColors.addPostInputBackground),
+                            controller: captionController,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'This field is required';
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   TextFormField(
-                    keyboardType: TextInputType.text,
-                    maxLines: 4,
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
                     textCapitalization: TextCapitalization.words,
                     maxLengthEnforcement: MaxLengthEnforcement.enforced,
+                    minLines: 3,
                     cursorColor: Colors.black,
                     decoration: getAuthInputDecoration(
                         hintText: "Give your picture a caption...",
@@ -163,100 +193,89 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
                     },
                   ),
                   _selectAddressLocation(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        flex: 2,
-                        child: Container(
-                          height: 35.h,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(6),
-                              color: AppColors.commentButtonColor),
-                          padding: EdgeInsets.symmetric(horizontal: 21.w),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SvgPicture.asset(
-                                  'assets/icons/category_icon.svg'),
-                              SizedBox(
-                                width: 6.w,
-                              ),
-                              DropdownButton(
-                                underline: SizedBox(),
-                                dropdownColor: AppColors.backGroundColor,
-                                hint: Container(
-                                  margin: EdgeInsets.only(right: 6.w),
-                                  alignment: Alignment.centerLeft,
-                                  child: Text('choose a Category',
-                                      style: regularTextStyle(
-                                          fontSize: 11,
-                                          textColor:
-                                              AppColors.backGroundColor)),
-                                ),
-                                value: _selectedCategory,
-                                onChanged: (String? newValue) {
-                                  setState(() {
-                                    _selectedCategory = newValue;
-                                  });
-                                },
-                                icon: SvgPicture.asset(
-                                    'assets/icons/select_category_arrow.svg'),
-                                selectedItemBuilder: (context) {
-                                  return catNames
-                                      .map<Widget>((item) => Container(
-                                            alignment: Alignment.centerLeft,
-                                            child: Text(item,
-                                                style: regularTextStyle(
-                                                    fontSize: 11,
-                                                    textColor: AppColors
-                                                        .backGroundColor)),
-                                          ))
-                                      .toList();
-                                },
-                                items: catNames.map((category) {
-                                  return DropdownMenuItem(
-                                    child: Text(category,
-                                        style: regularTextStyle(
-                                            fontSize: 11,
-                                            textColor:
-                                                AppColors.commentButtonColor)),
-                                    value: category,
-                                  );
-                                }).toList(),
-                              ),
-                            ],
-                          ),
+                  Container(
+                    height: 35.h,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        color: AppColors.commentButtonColor),
+                    padding: EdgeInsets.symmetric(horizontal: 21.w),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SvgPicture.asset('assets/icons/category_icon.svg'),
+                        SizedBox(
+                          width: 6.w,
                         ),
-                      ),
-                      Flexible(
-                          flex: 1,
-                          child: SizedBox(
-                            height: 35.h,
-                            child: Opacity(
-                              opacity: _canSharePost() ? 1 : 0.4,
-                              child: ElevatedButton.icon(
-                                icon: SvgPicture.asset(
-                                    'assets/icons/share_icon.svg'),
-                                label: Text(
-                                  'Share',
+                        DropdownButton(
+                          underline: SizedBox(),
+                          dropdownColor: AppColors.backGroundColor,
+                          hint: Container(
+                            margin: EdgeInsets.only(right: 6.w),
+                            alignment: Alignment.centerLeft,
+                            child: Text('choose a category',
+                                style: regularTextStyle(
+                                    fontSize: 11,
+                                    textColor: AppColors.backGroundColor)),
+                          ),
+                          value: _selectedCategory,
+                          onChanged: (String? newValue) {
+                            setState(() {
+                              _selectedCategory = newValue;
+                            });
+                          },
+                          icon: SvgPicture.asset(
+                              'assets/icons/select_category_arrow.svg'),
+                          selectedItemBuilder: (context) {
+                            return catNames
+                                .map<Widget>((item) => Container(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(item,
+                                          style: regularTextStyle(
+                                              fontSize: 11,
+                                              textColor:
+                                                  AppColors.backGroundColor)),
+                                    ))
+                                .toList();
+                          },
+                          items: catNames.map((category) {
+                            return DropdownMenuItem(
+                              child: Text(category,
                                   style: regularTextStyle(
                                       fontSize: 11,
-                                      textColor: AppColors.backGroundColor),
-                                ),
-                                style: ElevatedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(6.0),
-                                    ),
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 27.w, vertical: 6.h),
-                                    primary: AppColors.commentButtonColor),
-                                onPressed: _sharePost,
-                              ),
-                            ),
-                          )),
-                    ],
+                                      textColor: AppColors.commentButtonColor)),
+                              value: category,
+                            );
+                          }).toList(),
+                        ),
+                      ],
+                    ),
                   ),
+                  SizedBox(
+                    height: 37.h,
+                  ),
+                  SizedBox(
+                    height: 35.h,
+                    child: Opacity(
+                      opacity: _canSharePost() ? 1 : 0.4,
+                      child: ElevatedButton.icon(
+                        icon: SvgPicture.asset('assets/icons/share_icon.svg'),
+                        label: Text(
+                          'Share',
+                          style: regularTextStyle(
+                              fontSize: 11,
+                              textColor: AppColors.backGroundColor),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6.0),
+                            ),
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 27.w, vertical: 6.h),
+                            primary: AppColors.commentButtonColor),
+                        onPressed: _sharePost,
+                      ),
+                    ),
+                  )
                 ],
               ),
               decoration: BoxDecoration(
@@ -270,7 +289,9 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
   }
 
   bool _canSharePost() {
-    return captionController.text.isNotEmpty &&
+    return _selectedCategory != null &&
+        _selectedCategory!.isNotEmpty &&
+        captionController.text.isNotEmpty &&
         descriptionController.text.isNotEmpty;
   }
 
@@ -320,8 +341,22 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
                           onPlacePicked: (result) {
                             selectedPlace = result;
 
+                            String addressToShow = "";
+                            int numOfComponents =
+                                result.addressComponents!.length;
+                            try {
+                              addressToShow = 'UAE, ' +
+                                  result.addressComponents![numOfComponents - 2]
+                                      .shortName +
+                                  ', ' +
+                                  result.addressComponents![numOfComponents - 4]
+                                      .shortName;
+                            } catch (e) {
+                              addressToShow = 'UAE, Dubai';
+                            }
+
                             Navigator.pop(context, {
-                              "address": result.formattedAddress,
+                              "address": addressToShow,
                               "lat": result.geometry!.location.lat,
                               "lng": result.geometry!.location.lng
                             });
@@ -392,37 +427,39 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
   }
 
   Widget _displayImagePart() {
-    return Container(
-      height: 290.h,
-      width: size.width,
-      child: widget.postType == PostType.IMAGE
-          ? CarouselSlider(
-              options: CarouselOptions(
-                viewportFraction: 2,
-                autoPlay: false,
-                height: 290.h,
-                enlargeCenterPage: false,
-              ),
-              items: widget.multipleImages.map((e) {
-                return Image.file(
-                  File(e.path),
-                  width: size.width - 40.w,
-                  fit: BoxFit.fill,
-                );
-              }).toList(),
-            )
-          : _videoPlayerController.value.isInitialized
-              ? VideoPlayer(
-                  _videoPlayerController,
-                )
-              : LoadingWidget(constantColors: constantColors),
-    );
+    return SizedBox(
+        height: 95,
+        width: 95,
+        child: GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => ImageVideoDetails(
+                      videoPlayerController: _videoPlayerController,
+                      filesToShow: widget.multipleImages,
+                      postType: widget.postType,
+                    )));
+          },
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: widget.postType == PostType.IMAGE
+                ? Image.file(
+                    File(widget.multipleImages[0].path),
+                    // width: size.width - 40.w,
+                    fit: BoxFit.cover,
+                  )
+                : VideoThumbnailItem(
+                    video: widget.multipleImages[0],
+                  ),
+          ),
+        ));
   }
 
   _sharePost() async {
     //let's comment address and category and make them optional for now
 
-    if (_formKey.currentState!.validate()) {
+    if (_selectedCategory != null &&
+        _selectedCategory!.isNotEmpty &&
+        _formKey.currentState!.validate()) {
       try {
         LoadingHelper.startLoading();
         String postId = nanoid(14).toString();
@@ -451,6 +488,7 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
         await Provider.of<FirebaseOperations>(context, listen: false)
             .uploadPostData(postId, {
           'postid': postId,
+          'approvedForPosting': false,
           'searchindex': indexList,
           'likes': [],
           'comments': [],
@@ -480,6 +518,7 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
             .doc(postId)
             .set({
           'postid': postId,
+          'approvedForPosting': false,
           'likes': [],
           'comments': [],
           'searchindex': indexList,
@@ -501,18 +540,12 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
           'lat': lat,
           'lng': lng,
         });
-
-        setState(() {
-          widget.imagesList.clear();
-          widget.multipleImages.clear();
-        });
         Navigator.of(context).pop();
-        // Navigator.push(
-        //     context,
-        //     PageTransition(
-        //         child: HomePage(),
-        //         type: PageTransitionType.bottomToTop));
+        _globalMessagesController.displayNewMessage(
+            {'title': 'Success', 'body': 'Your post in under review !'});
       } catch (e) {
+        print('&&&&&&&&&&&&&');
+        print(e);
         CoolAlert.show(
           context: context,
           type: CoolAlertType.error,

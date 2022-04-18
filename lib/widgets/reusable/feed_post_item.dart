@@ -1,3 +1,5 @@
+import 'package:cool_alert/cool_alert.dart';
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
@@ -11,10 +13,14 @@ import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/constants/text_styles.dart';
 import 'package:mared_social/helpers/post_helpers.dart';
 import 'package:mared_social/helpers/time_helpers.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
+import 'package:mared_social/screens/Profile/profile.dart';
 import 'package:mared_social/screens/isAnon/isAnon.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
+import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
+import 'package:mared_social/utils/firebase_general_helpers.dart';
 import 'package:mared_social/utils/postoptions.dart';
 import 'package:mared_social/widgets/bottom_sheets/show_comments_section.dart';
 import 'package:mared_social/widgets/items/post_share_part.dart';
@@ -27,6 +33,7 @@ import 'package:mared_social/widgets/reusable/post_item_image.dart';
 import 'package:mared_social/widgets/reusable/post_likes_part.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:readmore/readmore.dart';
 
 class FeedPostItem extends StatefulWidget {
   final documentSnapshot;
@@ -39,6 +46,7 @@ class FeedPostItem extends StatefulWidget {
 }
 
 class _FeedPostItemState extends State<FeedPostItem> {
+  List<String> _editPostOptions = ['Edit post', 'Delete post'];
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -56,13 +64,20 @@ class _FeedPostItemState extends State<FeedPostItem> {
                     GestureDetector(
                       onTap: () {
                         if (widget.documentSnapshot['useruid'] !=
-                            Provider.of<Authentication>(context, listen: false)
-                                .getUserId) {
+                            UserInfoManger.getUserId()) {
                           Navigator.push(
                               context,
                               PageTransition(
                                   child: AltProfile(
                                     userModel: UserModel(
+                                        websiteLink: GeneralFirebaseHelpers
+                                            .getStringSafely(
+                                                key: 'websiteLink',
+                                                doc: widget.documentSnapshot),
+                                        bio: GeneralFirebaseHelpers
+                                            .getStringSafely(
+                                                key: 'bio',
+                                                doc: widget.documentSnapshot),
                                         uid: widget.documentSnapshot['useruid'],
                                         userName:
                                             widget.documentSnapshot['username'],
@@ -76,7 +91,13 @@ class _FeedPostItemState extends State<FeedPostItem> {
                                         store: false),
                                     userUid: widget.documentSnapshot['useruid'],
                                   ),
-                                  type: PageTransitionType.bottomToTop));
+                                  type: PageTransitionType.rightToLeft));
+                        } else {
+                          Navigator.push(
+                              context,
+                              PageTransition(
+                                  child: Profile(),
+                                  type: PageTransitionType.rightToLeft));
                         }
                       },
                       child: SizedBox(
@@ -85,7 +106,7 @@ class _FeedPostItemState extends State<FeedPostItem> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(100),
                           child: CachedNetworkImage(
-                            fit: BoxFit.cover,
+                            fit: BoxFit.contain,
                             imageUrl: widget.documentSnapshot['userimage'],
                             progressIndicatorBuilder: (context, url,
                                     downloadProgress) =>
@@ -97,10 +118,24 @@ class _FeedPostItemState extends State<FeedPostItem> {
                       ),
                     ),
                     Expanded(
-                      child: _postHeader(
-                          userName: widget.documentSnapshot['username'],
-                          address: widget.documentSnapshot['address'],
-                          userId: widget.documentSnapshot['useruid']),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: _postHeader(
+                                userName: widget.documentSnapshot['username'],
+                                address: widget.documentSnapshot['address'],
+                                userId: widget.documentSnapshot['useruid']),
+                          ),
+                          UserInfoManger.getUserId() ==
+                                  widget.documentSnapshot['useruid']
+                              ? _editPostSection()
+                              : const SizedBox(
+                                  height: 0,
+                                  width: 0,
+                                ),
+                        ],
+                      ),
                     )
                   ],
                 ),
@@ -124,7 +159,7 @@ class _FeedPostItemState extends State<FeedPostItem> {
                         widget.documentSnapshot['caption'],
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
-                        style: regularTextStyle(
+                        style: semiBoldTextStyle(
                           textColor: AppColors.commentButtonColor,
                           fontSize: 14.sp,
                         ),
@@ -133,16 +168,23 @@ class _FeedPostItemState extends State<FeedPostItem> {
                     SizedBox(
                       height: 8.h,
                     ),
-                    SizedBox(
+                    Container(
                       width: MediaQuery.of(context).size.width,
-                      child: Text(
+                      child: ReadMoreText(
                         widget.documentSnapshot['description'],
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: lightTextStyle(
+                        textAlign: TextAlign.start,
+                        trimLines: 2,
+                        trimMode: TrimMode.Line,
+                        trimCollapsedText: 'Show more',
+                        trimExpandedText: 'Show less',
+                        style: regularTextStyle(
                           textColor: AppColors.commentButtonColor,
                           fontSize: 11.sp,
                         ),
+                        lessStyle: regularTextStyle(
+                            textColor: Colors.black26, fontSize: 11.sp),
+                        moreStyle: regularTextStyle(
+                            textColor: Colors.black26, fontSize: 11.sp),
                       ),
                     ),
                     SizedBox(
@@ -169,6 +211,67 @@ class _FeedPostItemState extends State<FeedPostItem> {
         ));
   }
 
+  Widget _editPostSection() {
+    return DropdownButtonHideUnderline(
+      child: DropdownButton2(
+        customButton:
+            Icon(EvaIcons.moreVertical, color: AppColors.commentButtonColor),
+        customItemsHeight: 8,
+        items: [
+          ..._editPostOptions.map(
+            (item) => DropdownMenuItem<String>(
+              value: item,
+              child: Text(item),
+            ),
+          ),
+        ],
+        onChanged: (String? value) {
+          if (value == _editPostOptions[0]) {
+            // Provider.of<PostFunctions>(context, listen: false).showPostOptions(
+            //     context: context, postId: widget.documentSnapshot['postid']);
+
+            Provider.of<PostFunctions>(context, listen: false).editCaptionText(
+                context,
+                widget.documentSnapshot,
+                widget.documentSnapshot['postid']);
+          } else if (value == _editPostOptions[1]) {
+            CoolAlert.show(
+              context: context,
+              type: CoolAlertType.warning,
+              confirmBtnText: "Delete",
+              cancelBtnText: "Keep Post",
+              showCancelBtn: true,
+              title: "Delete this post?",
+              onConfirmBtnTap: () async {
+                Navigator.of(context, rootNavigator: true).pop();
+
+                await Provider.of<FirebaseOperations>(context, listen: false)
+                    .deletePostData(
+                  userUid: widget.documentSnapshot['useruid'],
+                  postId: widget.documentSnapshot['postid'],
+                );
+              },
+              onCancelBtnTap: () {
+                Navigator.of(context, rootNavigator: true).pop();
+              },
+            );
+          }
+          // MenuItems.onChanged(context, value as MenuItem);
+        },
+        itemHeight: 48,
+        itemPadding: const EdgeInsets.only(left: 16, right: 16),
+        dropdownWidth: 160,
+        dropdownPadding: const EdgeInsets.symmetric(vertical: 6),
+        dropdownDecoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(4),
+          color: Colors.white,
+        ),
+        dropdownElevation: 8,
+        offset: const Offset(0, 8),
+      ),
+    );
+  }
+
   Widget _postFooter({
     required documentSnapshot,
   }) {
@@ -185,25 +288,6 @@ class _FeedPostItemState extends State<FeedPostItem> {
           PostCommentsPart(documentSnapshot: documentSnapshot),
           PostSharePart(postId: documentSnapshot['postid']),
           const Spacer(),
-          Provider.of<Authentication>(context, listen: false).getUserId ==
-                  documentSnapshot['useruid']
-              ? IconButton(
-                  onPressed: () {
-                    Provider.of<PostFunctions>(context, listen: false)
-                        .showPostOptions(
-                            context: context,
-                            postId: documentSnapshot['postid']);
-
-                    Provider.of<PostFunctions>(context, listen: false)
-                        .getImageDescription(documentSnapshot['description']);
-                  },
-                  icon: Icon(EvaIcons.moreVertical,
-                      color: AppColors.commentButtonColor),
-                )
-              : const SizedBox(
-                  height: 0,
-                  width: 0,
-                ),
         ],
       ),
     );
@@ -216,19 +300,23 @@ class _FeedPostItemState extends State<FeedPostItem> {
       child: Container(
         width: MediaQuery.of(context).size.width,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             GestureDetector(
                 onTap: () {
-                  if (userId !=
-                      Provider.of<Authentication>(context, listen: false)
-                          .getUserId) {
+                  if (userId != UserInfoManger.getUserId()) {
                     Navigator.push(
                         context,
                         PageTransition(
                             child: AltProfile(
                               userModel: UserModel(
+                                  websiteLink:
+                                      GeneralFirebaseHelpers.getStringSafely(
+                                          key: 'websiteLink',
+                                          doc: widget.documentSnapshot),
+                                  bio: GeneralFirebaseHelpers.getStringSafely(
+                                      key: 'bio', doc: widget.documentSnapshot),
                                   uid: widget.documentSnapshot['useruid'],
                                   userName: widget.documentSnapshot['username'],
                                   photoUrl:
@@ -240,41 +328,32 @@ class _FeedPostItemState extends State<FeedPostItem> {
                                   store: false),
                               userUid: userId,
                             ),
-                            type: PageTransitionType.bottomToTop));
+                            type: PageTransitionType.rightToLeft));
+                  } else {
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            child: Profile(),
+                            type: PageTransitionType.rightToLeft));
                   }
                 },
                 child: Text(userName,
                     style: semiBoldTextStyle(
                         fontSize: 15.sp, textColor: AppColors.accentColor))),
-            SizedBox(
-              height: 5.h,
-            ),
-            Text(
-              address,
-              softWrap: true,
-              overflow: TextOverflow.ellipsis,
-              style: lightTextStyle(fontSize: 11.sp, textColor: Colors.black),
-            ),
+            if (address.isNotEmpty)
+              SizedBox(
+                height: 5.h,
+              ),
+            if (address.isNotEmpty)
+              Text(
+                address,
+                softWrap: true,
+                overflow: TextOverflow.ellipsis,
+                style: lightTextStyle(fontSize: 11.sp, textColor: Colors.black),
+              ),
           ],
         ),
       ),
-    );
-  }
-
-  //move to a seprate file later
-  IsAnonBottomSheet(BuildContext context) {
-    return showModalBottomSheet(
-      isScrollControlled: true,
-      context: context,
-      builder: (context) {
-        return SafeArea(
-          bottom: true,
-          child: SizedBox(
-            height: MediaQuery.of(context).size.height * 0.9,
-            child: IsAnonMsg(),
-          ),
-        );
-      },
     );
   }
 }

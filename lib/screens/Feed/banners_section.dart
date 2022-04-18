@@ -9,6 +9,8 @@ import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/PostDetails/post_details_screen.dart';
+import 'package:mared_social/screens/Profile/profile.dart';
+import 'package:mared_social/utils/firebase_general_helpers.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:get/get.dart';
@@ -36,8 +38,8 @@ class _BannersSectionState extends State<BannersSection> {
             !bannerSnap.hasData ||
             bannerSnap.data == null) {
           return LoadingWidget(constantColors: constantColors);
-        } else {
-          if (selectedUserId.isEmpty) {
+        } else if (bannerSnap.hasData && bannerSnap.data!.docs.isNotEmpty) {
+          if (selectedUserId.isNotEmpty) {
             var bannerItem = bannerSnap.data!.docs[0];
             selectedUserId = bannerItem['useruid'];
             selectedPostId = bannerItem['postid'];
@@ -47,6 +49,10 @@ class _BannersSectionState extends State<BannersSection> {
                 photoUrl: bannerItem['userimage'],
                 fcmToken: '',
                 store: false,
+                websiteLink: GeneralFirebaseHelpers.getStringSafely(
+                    key: 'websiteLink', doc: bannerItem),
+                bio: GeneralFirebaseHelpers.getStringSafely(
+                    key: 'bio', doc: bannerItem),
                 uid: bannerItem['useruid']);
           }
 
@@ -58,12 +64,17 @@ class _BannersSectionState extends State<BannersSection> {
             child: Stack(
               children: [
                 Swiper(
+                  loop: false,
                   onIndexChanged: (newIndex) {
                     var bannerItem = bannerSnap.data!.docs[newIndex];
                     selectedUser = UserModel(
                         userName: bannerItem['username'],
                         email: bannerItem['useremail'],
                         photoUrl: bannerItem['userimage'],
+                        websiteLink: GeneralFirebaseHelpers.getStringSafely(
+                            key: 'websiteLink', doc: bannerItem),
+                        bio: GeneralFirebaseHelpers.getStringSafely(
+                            key: 'bio', doc: bannerItem),
                         fcmToken: '',
                         store: false,
                         uid: bannerItem['useruid']);
@@ -115,6 +126,8 @@ class _BannersSectionState extends State<BannersSection> {
               ],
             ),
           );
+        } else {
+          return Container();
         }
       },
     );
@@ -192,6 +205,13 @@ class SwiperIndicator extends StatelessWidget {
                     context,
                     screen: AltProfile(
                         userUid: selectedUserId, userModel: userModel),
+                    withNavBar: false, // OPTIONAL VALUE. True by default.
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  );
+                } else {
+                  pushNewScreen(
+                    context,
+                    screen: Profile(),
                     withNavBar: false, // OPTIONAL VALUE. True by default.
                     pageTransitionAnimation: PageTransitionAnimation.cupertino,
                   );

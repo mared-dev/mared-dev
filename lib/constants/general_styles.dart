@@ -7,7 +7,8 @@ import 'colors.dart';
 InputDecoration getAuthInputDecoration(
     {IconData? prefixIcon,
     required String hintText,
-    Color backGroundColor = AppColors.authInputFillColor}) {
+    Color backGroundColor = AppColors.authInputFillColor,
+    double verticalContentPadding = 17}) {
   return InputDecoration(
     prefixIcon: prefixIcon != null
         ? Icon(
@@ -15,7 +16,8 @@ InputDecoration getAuthInputDecoration(
             color: AppColors.darkGrayTextColor,
           )
         : null,
-    contentPadding: EdgeInsets.symmetric(vertical: 17.h, horizontal: 14.w),
+    contentPadding: EdgeInsets.symmetric(
+        vertical: verticalContentPadding.h, horizontal: 14.w),
     hintText: hintText,
     hintStyle: regularTextStyle(
         fontSize: 12.sp, textColor: AppColors.darkGrayTextColor),

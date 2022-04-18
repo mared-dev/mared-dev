@@ -6,14 +6,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
-import 'package:mared_social/helpers/post_helpers.dart';
 import 'package:mared_social/models/user_model.dart';
-import 'package:mared_social/screens/AltProfile/altProfileHelper.dart';
 import 'package:mared_social/screens/Profile/profile_tabs.dart';
-import 'package:mared_social/widgets/items/profile_post_item.dart';
-import 'package:mared_social/widgets/items/show_post_details.dart';
 import 'package:mared_social/widgets/reusable/simple_appbar_with_back.dart';
-import 'package:provider/provider.dart';
 
 class AltProfile extends StatelessWidget {
   final String userUid;
