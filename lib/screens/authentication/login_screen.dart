@@ -1,13 +1,18 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mared_social/constants/general_styles.dart';
 import 'package:mared_social/constants/text_styles.dart';
 import 'package:mared_social/helpers/loading_helper.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
+import 'package:mared_social/models/user_cedentials_model.dart';
 import 'package:mared_social/screens/LandingPage/landing_helpers.dart';
 import 'package:mared_social/screens/authentication/forgot_password_screen.dart';
 import 'package:mared_social/screens/authentication/signup_screen.dart';
+import 'package:mared_social/utils/popup_utils.dart';
+import 'package:mared_social/widgets/reusable/auth_checkbox_item.dart';
 import 'package:page_transition/page_transition.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -16,6 +21,7 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  bool rememberMe = true;
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
   final _formKey = GlobalKey<FormState>();
@@ -25,11 +31,18 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
+
+    _initRememberedCredentials();
+    // WidgetsBinding.instance!
+    //     .addPostFrameCallback((_) => _initRememberedCredentials());
   }
+
+  List<UserCredentialsModel> savedCredentials = [];
 
   @override
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
+    print('@@@@@@@@@');
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: true,
@@ -71,19 +84,45 @@ class _LoginScreenState extends State<LoginScreen> {
                           SizedBox(
                             height: 28.h,
                           ),
-                          TextFormField(
-                            controller: _emailController,
-                            cursorColor: Colors.black,
-                            keyboardType: TextInputType.emailAddress,
-                            decoration: getAuthInputDecoration(
-                              prefixIcon: Icons.email_outlined,
-                              hintText: 'Email address',
+                          TypeAheadField(
+                            textFieldConfiguration: TextFieldConfiguration(
+                              controller: _emailController,
+                              autofocus: false,
+                              enableSuggestions: true,
+                              enableInteractiveSelection: true,
+                              scrollPadding: EdgeInsets.only(bottom: 120.h),
+                              decoration: getAuthInputDecoration(
+                                prefixIcon: Icons.email_outlined,
+                                hintText: 'Email address',
+                              ),
                             ),
-                            validator: (value) {
-                              if (value!.isNotEmpty) {
-                                return null;
-                              }
-                              return "This field can't be empty";
+                            suggestionsCallback: (pattern) async {
+                              List<UserCredentialsModel> foundList =
+                                  savedCredentials
+                                      .where((element) =>
+                                          element.email.contains(pattern))
+                                      .toList();
+                              return Future.value(foundList);
+                            },
+                            errorBuilder: (context, _) {
+                              return Container();
+                            },
+                            hideOnEmpty: true,
+                            itemBuilder:
+                                (context, UserCredentialsModel suggestion) {
+                              return Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 12, horizontal: 10),
+                                  decoration:
+                                      BoxDecoration(color: Colors.white),
+                                  child: Text(suggestion.email.toString()));
+                            },
+                            onSuggestionSelected:
+                                (UserCredentialsModel suggestion) {
+                              _emailController.text =
+                                  suggestion.email.toString();
+                              _passwordController.text =
+                                  suggestion.password.toString();
                             },
                           ),
                           SizedBox(
@@ -107,8 +146,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
                           ),
                           Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
+                              _rememberMeButton(),
                               GestureDetector(
                                 onTap: () {
                                   Navigator.pushReplacement(
@@ -136,12 +176,33 @@ class _LoginScreenState extends State<LoginScreen> {
                             width: screenSize.width,
                             child: ElevatedButton(
                               onPressed: () async {
-                                if (_formKey.currentState!.validate()) {
+                                if (_emailController.text.isEmpty) {
+                                  PopupUtils.showFailurePopup(
+                                      title: 'Failed',
+                                      body: "Email address can't be empty",
+                                      context: context);
+                                } else if (_formKey.currentState!.validate()) {
                                   LoadingHelper.startLoading();
-                                  await LandingHelpers.loginWithEmail(
-                                      context: context,
-                                      email: _emailController.text,
-                                      password: _passwordController.text);
+
+                                  bool isSuccessfulLogin =
+                                      await LandingHelpers.loginWithEmail(
+                                          context: context,
+                                          email: _emailController.text,
+                                          password: _passwordController.text);
+
+                                  if (isSuccessfulLogin) {
+                                    UserInfoManger.rememberUser(
+                                        email: _emailController.text,
+                                        password: _emailController.text);
+
+                                    savedCredentials.add(UserCredentialsModel(
+                                        email: _emailController.text,
+                                        password: _passwordController.text));
+
+                                    UserInfoManger.saveUsersCredentials(
+                                        savedCredentials);
+                                  }
+
                                   LoadingHelper.endLoading();
                                 }
                               },
@@ -196,6 +257,35 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  _initRememberedCredentials() async {
+    _emailController.text = await UserInfoManger.getRememberedEmail();
+    _passwordController.text = await UserInfoManger.getRememberedPassword();
+
+    savedCredentials = UserInfoManger.getSavedCredentials();
+  }
+
+  Widget _rememberMeButton() {
+    return StatefulBuilder(
+      builder: (BuildContext context,
+          void Function(void Function()) setButtonState) {
+        return GestureDetector(
+          onTap: () {
+            setButtonState(() {
+              rememberMe = !rememberMe;
+            });
+          },
+          child: Padding(
+            padding: EdgeInsets.only(left: 6),
+            child: AuthCheckboxItem(
+              optionText: 'Remeber me',
+              isSelected: rememberMe,
+            ),
+          ),
+        );
+      },
     );
   }
 }

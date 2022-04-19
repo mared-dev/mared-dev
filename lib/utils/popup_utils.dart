@@ -12,4 +12,12 @@ class PopupUtils {
         title: title,
         text: body);
   }
+
+  static showFailurePopup(
+      {required String title,
+      required String body,
+      required BuildContext context}) {
+    CoolAlert.show(
+        context: context, type: CoolAlertType.error, title: title, text: body);
+  }
 }

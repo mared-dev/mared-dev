@@ -27,4 +27,8 @@ class SharedPreferencesHelper {
   static clearSharedPrefs() async {
     await prefs.clear();
   }
+
+  static deleteItemWithKey(String key) async {
+    await prefs.remove(key);
+  }
 }

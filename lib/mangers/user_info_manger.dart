@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:mared_social/models/user_cedentials_model.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/services/shared_preferences_helper.dart';
 
@@ -18,7 +19,10 @@ class UserInfoManger {
   }
 
   static clearUserInfo() async {
-    await SharedPreferencesHelper.clearSharedPrefs();
+    await SharedPreferencesHelper.deleteItemWithKey('userInfo');
+    await SharedPreferencesHelper.deleteItemWithKey('userId');
+    await SharedPreferencesHelper.deleteItemWithKey('anonFlag');
+    await SharedPreferencesHelper.deleteItemWithKey('role');
   }
 
   static UserModel getUserInfo() {
@@ -52,12 +56,49 @@ class UserInfoManger {
   }
 
   static saveRole(value) async {
-    print('***************');
-    print(value);
     await SharedPreferencesHelper.setString('role', value);
   }
 
   static bool isAdmin() {
     return SharedPreferencesHelper.getString('role') == 'admin';
+  }
+
+  static void rememberUser(
+      {required String email, required String password}) async {
+    print('**********');
+    print(email);
+    print(password);
+    await SharedPreferencesHelper.setString('savedEmail', email);
+    await SharedPreferencesHelper.setString('savedPassword', password);
+  }
+
+  static Future<String> getRememberedEmail() async {
+    return SharedPreferencesHelper.getString('savedEmail');
+  }
+
+  static Future<String> getRememberedPassword() async {
+    return SharedPreferencesHelper.getString('savedPassword');
+  }
+
+  static void saveUsersCredentials(List<UserCredentialsModel> users) {
+    String encodedCredentials = json.encode(
+      users
+          .map<Map<String, dynamic>>((user) => UserCredentialsModel.toMap(user))
+          .toList(),
+    );
+    SharedPreferencesHelper.setString('savedCredentials', encodedCredentials);
+  }
+
+  static List<UserCredentialsModel> getSavedCredentials() {
+    String savedCredentials = "";
+    try {
+      savedCredentials = SharedPreferencesHelper.getString('savedCredentials');
+      return (json.decode(savedCredentials) as List<dynamic>)
+          .map<UserCredentialsModel>(
+              (item) => UserCredentialsModel.fromJson(item))
+          .toList();
+    } catch (e) {
+      return [];
+    }
   }
 }

@@ -200,7 +200,7 @@ class LandingHelpers {
     }
   }
 
-  static loginWithEmail({context, email, password}) async {
+  static Future<bool> loginWithEmail({context, email, password}) async {
     try {
       await Provider.of<Authentication>(context, listen: false)
           .loginIntoAccount(email, password);
@@ -236,12 +236,14 @@ class LandingHelpers {
         context,
         PageTransition(child: HomePage(), type: PageTransitionType.rightToLeft),
       );
+      return Future.value(true);
     } catch (e) {
       CoolAlert.show(
           context: context,
           type: CoolAlertType.error,
           title: "Sign In Failed",
           text: GeneralFirebaseHelpers.getFormattedAuthError(e));
+      return Future.value(false);
     }
   }
 }
