@@ -188,12 +188,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                         email: _emailController.text,
                                         password: _passwordController.text);
 
-                                    savedCredentials.add(UserCredentialsModel(
-                                        email: _emailController.text,
-                                        password: _passwordController.text));
+                                    if (!savedCredentials.any((element) =>
+                                        element.email ==
+                                        _emailController.text)) {
+                                      savedCredentials.add(UserCredentialsModel(
+                                          email: _emailController.text,
+                                          password: _passwordController.text));
 
-                                    UserInfoManger.saveUsersCredentials(
-                                        savedCredentials);
+                                      UserInfoManger.saveUsersCredentials(
+                                          savedCredentials);
+                                    }
                                   }
 
                                   LoadingHelper.endLoading();

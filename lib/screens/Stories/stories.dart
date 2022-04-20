@@ -98,14 +98,21 @@ class _StoriesState extends State<Stories> {
                         SizedBox(
                           height: MediaQuery.of(context).size.height,
                           width: MediaQuery.of(context).size.width,
-                          child: AspectRatio(
-                            aspectRatio: 16 / 9,
-                            child: _controller!.value.isInitialized
-                                ? VideoPlayer(
-                                    _controller!,
-                                  )
-                                : LoadingWidget(constantColors: constantColors),
-                          ),
+                          child: _controller!.value.isInitialized
+                              ? Center(
+                                  child: AspectRatio(
+                                    aspectRatio: _controller!.value.size.width /
+                                        _controller!.value.size.height,
+                                    child: SizedBox(
+                                      height: _controller!.value.size.height,
+                                      width: _controller!.value.size.width,
+                                      child: VideoPlayer(
+                                        _controller!,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : LoadingWidget(constantColors: constantColors),
                         ),
                       ],
                     ),
