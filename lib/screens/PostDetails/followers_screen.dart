@@ -71,6 +71,8 @@ class _FollowersScreenState extends State<FollowersScreen> {
                     imageUrl: followerItem['userimage'],
                     title: followerItem['username'],
                     subtitle: followerItem['useremail'],
+                    shouldShowIcon:
+                        followerItem['useruid'] != UserInfoManger.getUserId(),
                     trailingCallback: () async {
                       if (isUserFollowed) {
                         await Provider.of<FirebaseOperations>(context,

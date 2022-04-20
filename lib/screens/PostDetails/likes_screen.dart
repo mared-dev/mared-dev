@@ -71,6 +71,8 @@ class _LikesScreenState extends State<LikesScreen> {
                     imageUrl: likeItem['userimage'],
                     title: likeItem['username'],
                     subtitle: likeItem['useremail'],
+                    shouldShowIcon:
+                        likeItem['useruid'] != UserInfoManger.getUserId(),
                     trailingCallback: () async {
                       if (isUserFollowed) {
                         await Provider.of<FirebaseOperations>(context,

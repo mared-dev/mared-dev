@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/screens/LandingPage/landingpage.dart';
@@ -24,7 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // });
     Timer(
         const Duration(
-          milliseconds: 3500,
+          milliseconds: 500,
         ), () async {
       if (FirebaseAuth.instance.currentUser != null &&
           !UserInfoManger.getAnonFlag()) {
@@ -49,17 +50,17 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: constantColors.lightBlueColor,
+      backgroundColor: AppColors.backGroundColor,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            color: constantColors.lightBlueColor,
+            color: AppColors.backGroundColor,
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: Image.asset(
-              "assets/animations/Animation_Logo.gif",
+              "assets/animations/mared_logo_animation_white.gif",
               fit: BoxFit.fitWidth,
             ),
           ),

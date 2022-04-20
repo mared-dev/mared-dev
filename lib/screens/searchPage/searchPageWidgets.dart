@@ -72,6 +72,7 @@ class UserSearchResultBody extends StatelessWidget {
                               itemUserId: userData['useruid'],
                               title: userData['username'],
                               subtitle: userData['useremail'],
+                              shouldShowIcon: false,
                               leadingCallback: () {
                                 if (userData['useruid'] !=
                                     UserInfoManger.getUserId()) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
@@ -62,22 +63,18 @@ class _PreviewPickedVideoState extends State<PreviewPickedVideo> {
                   children: [
                     FloatingActionButton(
                       heroTag: "Reselect Image",
-                      backgroundColor: constantColors.redColor,
-                      child: Icon(
-                        FontAwesomeIcons.backspace,
-                        color: constantColors.whiteColor,
-                      ),
+                      backgroundColor: constantColors.transperant,
+                      child: SvgPicture.asset(
+                          'assets/icons/discard_video_button.svg'),
                       onPressed: () {
                         Navigator.pop(context);
                       },
                     ),
                     FloatingActionButton(
                       heroTag: "Confirm Image",
-                      backgroundColor: constantColors.blueColor,
-                      child: Icon(
-                        FontAwesomeIcons.check,
-                        color: constantColors.whiteColor,
-                      ),
+                      child: SvgPicture.asset(
+                          'assets/icons/confirm_video_button.svg'),
+                      backgroundColor: constantColors.transperant,
                       onPressed: () async {
                         widget.videoPlayerController.pause().then((_) {
                           // CoolAlert.show(

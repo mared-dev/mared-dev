@@ -72,6 +72,8 @@ class _FollowingScreenState extends State<FollowingScreen> {
                     imageUrl: followingItem['userimage'],
                     title: followingItem['username'],
                     subtitle: followingItem['useremail'],
+                    shouldShowIcon:
+                        followingItem['useruid'] != UserInfoManger.getUserId(),
                     trailingCallback: () async {
                       if (isUserFollowed) {
                         await Provider.of<FirebaseOperations>(context,

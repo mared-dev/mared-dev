@@ -70,18 +70,22 @@ class _CommentsScreenState extends State<CommentsScreen> {
                         imageUrl: commentItem['userimage'],
                         title: commentItem['username'],
                         subtitle: commentItem['comment'],
+                        shouldShowIcon: commentItem['useruid'] ==
+                            UserInfoManger.getUserId(),
                         trailingIcon: IconButton(
                           onPressed: () {
                             Provider.of<FirebaseOperations>(context,
                                     listen: false)
                                 .deleteUserComment(
                                     postId: widget.postId,
-                                    commentId: commentItem['commentid']);
+                                    commentId: commentItem['commentid'])
+                                .then((value) => Navigator.of(context).pop());
                           },
                           icon: SvgPicture.asset(
                             'assets/icons/delete_comment_icon.svg',
                             width: 20,
                             height: 18,
+                            color: Colors.black,
                           ),
                         ),
                         leadingCallback: () {
