@@ -127,7 +127,7 @@ class _LandingPageState extends State<LandingPage> {
                   Container(
                     width: screenSize.width,
                     child: Text(
-                      'CONNECTING BUISNESSES',
+                      'CONNECTING BUSINESSES',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 31.sp,

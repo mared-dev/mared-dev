@@ -193,7 +193,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   if (isSuccessfulLogin) {
                                     UserInfoManger.rememberUser(
                                         email: _emailController.text,
-                                        password: _emailController.text);
+                                        password: _passwordController.text);
 
                                     savedCredentials.add(UserCredentialsModel(
                                         email: _emailController.text,

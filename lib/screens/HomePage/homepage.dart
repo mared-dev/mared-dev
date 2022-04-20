@@ -168,9 +168,9 @@ class _HomePageState extends State<HomePage> {
           hideNavigationBarWhenKeyboardShows: true,
           items: _navBarItems,
           // padding: NavBarPadding.only(bottom: 10),
-          navBarHeight: 85.h,
-          padding: NavBarPadding.only(bottom: 15.h),
-          backgroundColor: Colors.black,
+          navBarHeight: 65.h,
+          padding: NavBarPadding.only(bottom: 12.h),
+          backgroundColor: Colors.white,
           navBarStyle: NavBarStyle.style6),
     );
   }
@@ -184,8 +184,8 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           SvgPicture.asset(iconPath,
-              width: 24,
-              height: 28,
+              width: 22,
+              height: 24,
               fit: BoxFit.fill,
               color: AppColors.notActiveNavItemColor),
           SizedBox(
@@ -204,8 +204,8 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           SvgPicture.asset(iconPath,
-              width: 24,
-              height: 28,
+              width: 22,
+              height: 24,
               fit: BoxFit.fill,
               color: AppColors.accentColor),
           SizedBox(
