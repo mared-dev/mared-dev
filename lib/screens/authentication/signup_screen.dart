@@ -22,6 +22,7 @@ import 'package:mared_social/widgets/bottom_sheets/confirm_profile_pic_sheet.dar
 import 'package:mared_social/widgets/items/pick_image_avatar.dart';
 import 'package:mared_social/widgets/reusable/auth_checkbox_group.dart';
 import 'package:mared_social/widgets/reusable/auth_checkbox_item.dart';
+import 'package:mared_social/widgets/reusable/password_text_field.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -161,15 +162,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       SizedBox(
                         height: 18.h,
                       ),
-                      TextFormField(
-                        cursorColor: Colors.black,
-                        obscureText: true,
-                        enableSuggestions: false,
-                        autocorrect: false,
-                        decoration: getAuthInputDecoration(
-                          hintText: 'Password',
-                        ),
-                        controller: _passwordController,
+                      PasswordTextField(
+                        passwordController: _passwordController,
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'This field is required';
@@ -182,15 +176,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       SizedBox(
                         height: 18.h,
                       ),
-                      TextFormField(
-                        cursorColor: Colors.black,
-                        obscureText: true,
-                        enableSuggestions: false,
-                        autocorrect: false,
-                        decoration: getAuthInputDecoration(
-                          hintText: 'Confirm password',
-                        ),
-                        controller: _confirmPasswordController,
+                      PasswordTextField(
+                        passwordController: _confirmPasswordController,
                         validator: (value) {
                           if (value!.isEmpty) {
                             return 'This field is required';

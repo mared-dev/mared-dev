@@ -13,6 +13,7 @@ import 'package:mared_social/screens/authentication/forgot_password_screen.dart'
 import 'package:mared_social/screens/authentication/signup_screen.dart';
 import 'package:mared_social/utils/popup_utils.dart';
 import 'package:mared_social/widgets/reusable/auth_checkbox_item.dart';
+import 'package:mared_social/widgets/reusable/password_text_field.dart';
 import 'package:page_transition/page_transition.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -128,16 +129,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           SizedBox(
                             height: 18.h,
                           ),
-                          TextFormField(
-                            controller: _passwordController,
-                            cursorColor: Colors.black,
-                            obscureText: true,
-                            enableSuggestions: false,
-                            autocorrect: false,
-                            decoration: getAuthInputDecoration(
-                              prefixIcon: Icons.lock_outline,
-                              hintText: 'Password',
-                            ),
+                          PasswordTextField(
+                            passwordController: _passwordController,
                             validator: (value) {
                               if (value!.isNotEmpty) {
                                 return null;

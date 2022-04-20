@@ -6,6 +6,7 @@ import 'colors.dart';
 
 InputDecoration getAuthInputDecoration(
     {IconData? prefixIcon,
+    Widget? suffixIcon,
     required String hintText,
     Color backGroundColor = AppColors.authInputFillColor,
     double verticalContentPadding = 17}) {
@@ -23,6 +24,7 @@ InputDecoration getAuthInputDecoration(
         fontSize: 12.sp, textColor: AppColors.darkGrayTextColor),
     fillColor: backGroundColor,
     filled: true,
+    suffixIcon: suffixIcon,
     border: OutlineInputBorder(
       borderRadius: BorderRadius.circular(6),
       borderSide: BorderSide.none,
