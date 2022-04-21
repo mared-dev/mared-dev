@@ -9,7 +9,6 @@ import 'package:mared_social/screens/Chatroom/chatroom_helpers.dart';
 import 'package:mared_social/screens/Chatroom/privateChatHelpers.dart';
 import 'package:mared_social/screens/Messaging/groupmessagehelper.dart';
 import 'package:mared_social/screens/Messaging/privateMessageHelper.dart';
-import 'package:mared_social/screens/Profile/profileHelpers.dart';
 import 'package:mared_social/screens/SearchFeed/searchfeedhelper.dart';
 import 'package:mared_social/screens/Stories/stories_helper.dart';
 import 'package:mared_social/screens/auctionFeed/auctionfeedHelper.dart';
@@ -18,7 +17,6 @@ import 'package:mared_social/screens/auctionMap/auctionMapHelper.dart';
 import 'package:mared_social/screens/auctions/auctionPageHelper.dart';
 import 'package:mared_social/screens/isAnon/isAnonHelper.dart';
 import 'package:mared_social/screens/promotePost/promotePostHelper.dart';
-import 'package:mared_social/screens/searchPage/search_page_header_tabs.dart';
 import 'package:mared_social/screens/splashscreens/splashscreen.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
@@ -71,7 +69,6 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => IsAnonHelper()),
           ChangeNotifierProvider(create: (_) => FirebaseOperations()),
           ChangeNotifierProvider(create: (_) => Authentication()),
-          ChangeNotifierProvider(create: (_) => ProfileHelpers()),
           ChangeNotifierProvider(create: (_) => UploadPost()),
           ChangeNotifierProvider(create: (_) => PostFunctions()),
           ChangeNotifierProvider(create: (_) => ChatroomHelpers()),

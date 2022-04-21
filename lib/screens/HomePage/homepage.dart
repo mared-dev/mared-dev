@@ -154,8 +154,7 @@ class _HomePageState extends State<HomePage> {
               ? null
               : FloatingActionButton(
                   onPressed: () {
-                    Provider.of<ProfileHelpers>(context, listen: false)
-                        .postSelectType(context: context);
+                    ProfileHelpers.postSelectType(context: context);
                   },
                   child:
                       SvgPicture.asset('assets/icons/home_add_post_button.svg'),

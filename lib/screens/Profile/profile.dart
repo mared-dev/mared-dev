@@ -39,8 +39,7 @@ class _ProfileState extends State<Profile> {
               margin: EdgeInsets.only(bottom: 45.h),
               child: FloatingActionButton(
                 onPressed: () {
-                  Provider.of<ProfileHelpers>(context, listen: false)
-                      .postSelectType(context: context);
+                  ProfileHelpers.postSelectType(context: context);
                 },
                 child:
                     SvgPicture.asset('assets/icons/home_add_post_button.svg'),
@@ -65,8 +64,7 @@ class _ProfileState extends State<Profile> {
           height: 18.h,
         ),
         actionCallback: () {
-          Provider.of<ProfileHelpers>(context, listen: false)
-              .logOutDialog(context);
+          ProfileHelpers.logOutDialog(context);
         },
       ),
       body: PostsProfile(size: size),

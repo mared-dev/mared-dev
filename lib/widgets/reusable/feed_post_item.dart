@@ -106,7 +106,7 @@ class _FeedPostItemState extends State<FeedPostItem> {
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(100),
                           child: CachedNetworkImage(
-                            fit: BoxFit.contain,
+                            fit: BoxFit.cover,
                             imageUrl: widget.documentSnapshot['userimage'],
                             progressIndicatorBuilder: (context, url,
                                     downloadProgress) =>

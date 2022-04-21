@@ -42,8 +42,7 @@ class AdminPostsFeed extends StatelessWidget {
             height: 18.h,
           ),
           actionCallback: () {
-            Provider.of<ProfileHelpers>(context, listen: false)
-                .logOutDialog(context);
+            ProfileHelpers.logOutDialog(context);
           },
         ),
         body: CustomPaginateFirestore(
