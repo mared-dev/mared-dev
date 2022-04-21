@@ -14,4 +14,5 @@ class AppColors {
   static const addPostInputBackground = Color(0xFFF5F5F5);
   static const acceptColor = Color(0xFF10B132);
   static const rejectColor = Color(0xFFF21E31);
+  static const navyColor = Color(0xFF002F57);
 }

@@ -7,8 +7,11 @@ import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/screens/LandingPage/landingpage.dart';
+import 'package:mared_social/screens/authentication/update_screen.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
+import 'package:mared_social/services/firebase/firestore/firestore_update.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -23,10 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // WidgetsBinding.instance!.addPostFrameCallback((_) async {
     //
     // });
-    Timer(
-        const Duration(
-          milliseconds: 500,
-        ), () async {
+    Future.delayed(Duration(milliseconds: 500)).then((value) async {
       if (FirebaseAuth.instance.currentUser != null &&
           !UserInfoManger.getAnonFlag()) {
         Provider.of<Authentication>(context, listen: false)
@@ -34,8 +34,19 @@ class _SplashScreenState extends State<SplashScreen> {
         await Provider.of<FirebaseOperations>(context, listen: false)
             .initUserData(context);
 
-        Navigator.pushReplacement(context,
-            PageTransition(child: HomePage(), type: PageTransitionType.fade));
+        bool _shouldUpdate = await _checkIfShouldUpdate();
+
+        if (_shouldUpdate) {
+          Navigator.pushReplacement(
+              context,
+              PageTransition(
+                  child: UpdateScreen(), type: PageTransitionType.fade));
+        } else {
+          Navigator.pushReplacement(
+              context,
+              PageTransition(
+                  child: const HomePage(), type: PageTransitionType.fade));
+        }
         // signed in
       } else {
         Navigator.pushReplacement(
@@ -67,5 +78,9 @@ class _SplashScreenState extends State<SplashScreen> {
         ],
       ),
     );
+  }
+
+  _checkIfShouldUpdate() async {
+    return await FireStoreUpdate.checkIfShouldUpdate(context);
   }
 }
