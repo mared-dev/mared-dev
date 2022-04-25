@@ -143,6 +143,7 @@ class _PostDetailsState extends State<PostDetails> {
                       PostLikesPart(
                         postId: widget.documentSnapshot['postid'],
                         likes: widget.documentSnapshot['likes'],
+                        userId: widget.documentSnapshot['useruid'],
                       ),
                       InkWell(
                           onTap: () {

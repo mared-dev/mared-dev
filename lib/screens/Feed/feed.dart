@@ -21,8 +21,6 @@ import '../../mangers/user_info_manger.dart';
 class Feed extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print('(((((((((((((((((');
-
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.backGroundColor,

@@ -27,7 +27,7 @@ class PostSharePart extends StatelessWidget {
         Share.share('check out this product ' + generatedLink.toString());
       },
       child: Padding(
-        padding: EdgeInsets.only(left: 10.w),
+        padding: EdgeInsets.only(left: 8.w, top: 10.h, bottom: 10.h),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [

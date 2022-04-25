@@ -220,9 +220,6 @@ class FirebaseOperations with ChangeNotifier {
 
     UserModel oldModel = UserInfoManger.getUserInfo();
 
-    print('@*******************');
-    print(bio);
-    print(websiteLink);
     UserInfoManger.saveUserInfo(UserModel(
         userName: oldModel.userName,
         email: oldModel.email,

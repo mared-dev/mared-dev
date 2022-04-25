@@ -277,14 +277,15 @@ class _FeedPostItemState extends State<FeedPostItem> {
     required documentSnapshot,
   }) {
     return Container(
-      height: 22.h,
-      margin: EdgeInsets.only(left: 10.w, top: 18.h, bottom: 16.h),
+      height: 38.h,
+      margin: EdgeInsets.only(left: 10.w, top: 8.h, bottom: 6.h),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           PostLikesPart(
             postId: documentSnapshot['postid'],
             likes: documentSnapshot['likes'],
+            userId: documentSnapshot['useruid'],
           ),
           PostCommentsPart(documentSnapshot: documentSnapshot),
           PostSharePart(postId: documentSnapshot['postid']),

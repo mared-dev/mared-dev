@@ -146,7 +146,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print('))))))))))))))))))))');
     return Scaffold(
       backgroundColor: AppColors.backGroundColor,
       body: PersistentTabView(context,

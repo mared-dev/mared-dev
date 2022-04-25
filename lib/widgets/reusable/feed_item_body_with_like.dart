@@ -41,6 +41,7 @@ class _FeedItemWithLikeState extends State<FeedItemBodyWithLike> {
 
   @override
   Widget build(BuildContext context) {
+    print('@@@@@@@@@@');
     return GestureDetector(
       onDoubleTap: () {
         if (Provider.of<Authentication>(context, listen: false).getIsAnon ==
