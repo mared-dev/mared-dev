@@ -132,6 +132,7 @@ class _ReviewStoryItemState extends State<ReviewStoryItem> {
                   padding: EdgeInsets.symmetric(horizontal: 15.w),
                   height: 0.6.sh,
                   child: VideoPostItem(
+                      videoThumbnailLink: widget.documentSnapshot['thumbnail'],
                       videoUrl: widget.documentSnapshot['videourl'])),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15.w),

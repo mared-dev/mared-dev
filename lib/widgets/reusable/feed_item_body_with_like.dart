@@ -13,6 +13,7 @@ class FeedItemBodyWithLike extends StatefulWidget {
   final userId;
   final postId;
   final likes;
+  final videoThumbnail;
 
   const FeedItemBodyWithLike({
     Key? key,
@@ -20,6 +21,7 @@ class FeedItemBodyWithLike extends StatefulWidget {
     this.userId,
     this.postId,
     this.likes,
+    this.videoThumbnail,
   }) : super(key: key);
   @override
   _FeedItemWithLikeState createState() => _FeedItemWithLikeState();
@@ -69,6 +71,7 @@ class _FeedItemWithLikeState extends State<FeedItemBodyWithLike> {
         children: [
           FeedPostItemBody(
             imageList: widget.imageList,
+            videoThumbnail: widget.videoThumbnail,
             userId: widget.userId,
             postId: widget.postId,
           ),

@@ -83,6 +83,8 @@ class _PostDetailsState extends State<PostDetails> {
                         widget.documentSnapshot['imageslist'])
                     ? VideoPostItem(
                         videoUrl: widget.documentSnapshot['imageslist'][0],
+                        videoThumbnailLink:
+                            widget.documentSnapshot['thumbnail'],
                       )
                     : Swiper(
                         loop: false,

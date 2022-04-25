@@ -129,6 +129,7 @@ class _ReviewPostItemState extends State<ReviewPostItem> {
               imageList: widget.documentSnapshot['imageslist'],
               userId: widget.documentSnapshot['useruid'],
               postId: widget.documentSnapshot['postid'],
+              videoThumbnail: widget.documentSnapshot['thumbnail'],
             ),
             SizedBox(
               height: 18.h,

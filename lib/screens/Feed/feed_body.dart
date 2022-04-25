@@ -62,6 +62,7 @@ class _FeedBodyState extends State<FeedBody> {
           .collection("posts")
           .where('approvedForPosting', isEqualTo: true)
           .orderBy('time', descending: true),
+
       //Change types accordingly
       itemBuilderType: PaginateBuilderType.listView,
       // to fetch real-time data

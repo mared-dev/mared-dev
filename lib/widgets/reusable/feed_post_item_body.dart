@@ -14,11 +14,13 @@ class FeedPostItemBody extends StatelessWidget {
   final userId;
   final postId;
   final imageList;
+  final videoThumbnail;
 
   const FeedPostItemBody(
       {Key? key,
       required this.userId,
       required this.postId,
+      required this.videoThumbnail,
       required this.imageList})
       : super(key: key);
   @override
@@ -59,7 +61,10 @@ class FeedPostItemBody extends StatelessWidget {
                     ),
                   ),
                 )
-              : VideoPostItem(videoUrl: imageList[0])),
+              : VideoPostItem(
+                  videoUrl: imageList[0],
+                  videoThumbnailLink: videoThumbnail,
+                )),
     );
   }
 }

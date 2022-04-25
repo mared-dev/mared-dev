@@ -145,6 +145,7 @@ class _FeedPostItemState extends State<FeedPostItem> {
                 userId: widget.documentSnapshot['useruid'],
                 postId: widget.documentSnapshot['postid'],
                 likes: widget.documentSnapshot['likes'],
+                videoThumbnail: widget.documentSnapshot['thumbnail'],
               ),
               _postFooter(documentSnapshot: widget.documentSnapshot),
               Padding(
