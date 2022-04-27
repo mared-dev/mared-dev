@@ -47,14 +47,10 @@ class _FeedItemWithLikeState extends State<FeedItemBodyWithLike> {
         if (Provider.of<Authentication>(context, listen: false).getIsAnon ==
             false) {
           if (!isAlreadyLiked) {
-            setState(() {
-              isAnimating = true;
-              isAlreadyLiked = true;
-            });
+            isAnimating = true;
+            isAlreadyLiked = true;
           } else {
-            setState(() {
-              isAlreadyLiked = false;
-            });
+            isAlreadyLiked = false;
           }
 
           Provider.of<PostFunctions>(context, listen: false).addLike(

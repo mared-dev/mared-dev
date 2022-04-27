@@ -57,6 +57,7 @@ class _FeedBodyState extends State<FeedBody> {
           )
         ],
       ),
+
       // orderBy is compulsory to enable pagination
       query: FirebaseFirestore.instance
           .collection("posts")
@@ -66,7 +67,8 @@ class _FeedBodyState extends State<FeedBody> {
       //Change types accordingly
       itemBuilderType: PaginateBuilderType.listView,
       // to fetch real-time data
-      isLive: true,
+      isLive: false,
+      itemsPerPage: 15,
     );
   }
 }

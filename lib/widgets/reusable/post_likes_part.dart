@@ -26,8 +26,7 @@ class PostLikesPart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.red,
+    return Padding(
       padding: EdgeInsets.only(left: 8.w),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,

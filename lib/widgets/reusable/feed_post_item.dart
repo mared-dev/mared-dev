@@ -47,172 +47,190 @@ class FeedPostItem extends StatefulWidget {
 
 class _FeedPostItemState extends State<FeedPostItem> {
   List<String> _editPostOptions = ['Edit post', 'Delete post'];
+  bool firstBuild = true;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
         padding: EdgeInsets.only(left: 4.w, right: 4.w, bottom: 30.h),
         child: SizedBox(
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 8.0, left: 8),
-                child: Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        if (widget.documentSnapshot['useruid'] !=
-                            UserInfoManger.getUserId()) {
-                          Navigator.push(
-                              context,
-                              PageTransition(
-                                  child: AltProfile(
-                                    userModel: UserModel(
-                                        websiteLink: GeneralFirebaseHelpers
-                                            .getStringSafely(
-                                                key: 'websiteLink',
-                                                doc: widget.documentSnapshot),
-                                        bio: GeneralFirebaseHelpers
-                                            .getStringSafely(
-                                                key: 'bio',
-                                                doc: widget.documentSnapshot),
-                                        uid: widget.documentSnapshot['useruid'],
-                                        userName:
-                                            widget.documentSnapshot['username'],
-                                        photoUrl: widget
-                                            .documentSnapshot['userimage'],
-                                        email: widget
-                                            .documentSnapshot['useremail'],
-                                        fcmToken: "",
+            width: MediaQuery.of(context).size.width,
+            child: StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection("posts")
+                  .doc(widget.documentSnapshot['postid'])
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (!firstBuild && snapshot.hasData && snapshot.data != null) {
+                  return _postContent(snapshot.data);
+                } else {
+                  firstBuild = false;
+                  return _postContent(widget.documentSnapshot);
+                }
+              },
+            )));
+  }
 
-                                        ///later you have to give this the right value
-                                        store: false),
-                                    userUid: widget.documentSnapshot['useruid'],
-                                  ),
-                                  type: PageTransitionType.rightToLeft));
-                        } else {
-                          Navigator.push(
-                              context,
-                              PageTransition(
-                                  child: Profile(),
-                                  type: PageTransitionType.rightToLeft));
-                        }
-                      },
-                      child: SizedBox(
-                        height: 50,
-                        width: 50,
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(100),
-                          child: CachedNetworkImage(
-                            fit: BoxFit.cover,
-                            imageUrl: widget.documentSnapshot['userimage'],
-                            progressIndicatorBuilder: (context, url,
-                                    downloadProgress) =>
-                                LoadingWidget(constantColors: constantColors),
-                            errorWidget: (context, url, error) =>
-                                const Icon(Icons.error),
-                          ),
-                        ),
-                      ),
+  Widget _postContent(documentSnapshotToUse) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 8.0, left: 8),
+          child: Row(
+            children: [
+              GestureDetector(
+                onTap: () {
+                  if (documentSnapshotToUse['useruid'] !=
+                      UserInfoManger.getUserId()) {
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            child: AltProfile(
+                              userModel: UserModel(
+                                  websiteLink:
+                                      GeneralFirebaseHelpers.getStringSafely(
+                                          key: 'websiteLink',
+                                          doc: documentSnapshotToUse),
+                                  bio: GeneralFirebaseHelpers.getStringSafely(
+                                      key: 'bio', doc: documentSnapshotToUse),
+                                  uid: documentSnapshotToUse['useruid'],
+                                  userName: documentSnapshotToUse['username'],
+                                  photoUrl:
+                                      widget.documentSnapshot['userimage'],
+                                  email: widget.documentSnapshot['useremail'],
+                                  fcmToken: "",
+
+                                  ///later you have to give this the right value
+                                  store: false),
+                              userUid: documentSnapshotToUse['useruid'],
+                            ),
+                            type: PageTransitionType.rightToLeft));
+                  } else {
+                    Navigator.push(
+                        context,
+                        PageTransition(
+                            child: Profile(),
+                            type: PageTransitionType.rightToLeft));
+                  }
+                },
+                child: SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: CachedNetworkImage(
+                      fit: BoxFit.cover,
+                      imageUrl: documentSnapshotToUse['userimage'],
+                      progressIndicatorBuilder:
+                          (context, url, downloadProgress) =>
+                              LoadingWidget(constantColors: constantColors),
+                      errorWidget: (context, url, error) =>
+                          const Icon(Icons.error),
                     ),
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: _postHeader(
-                                userName: widget.documentSnapshot['username'],
-                                address: widget.documentSnapshot['address'],
-                                userId: widget.documentSnapshot['useruid']),
-                          ),
-                          UserInfoManger.getUserId() ==
-                                  widget.documentSnapshot['useruid']
-                              ? _editPostSection()
-                              : const SizedBox(
-                                  height: 0,
-                                  width: 0,
-                                ),
-                        ],
-                      ),
-                    )
-                  ],
+                  ),
                 ),
               ),
-              FeedItemBodyWithLike(
-                imageList: widget.documentSnapshot['imageslist'],
-                userId: widget.documentSnapshot['useruid'],
-                postId: widget.documentSnapshot['postid'],
-                likes: widget.documentSnapshot['likes'],
-                videoThumbnail: widget.documentSnapshot['thumbnail'],
-              ),
-              _postFooter(documentSnapshot: widget.documentSnapshot),
-              Padding(
-                padding: EdgeInsets.only(
-                  left: 18.w,
-                ),
-                child: Column(
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    SizedBox(
-                      width: MediaQuery.of(context).size.width,
-                      child: Text(
-                        widget.documentSnapshot['caption'],
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: semiBoldTextStyle(
-                          textColor: AppColors.commentButtonColor,
-                          fontSize: 14.sp,
-                        ),
-                      ),
+                    Expanded(
+                      child: _postHeader(
+                          userName: documentSnapshotToUse['username'],
+                          address: documentSnapshotToUse['address'],
+                          userId: documentSnapshotToUse['useruid'],
+                          documentSnapshotToUse: documentSnapshotToUse),
                     ),
-                    SizedBox(
-                      height: 8.h,
-                    ),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      child: ReadMoreText(
-                        widget.documentSnapshot['description'],
-                        textAlign: TextAlign.start,
-                        trimLines: 2,
-                        trimMode: TrimMode.Line,
-                        trimCollapsedText: 'Show more',
-                        trimExpandedText: 'Show less',
-                        style: regularTextStyle(
-                          textColor: AppColors.commentButtonColor,
-                          fontSize: 11.sp,
-                        ),
-                        lessStyle: regularTextStyle(
-                            textColor: Colors.black26, fontSize: 11.sp),
-                        moreStyle: regularTextStyle(
-                            textColor: Colors.black26, fontSize: 11.sp),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 10.h,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text(
-                          TimeHelper.getElpasedTime(
-                              widget.documentSnapshot['time']),
-                          textAlign: TextAlign.start,
-                          style: lightTextStyle(
-                              textColor: AppColors.accentColor,
-                              fontSize: 11.sp),
-                        ),
-                      ],
-                    ),
+                    UserInfoManger.getUserId() ==
+                            documentSnapshotToUse['useruid']
+                        ? _editPostSection(documentSnapshotToUse)
+                        : const SizedBox(
+                            height: 0,
+                            width: 0,
+                          ),
                   ],
                 ),
+              )
+            ],
+          ),
+        ),
+        FeedItemBodyWithLike(
+          imageList: documentSnapshotToUse['imageslist'],
+          userId: documentSnapshotToUse['useruid'],
+          postId: documentSnapshotToUse['postid'],
+          likes: documentSnapshotToUse['likes'],
+          videoThumbnail: documentSnapshotToUse['thumbnail'],
+        ),
+        _postFooter(documentSnapshot: documentSnapshotToUse),
+        Padding(
+          padding: EdgeInsets.only(
+            left: 18.w,
+          ),
+          child: Column(
+            children: [
+              SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: Text(
+                  documentSnapshotToUse['caption'],
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: semiBoldTextStyle(
+                    textColor: AppColors.commentButtonColor,
+                    fontSize: 14.sp,
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 8.h,
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width,
+                child: ReadMoreText(
+                  documentSnapshotToUse['description'],
+                  textAlign: TextAlign.start,
+                  trimLines: 2,
+                  trimMode: TrimMode.Line,
+                  trimCollapsedText: 'Show more',
+                  trimExpandedText: 'Show less',
+                  style: regularTextStyle(
+                    textColor: AppColors.commentButtonColor,
+                    fontSize: 11.sp,
+                  ),
+                  lessStyle: regularTextStyle(
+                      textColor: Colors.black26, fontSize: 11.sp),
+                  moreStyle: regularTextStyle(
+                      textColor: Colors.black26, fontSize: 11.sp),
+                ),
+              ),
+              SizedBox(
+                height: 10.h,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    TimeHelper.getElpasedTime(documentSnapshotToUse['time']),
+                    textAlign: TextAlign.start,
+                    style: lightTextStyle(
+                        textColor: AppColors.accentColor, fontSize: 11.sp),
+                  ),
+                ],
               ),
             ],
           ),
-        ));
+        ),
+      ],
+    );
   }
 
-  Widget _editPostSection() {
+  Widget _editPostSection(documentSnapshotToUse) {
     return DropdownButtonHideUnderline(
       child: DropdownButton2(
         customButton:
@@ -229,12 +247,12 @@ class _FeedPostItemState extends State<FeedPostItem> {
         onChanged: (String? value) {
           if (value == _editPostOptions[0]) {
             // Provider.of<PostFunctions>(context, listen: false).showPostOptions(
-            //     context: context, postId: widget.documentSnapshot['postid']);
+            //     context: context, postId: documentSnapshotToUse['postid']);
 
             Provider.of<PostFunctions>(context, listen: false).editCaptionText(
                 context,
-                widget.documentSnapshot,
-                widget.documentSnapshot['postid']);
+                documentSnapshotToUse,
+                documentSnapshotToUse['postid']);
           } else if (value == _editPostOptions[1]) {
             CoolAlert.show(
               context: context,
@@ -248,8 +266,8 @@ class _FeedPostItemState extends State<FeedPostItem> {
 
                 await Provider.of<FirebaseOperations>(context, listen: false)
                     .deletePostData(
-                  userUid: widget.documentSnapshot['useruid'],
-                  postId: widget.documentSnapshot['postid'],
+                  userUid: documentSnapshotToUse['useruid'],
+                  postId: documentSnapshotToUse['postid'],
                 );
               },
               onCancelBtnTap: () {
@@ -296,7 +314,10 @@ class _FeedPostItemState extends State<FeedPostItem> {
   }
 
   Widget _postHeader(
-      {required String userName, required String address, required userId}) {
+      {required String userName,
+      required String address,
+      required userId,
+      required documentSnapshotToUse}) {
     return Padding(
       padding: const EdgeInsets.only(left: 8.0),
       child: Container(
@@ -316,14 +337,13 @@ class _FeedPostItemState extends State<FeedPostItem> {
                                   websiteLink:
                                       GeneralFirebaseHelpers.getStringSafely(
                                           key: 'websiteLink',
-                                          doc: widget.documentSnapshot),
+                                          doc: documentSnapshotToUse),
                                   bio: GeneralFirebaseHelpers.getStringSafely(
-                                      key: 'bio', doc: widget.documentSnapshot),
-                                  uid: widget.documentSnapshot['useruid'],
-                                  userName: widget.documentSnapshot['username'],
-                                  photoUrl:
-                                      widget.documentSnapshot['userimage'],
-                                  email: widget.documentSnapshot['useremail'],
+                                      key: 'bio', doc: documentSnapshotToUse),
+                                  uid: documentSnapshotToUse['useruid'],
+                                  userName: documentSnapshotToUse['username'],
+                                  photoUrl: documentSnapshotToUse['userimage'],
+                                  email: documentSnapshotToUse['useremail'],
                                   fcmToken: "",
 
                                   ///later you have to give this the right value

@@ -50,7 +50,6 @@ Future selectAvatarOptionsSheet(
                         callback: () async {
                           XFile pickedFile = await _pickUserAvatar(
                               context, ImageSource.gallery);
-                          print('@@@@@@@@@@@@@@@@@');
                           print(pickedFile.path);
                           // confirmProfilePicSheet(
                           //     context, File(pickedFile.path));

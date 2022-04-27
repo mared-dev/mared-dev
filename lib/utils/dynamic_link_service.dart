@@ -13,7 +13,6 @@ class DynamicLinkService {
 
       if (deepLink != null) {
         ///
-        print('@@@@@@@@@@@@@@@@@@@@@');
         print('app opened in foreground');
         print(deepLink.queryParameters);
         if (deepLink.queryParameters.containsKey('post_id')) {
@@ -31,7 +30,6 @@ class DynamicLinkService {
       }
 
       FirebaseDynamicLinks.instance.onLink.listen((dynamicLinkData) {
-        print('@@@@@@@@@@@@@@@@@@@@@');
         print('app opened in background');
         print(dynamicLinkData.link.queryParameters);
         if (dynamicLinkData.link.queryParameters.containsKey('post_id')) {

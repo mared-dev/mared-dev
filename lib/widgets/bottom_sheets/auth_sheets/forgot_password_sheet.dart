@@ -66,7 +66,6 @@ ForgotPasswordSheet(BuildContext context) {
                             color: constantColors.whiteColor,
                           ),
                           onPressed: () async {
-                            print('@@@@@@@@@@@@@@@@@@@@@@');
                             if (_formKey.currentState!.validate()) {
                               try {
                                 await Provider.of<Authentication>(context,
