@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/appleSignInCheck.dart';
 import 'package:mared_social/screens/Categories/categoryHelpers.dart';
-import 'package:mared_social/screens/CategoryFeed/categoryfeedhelper.dart';
 import 'package:mared_social/screens/Chatroom/chatroom_helpers.dart';
 import 'package:mared_social/screens/Chatroom/privateChatHelpers.dart';
 import 'package:mared_social/screens/Messaging/groupmessagehelper.dart';
@@ -70,15 +69,14 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => FirebaseOperations()),
           ChangeNotifierProvider(create: (_) => Authentication()),
           ChangeNotifierProvider(create: (_) => UploadPost()),
-          ChangeNotifierProvider(create: (_) => PostFunctions()),
           ChangeNotifierProvider(create: (_) => ChatroomHelpers()),
           ChangeNotifierProvider(create: (_) => GroupMessageHelper()),
           ChangeNotifierProvider(create: (_) => CategoryHelper()),
           ChangeNotifierProvider(create: (_) => StoriesHelper()),
-          ChangeNotifierProvider(create: (_) => CatgeoryFeedHelper()),
           ChangeNotifierProvider(create: (_) => SearchFeedHelper()),
           ChangeNotifierProvider(create: (_) => PrivateChatHelpers()),
           ChangeNotifierProvider(create: (_) => PrivateMessageHelper()),
+          ChangeNotifierProvider(create: (_) => PostFunctions()),
         ],
       ),
     );

@@ -10,6 +10,7 @@ import 'package:mared_social/constants/appleSignInCheck.dart';
 import 'package:mared_social/controllers/global_messages_controller.dart';
 import 'package:mared_social/services/get_http_client.dart';
 import 'package:mared_social/services/shared_preferences_helper.dart';
+import 'package:paginate_firestore/bloc/pagination_listeners.dart';
 
 late final appleSignInAvailable;
 final getIt = GetIt.instance;
@@ -42,6 +43,8 @@ config() async {
   );
   appleSignInAvailable = await AppleSignInAvailable.check();
   getIt.registerSingleton<Dio>(getHttpClient());
+  getIt.registerSingleton<PaginateRefreshedChangeListener>(
+      PaginateRefreshedChangeListener());
   SharedPreferencesHelper.initSharedPrefs();
   _defineGetxControllers();
 }

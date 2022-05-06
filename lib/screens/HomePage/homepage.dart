@@ -152,6 +152,7 @@ class _HomePageState extends State<HomePage> {
           floatingActionButton: UserInfoManger.getAnonFlag()
               ? null
               : FloatingActionButton(
+                  heroTag: "addPostFeed",
                   onPressed: () {
                     ProfileHelpers.postSelectType(context: context);
                   },

@@ -26,7 +26,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // WidgetsBinding.instance!.addPostFrameCallback((_) async {
     //
     // });
-    Future.delayed(Duration(milliseconds: 500)).then((value) async {
+    Future.delayed(Duration(milliseconds: 1500)).then((value) async {
       if (FirebaseAuth.instance.currentUser != null &&
           !UserInfoManger.getAnonFlag()) {
         Provider.of<Authentication>(context, listen: false)

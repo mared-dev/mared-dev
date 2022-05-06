@@ -15,4 +15,5 @@ class AppColors {
   static const acceptColor = Color(0xFF10B132);
   static const rejectColor = Color(0xFFF21E31);
   static const navyColor = Color(0xFF002F57);
+  static const errorColor = Color(0xFFd32f2f);
 }

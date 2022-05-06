@@ -56,6 +56,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
               if (shouldUseSentData) {
                 shouldUseSentData = false;
                 return FeedPostItem(
+                  isInPostDetails: true,
                   documentSnapshot: widget.documentSnapshot,
                 );
               }
@@ -64,6 +65,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
               );
             } else {
               return FeedPostItem(
+                isInPostDetails: true,
                 documentSnapshot: postDocSnap.data,
               );
             }

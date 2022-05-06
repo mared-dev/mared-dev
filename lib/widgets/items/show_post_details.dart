@@ -41,6 +41,7 @@ class PostDetails extends StatefulWidget {
 class _PostDetailsState extends State<PostDetails> {
   @override
   Widget build(BuildContext context) {
+    print('%%%%%%%%%%%%%%%%%%');
     return SafeArea(
       bottom: true,
       child: Container(

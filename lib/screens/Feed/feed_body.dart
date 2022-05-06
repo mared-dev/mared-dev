@@ -2,14 +2,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mared_social/config.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/constants/text_styles.dart';
+import 'package:mared_social/mangers/posts_refresh_manger.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/screens/Feed/banners_section.dart';
 import 'package:mared_social/screens/Feed/stories_section.dart';
 import 'package:mared_social/widgets/reusable/feed_post_item.dart';
+import 'package:mared_social/widgets/reusable/feed_post_item_body.dart';
 import 'package:mared_social/widgets/reusable/paginate_firestore_edited.dart';
+import 'package:paginate_firestore/bloc/pagination_listeners.dart';
 
 class FeedBody extends StatefulWidget {
   @override
@@ -18,6 +22,7 @@ class FeedBody extends StatefulWidget {
 
 class _FeedBodyState extends State<FeedBody> {
   late List<Widget> _topSectionItems;
+  ScrollController controller = ScrollController();
 
   @override
   void initState() {
@@ -25,8 +30,11 @@ class _FeedBodyState extends State<FeedBody> {
     _topSectionItems = [StoriesSection(), BannersSection()];
   }
 
+  bool flag = false;
+
   @override
   Widget build(BuildContext context) {
+    print('((((((((((((((((((((((');
     //temp changing StreamBuilder to FutureBuilder and .snapshot to .get
     return CustomPaginateFirestore(
       header: SliverList(
@@ -39,8 +47,12 @@ class _FeedBodyState extends State<FeedBody> {
       ),
       //item builder type is compulsory.
       itemBuilder: (context, snapshot, index) {
+        print('item builder');
         dynamic documentSnapshot = snapshot[index].data()!;
-        return FeedPostItem(documentSnapshot: documentSnapshot);
+        return FeedPostItem(
+          documentSnapshot: documentSnapshot,
+          isInPostDetails: false,
+        );
       },
       onEmpty: Column(
         children: [
@@ -68,7 +80,8 @@ class _FeedBodyState extends State<FeedBody> {
       itemBuilderType: PaginateBuilderType.listView,
       // to fetch real-time data
       isLive: false,
-      itemsPerPage: 15,
+      itemsPerPage: 19,
+      listeners: [getIt.get<PaginateRefreshedChangeListener>()],
     );
   }
 }

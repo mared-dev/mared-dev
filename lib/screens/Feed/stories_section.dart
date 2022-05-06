@@ -14,6 +14,7 @@ class StoriesSection extends StatefulWidget {
 class _StoriesSectionState extends State<StoriesSection> {
   @override
   Widget build(BuildContext context) {
+    print('stories : #####################');
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 17.w),
       // margin: EdgeInsets.only(top: 27, bottom: 20),

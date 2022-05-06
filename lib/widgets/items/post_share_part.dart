@@ -6,6 +6,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/constants/text_styles.dart';
+import 'package:mared_social/helpers/loading_helper.dart';
 import 'package:mared_social/utils/dynamic_link_service.dart';
 import 'package:mared_social/widgets/bottom_sheets/show_comments_section.dart';
 import 'package:share_plus/share_plus.dart';
@@ -19,12 +20,11 @@ class PostSharePart extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () async {
-        //Start HERE
-        ///TODO: a feature to add later
-
+        LoadingHelper.startLoading();
         var generatedLink =
             await DynamicLinkService.createDynamicLink(postId, short: true);
         Share.share('check out this product ' + generatedLink.toString());
+        LoadingHelper.endLoading();
       },
       child: Padding(
         padding: EdgeInsets.only(left: 8.w, top: 10.h, bottom: 10.h),

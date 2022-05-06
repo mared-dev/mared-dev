@@ -44,7 +44,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   late TextEditingController _passwordController;
   late TextEditingController _confirmPasswordController;
 
-  bool isStore = false;
+  int isStore = -1;
+  String userTypeError = "";
 
   @override
   void initState() {
@@ -188,17 +189,32 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         },
                       ),
                       SizedBox(
-                          width: screenSize.width,
-                          child: AuthCheckBoxGroup(
-                            changeSelectedItemCallback: (newIndex) {
-                              if (newIndex == 0) {
-                                isStore = false;
-                              } else {
-                                isStore = true;
-                              }
-                            },
-                            options: ['individual', 'buisness'],
-                          )),
+                        width: screenSize.width,
+                        child: AuthCheckBoxGroup(
+                          changeSelectedItemCallback: (newIndex) {
+                            if (newIndex == 0) {
+                              isStore = 0;
+                            } else {
+                              isStore = 1;
+                            }
+                          },
+                          options: ['individual', 'buisness'],
+                        ),
+                      ),
+                      if (userTypeError.isNotEmpty)
+                        Container(
+                          padding: EdgeInsets.only(left: 16),
+                          width: MediaQuery.of(context).size.width,
+                          child: Text(
+                            userTypeError,
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                fontSize: 12, color: AppColors.errorColor),
+                          ),
+                        ),
+                      SizedBox(
+                        height: 28.h,
+                      ),
                       SizedBox(
                         width: screenSize.width,
                         child: ElevatedButton(
@@ -228,7 +244,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       'userpassword': _passwordController.text,
                                       'usercontactnumber':
                                           _phoneNumberController.text,
-                                      'store': isStore,
+                                      'store': isStore == 1,
                                       'useruid': Provider.of<Authentication>(
                                               context,
                                               listen: false)
@@ -249,7 +265,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     uid: Provider.of<Authentication>(context,
                                             listen: false)
                                         .getUserId,
-                                    store: isStore,
+                                    store: isStore == 1,
                                     email: _emailController.text,
                                     userName: _nameController.text,
                                     photoUrl: _uploadedImageLink,
@@ -280,7 +296,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   'userpassword': _nameController.text,
                                   'usercontactnumber':
                                       _phoneNumberController.text,
-                                  'store': isStore,
+                                  'store': isStore == 1,
                                   'useruid': Provider.of<Authentication>(
                                           context,
                                           listen: false)
@@ -306,6 +322,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                         .getFormattedAuthError(e));
                               } finally {
                                 LoadingHelper.endLoading();
+                              }
+                            } else {
+                              if (isStore == -1) {
+                                setState(() {
+                                  userTypeError = 'This field is required';
+                                });
                               }
                             }
                           },

@@ -38,6 +38,7 @@ class _ProfileState extends State<Profile> {
           : Container(
               margin: EdgeInsets.only(bottom: 45.h),
               child: FloatingActionButton(
+                heroTag: "addPostProfile",
                 onPressed: () {
                   ProfileHelpers.postSelectType(context: context);
                 },

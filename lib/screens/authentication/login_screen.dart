@@ -44,6 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
     print('@@@@@@@@@');
+    print(rememberMe);
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: true,
@@ -275,7 +276,7 @@ class _LoginScreenState extends State<LoginScreen> {
             });
           },
           child: Padding(
-            padding: EdgeInsets.only(left: 6),
+            padding: EdgeInsets.only(left: 6, bottom: 22.h),
             child: AuthCheckboxItem(
               optionText: 'Remeber me',
               isSelected: rememberMe,

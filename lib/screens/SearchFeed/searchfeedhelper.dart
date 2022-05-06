@@ -119,7 +119,10 @@ class SearchFeedHelper with ChangeNotifier {
                 .toString()
                 .toLowerCase()
                 .contains(searchTerm.toLowerCase())) {
-          return FeedPostItem(documentSnapshot: documentSnapshot);
+          return FeedPostItem(
+            documentSnapshot: documentSnapshot,
+            isInPostDetails: false,
+          );
         } else {
           return const SizedBox(
             height: 0,

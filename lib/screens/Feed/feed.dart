@@ -26,7 +26,7 @@ class Feed extends StatelessWidget {
       backgroundColor: AppColors.backGroundColor,
       appBar: homeAppBar(
         context,
-        title: 'Mared FEED',
+        title: 'Mared',
         leadingIcon: SvgPicture.asset(
           'assets/icons/home_search_icon.svg',
           width: 18.w,

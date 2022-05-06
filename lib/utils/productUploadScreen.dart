@@ -69,14 +69,16 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
   @override
   void dispose() {
     super.dispose();
-    if (_videoPlayerController != null) {
+    if (mounted &&
+        widget.postType == PostType.VIDEO &&
+        _videoPlayerController != null) {
       _videoPlayerController!.dispose();
     }
   }
 
   @override
   void initState() {
-    if (widget.postType == PostType.VIDEO) {
+    if (mounted && widget.postType == PostType.VIDEO) {
       _videoPlayerController =
           VideoPlayerController.file(File(widget.multipleImages[0].path));
 
@@ -545,13 +547,14 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
             {'title': 'Success', 'body': 'Your post in under review !'});
       } catch (e) {
         print('&&&&&&&&&&&&&');
+        print(widget.postType);
         print(e);
-        CoolAlert.show(
-          context: context,
-          type: CoolAlertType.error,
-          title: "Error",
-          text: "Please Check all fields",
-        );
+        // CoolAlert.show(
+        //   context: context,
+        //   type: CoolAlertType.error,
+        //   title: "Error",
+        //   text: "Please Check all fields",
+        // );
       } finally {
         LoadingHelper.endLoading();
       }

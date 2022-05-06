@@ -24,7 +24,6 @@ class _SearchPageHeaderTabsState extends State<SearchPageHeaderTabs> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     itemsToShow = [
       {'label': 'POSTS', 'imagePath': 'assets/icons/post_result_icon.svg'},

@@ -6,7 +6,6 @@ import 'package:lottie/lottie.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
-import 'package:mared_social/screens/CategoryFeed/categoryfeedhelper.dart';
 import 'package:mared_social/widgets/reusable/feed_post_item.dart';
 import 'package:mared_social/widgets/reusable/paginate_firestore_edited.dart';
 import 'package:mared_social/widgets/reusable/simple_appbar_with_auto_text.dart';
@@ -38,7 +37,10 @@ class CategoryFeed extends StatelessWidget {
           //item builder type is compulsory.
           itemBuilder: (context, snapshot, index) {
             dynamic documentSnapshot = snapshot[index].data()!;
-            return FeedPostItem(documentSnapshot: documentSnapshot);
+            return FeedPostItem(
+              documentSnapshot: documentSnapshot,
+              isInPostDetails: true,
+            );
           },
           // orderBy is compulsory to enable pagination
           query: FirebaseFirestore.instance

@@ -14,7 +14,7 @@ class AuthCheckboxItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(top: 21.h, bottom: 28.h),
+      padding: EdgeInsets.only(top: 21.h, bottom: 6.h),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [

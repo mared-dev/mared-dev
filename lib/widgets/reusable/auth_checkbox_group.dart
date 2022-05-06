@@ -17,13 +17,12 @@ class AuthCheckBoxGroup extends StatefulWidget {
 
 class _AuthCheckBoxGroupState extends State<AuthCheckBoxGroup> {
   List<bool> selectedList = [];
-  int selectedIndex = 0;
+  int selectedIndex = -1;
 
   @override
   void initState() {
     super.initState();
     selectedList = List.filled(widget.options.length, false);
-    selectedList[selectedIndex] = true;
   }
 
   @override

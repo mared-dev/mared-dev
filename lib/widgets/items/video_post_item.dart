@@ -85,7 +85,8 @@ class _VideoPostItemState extends State<VideoPostItem> {
   @override
   void dispose() {
     _videoPlayerController.dispose();
-    _chewieController.dispose();
+    // if(_chewieController.ini)
+    // _chewieController.dispose();
     super.dispose();
   }
 }

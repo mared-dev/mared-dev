@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
+import 'package:mared_social/models/feed_models/post_details_model.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/fcm_notification_Service.dart';
@@ -172,14 +173,14 @@ class FirebaseOperations with ChangeNotifier {
       websiteLink = extraInfo.data()!['websiteLink'];
       userImage = extraInfo.data()!['userimage'];
     }
-    print(bio);
-    print(websiteLink);
 
     return FirebaseFirestore.instance
         .collection("users")
         .doc(Provider.of<Authentication>(context, listen: false).getUserId)
         .get()
         .then((doc) async {
+      print('!!!!!!!!!!!!!!!!!!!!!!!&');
+      print(doc['store']);
       initUserName = doc['username'];
       initUserEmail = doc['useremail'];
       initUserImage = userImage.isNotEmpty ? userImage : doc['userimage'];
@@ -420,11 +421,11 @@ class FirebaseOperations with ChangeNotifier {
 
   Future updateDescription(
       {required String postId,
-      required var postDoc,
+      required PostDetailsModel postDetailsModel,
       required String description,
       required String title,
       required BuildContext context}) async {
-    String name = "${postDoc['caption']} ${description}";
+    String name = "${postDetailsModel.caption} ${description}";
 
     List<String> splitList = name.split(" ");
     List<String> indexList = [];
@@ -448,6 +449,7 @@ class FirebaseOperations with ChangeNotifier {
           .collection("posts")
           .doc(postId)
           .update({
+        'caption': title,
         'description': description,
         'searchindex': indexList,
       });

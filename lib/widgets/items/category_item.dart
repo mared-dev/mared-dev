@@ -6,7 +6,6 @@ import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/constants/text_styles.dart';
 import 'package:mared_social/helpers/color_helpers.dart';
 import 'package:mared_social/screens/CategoryFeed/categoryfeed.dart';
-import 'package:mared_social/screens/CategoryFeed/categoryfeedhelper.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
@@ -19,8 +18,8 @@ class CategoryItem extends StatelessWidget {
     return InkWell(
       onTap: () async {
         // * Push to Category screen
-        await Provider.of<CatgeoryFeedHelper>(context, listen: false)
-            .getCategoryNameVal(categoryNameVal: catDocSnap['categoryname']);
+        // await Provider.of<CatgeoryFeedHelper>(context, listen: false)
+        //     .getCategoryNameVal(categoryNameVal: catDocSnap['categoryname']);
 
         pushNewScreen(
           context,

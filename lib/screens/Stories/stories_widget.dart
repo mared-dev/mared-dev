@@ -191,7 +191,7 @@ class StoryWidgets {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         FloatingActionButton(
-                          heroTag: "Reselect Image",
+                          heroTag: "Reselect Story Image",
                           backgroundColor: constantColors.redColor,
                           child: Icon(
                             FontAwesomeIcons.backspace,

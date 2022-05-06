@@ -20,7 +20,6 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     showText = false;
   }

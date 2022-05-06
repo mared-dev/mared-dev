@@ -39,7 +39,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _usernameController.text = widget.userModel.userName;
     _bioController.text = widget.userModel.bio;

@@ -5,10 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
+import 'package:mared_social/config.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/constants/general_styles.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
+import 'package:mared_social/models/feed_models/post_details_model.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/promotePost/promotePostHelper.dart';
@@ -19,6 +21,7 @@ import 'package:mared_social/widgets/bottom_sheets/is_anon_bottom_sheet.dart';
 import 'package:mared_social/widgets/reusable/bottom_sheet_top_divider.dart';
 import 'package:nanoid/nanoid.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:paginate_firestore/bloc/pagination_listeners.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -99,7 +102,10 @@ class PostFunctions with ChangeNotifier {
                                         )),
                                     onPressed: () {
                                       editCaptionText(
-                                          context, postDocSnap, postId);
+                                          context,
+                                          PostDetailsModel.fromjson(
+                                              postDocSnap),
+                                          postId);
                                     },
                                   ),
                                 ),
@@ -190,9 +196,9 @@ class PostFunctions with ChangeNotifier {
   }
 
   Future<dynamic> editCaptionText(
-      BuildContext context, postDocSnap, String postId) {
-    updateDescriptionController.text = postDocSnap['description'];
-    updateTitleController.text = postDocSnap['caption'];
+      BuildContext context, PostDetailsModel postDetailsModel, String postId) {
+    updateDescriptionController.text = postDetailsModel.description;
+    updateTitleController.text = postDetailsModel.caption;
     return showModalBottomSheet(
       //to show it on top of the persistent bottom navbar and its components
       useRootNavigator: true,
@@ -246,7 +252,7 @@ class PostFunctions with ChangeNotifier {
                   onPressed: () async {
                     Provider.of<FirebaseOperations>(context, listen: false)
                         .updateDescription(
-                            postDoc: postDocSnap,
+                            postDetailsModel: postDetailsModel,
                             context: context,
                             postId: postId,
                             title: updateTitleController.text,

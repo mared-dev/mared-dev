@@ -11,11 +11,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/constants/text_styles.dart';
+import 'package:mared_social/helpers/loading_helper.dart';
 import 'package:mared_social/helpers/post_helpers.dart';
 import 'package:mared_social/helpers/time_helpers.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
+import 'package:mared_social/models/feed_models/post_details_model.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
+import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/screens/Profile/profile.dart';
 import 'package:mared_social/screens/isAnon/isAnon.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
@@ -37,8 +40,10 @@ import 'package:readmore/readmore.dart';
 
 class FeedPostItem extends StatefulWidget {
   final documentSnapshot;
+  final bool isInPostDetails;
 
-  const FeedPostItem({Key? key, required this.documentSnapshot})
+  const FeedPostItem(
+      {Key? key, required this.documentSnapshot, required this.isInPostDetails})
       : super(key: key);
 
   @override
@@ -46,34 +51,41 @@ class FeedPostItem extends StatefulWidget {
 }
 
 class _FeedPostItemState extends State<FeedPostItem> {
-  List<String> _editPostOptions = ['Edit post', 'Delete post'];
+  List<String> _editPostOptions = [];
   bool firstBuild = true;
+  bool shouldShowPost = true;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    _editPostOptions =
+        widget.isInPostDetails ? ['Edit post'] : ['Edit post', 'Delete post'];
   }
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: EdgeInsets.only(left: 4.w, right: 4.w, bottom: 30.h),
-        child: SizedBox(
-            width: MediaQuery.of(context).size.width,
-            child: StreamBuilder(
-              stream: FirebaseFirestore.instance
-                  .collection("posts")
-                  .doc(widget.documentSnapshot['postid'])
-                  .snapshots(),
-              builder: (context, snapshot) {
-                if (!firstBuild && snapshot.hasData && snapshot.data != null) {
-                  return _postContent(snapshot.data);
-                } else {
-                  firstBuild = false;
-                  return _postContent(widget.documentSnapshot);
-                }
-              },
-            )));
+    return !shouldShowPost
+        ? Container()
+        : Padding(
+            padding: EdgeInsets.only(left: 4.w, right: 4.w, bottom: 30.h),
+            child: SizedBox(
+                width: MediaQuery.of(context).size.width,
+                child: StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection("posts")
+                      .doc(widget.documentSnapshot['postid'])
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!firstBuild &&
+                        snapshot.hasData &&
+                        snapshot.data != null) {
+                      return _postContent(snapshot.data);
+                    } else {
+                      firstBuild = false;
+                      return _postContent(widget.documentSnapshot);
+                    }
+                  },
+                )));
   }
 
   Widget _postContent(documentSnapshotToUse) {
@@ -251,7 +263,7 @@ class _FeedPostItemState extends State<FeedPostItem> {
 
             Provider.of<PostFunctions>(context, listen: false).editCaptionText(
                 context,
-                documentSnapshotToUse,
+                PostDetailsModel.fromjson(documentSnapshotToUse),
                 documentSnapshotToUse['postid']);
           } else if (value == _editPostOptions[1]) {
             CoolAlert.show(
@@ -264,11 +276,26 @@ class _FeedPostItemState extends State<FeedPostItem> {
               onConfirmBtnTap: () async {
                 Navigator.of(context, rootNavigator: true).pop();
 
+                setState(() {
+                  shouldShowPost = false;
+                });
+                LoadingHelper.startLoading();
                 await Provider.of<FirebaseOperations>(context, listen: false)
                     .deletePostData(
                   userUid: documentSnapshotToUse['useruid'],
                   postId: documentSnapshotToUse['postid'],
-                );
+                )
+                    .then((value) {
+                  LoadingHelper.endLoading();
+                  Navigator.of(context, rootNavigator: true)
+                      .pushAndRemoveUntil(
+                    MaterialPageRoute(builder: (_) => HomePage()),
+                    (Route<dynamic> route) => false,
+                  )
+                      .onError((error, stackTrace) {
+                    LoadingHelper.endLoading();
+                  });
+                });
               },
               onCancelBtnTap: () {
                 Navigator.of(context, rootNavigator: true).pop();

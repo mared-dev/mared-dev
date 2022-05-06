@@ -6,7 +6,6 @@ import 'package:lottie/lottie.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/screens/CategoryFeed/categoryfeed.dart';
-import 'package:mared_social/screens/CategoryFeed/categoryfeedhelper.dart';
 import 'package:mared_social/screens/SearchFeed/searchfeed.dart';
 import 'package:mared_social/screens/SearchFeed/searchfeedhelper.dart';
 import 'package:mared_social/widgets/items/category_item.dart';

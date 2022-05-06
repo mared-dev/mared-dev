@@ -105,7 +105,6 @@ class _PreviewPickedVideoState extends State<PreviewPickedVideo> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
     widget.videoPlayerController.dispose();
   }
