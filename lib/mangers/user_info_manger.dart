@@ -31,8 +31,10 @@ class UserInfoManger {
           json.decode(SharedPreferencesHelper.getString('userInfo')));
       return userModel;
     } catch (e) {
+      print(e);
       return UserModel(
           userName: '',
+          phoneNumber: '',
           email: '',
           photoUrl: '',
           fcmToken: '',
@@ -65,9 +67,6 @@ class UserInfoManger {
 
   static void rememberUser(
       {required String email, required String password}) async {
-    print('**********');
-    print(email);
-    print(password);
     await SharedPreferencesHelper.setString('savedEmail', email);
     await SharedPreferencesHelper.setString('savedPassword', password);
   }
@@ -86,6 +85,7 @@ class UserInfoManger {
           .map<Map<String, dynamic>>((user) => UserCredentialsModel.toMap(user))
           .toList(),
     );
+    print(encodedCredentials);
     SharedPreferencesHelper.setString('savedCredentials', encodedCredentials);
   }
 

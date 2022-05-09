@@ -27,7 +27,6 @@ class InteractedUserItem extends StatelessWidget {
       : super(key: key);
   @override
   Widget build(BuildContext context) {
-    print('******************');
     print(itemUserId);
     print(UserInfoManger.getUserId());
     return ListTile(

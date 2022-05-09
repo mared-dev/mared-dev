@@ -96,6 +96,10 @@ class _CommentsScreenState extends State<CommentsScreen> {
                                 PageTransition(
                                     child: AltProfile(
                                       userModel: UserModel(
+                                          phoneNumber: GeneralFirebaseHelpers
+                                              .getStringSafely(
+                                                  key: 'usercontactnumber',
+                                                  doc: commentItem),
                                           websiteLink: GeneralFirebaseHelpers
                                               .getStringSafely(
                                                   key: 'websiteLink',

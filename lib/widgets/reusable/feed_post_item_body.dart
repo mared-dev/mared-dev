@@ -62,6 +62,7 @@ class FeedPostItemBody extends StatelessWidget {
                   ),
                 )
               : VideoPostItem(
+                  userId: userId,
                   videoUrl: imageList[0],
                   videoThumbnailLink: videoThumbnail,
                 )),

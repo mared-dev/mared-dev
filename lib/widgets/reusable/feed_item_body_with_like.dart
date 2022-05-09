@@ -1,12 +1,21 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:mared_social/constants/colors.dart';
+import 'package:mared_social/constants/text_styles.dart';
+import 'package:mared_social/helpers/loading_helper.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
+import 'package:mared_social/utils/firebase_general_helpers.dart';
 import 'package:mared_social/utils/postoptions.dart';
+import 'package:mared_social/utils/url_launcher_utils.dart';
 import 'package:mared_social/widgets/bottom_sheets/is_anon_bottom_sheet.dart';
+import 'package:mared_social/widgets/dialogs/contact_user_dialog.dart';
 import 'package:mared_social/widgets/reusable/feed_post_item.dart';
 import 'package:mared_social/widgets/reusable/feed_post_item_body.dart';
 import 'package:provider/provider.dart';
+
+import '../../helpers/post_helpers.dart';
 
 class FeedItemBodyWithLike extends StatefulWidget {
   final imageList;
@@ -41,8 +50,22 @@ class _FeedItemWithLikeState extends State<FeedItemBodyWithLike> {
 
   @override
   Widget build(BuildContext context) {
-    print('@@@@@@@@@@');
     return GestureDetector(
+      onTap: () async {
+        LoadingHelper.startLoading();
+        var user = await FirebaseFirestore.instance
+            .collection('users')
+            .doc(widget.userId)
+            .get();
+        LoadingHelper.endLoading();
+        if (!PostHelpers.checkIfPostIsVideo(widget.imageList) &&
+            GeneralFirebaseHelpers.getStringSafely(
+                    key: 'usercontactnumber', doc: user)
+                .isNotEmpty) {
+          showContactDialog(
+              phoneNumber: user['usercontactnumber'], context: context);
+        } else {}
+      },
       onDoubleTap: () {
         if (Provider.of<Authentication>(context, listen: false).getIsAnon ==
             false) {

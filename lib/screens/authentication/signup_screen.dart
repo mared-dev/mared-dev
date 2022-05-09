@@ -270,6 +270,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     userName: _nameController.text,
                                     photoUrl: _uploadedImageLink,
                                     websiteLink: '',
+                                    phoneNumber: _phoneNumberController.text,
                                     bio: '',
                                     fcmToken: ''));
 

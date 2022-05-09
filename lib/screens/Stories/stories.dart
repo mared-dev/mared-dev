@@ -195,6 +195,10 @@ class _StoriesState extends State<Stories> {
                                 PageTransition(
                                     child: AltProfile(
                                       userModel: UserModel(
+                                          phoneNumber: GeneralFirebaseHelpers.getStringSafely(
+                                              key: 'usercontactnumber',
+                                              doc: widget.querySnapshot.data!
+                                                  .docs[indexCheck]),
                                           websiteLink:
                                               GeneralFirebaseHelpers.getStringSafely(
                                                   key: 'websiteLink',
@@ -210,8 +214,7 @@ class _StoriesState extends State<Stories> {
                                               .docs[indexCheck]['username'],
                                           photoUrl: widget.querySnapshot.data!
                                               .docs[indexCheck]['userimage'],
-                                          email: widget.querySnapshot.data!
-                                              .docs[indexCheck]['useremail'],
+                                          email: widget.querySnapshot.data!.docs[indexCheck]['useremail'],
                                           fcmToken: "",
 
                                           ///later you have to give this the right value

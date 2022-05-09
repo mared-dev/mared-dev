@@ -7,6 +7,7 @@ class UserModel {
   final String websiteLink;
   final String uid;
   final bool store;
+  final String phoneNumber;
 
   UserModel(
       {required this.userName,
@@ -16,6 +17,7 @@ class UserModel {
       required this.store,
       required this.bio,
       required this.websiteLink,
+      required this.phoneNumber,
       required this.uid});
 
   UserModel.fromJson(obj)
@@ -26,6 +28,7 @@ class UserModel {
         store = obj['store'],
         uid = obj['uid'],
         websiteLink = obj['websiteLink'] ?? '',
+        phoneNumber = obj['usercontactnumber'],
         bio = obj['bio'] ?? '';
   toJson() {
     return {
@@ -36,6 +39,7 @@ class UserModel {
       "fcmToken": fcmToken,
       "uid": uid,
       "bio": bio,
+      'usercontactnumber': phoneNumber,
       "websiteLink": websiteLink
     };
   }

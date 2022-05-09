@@ -201,9 +201,7 @@ class _PostsProfileState extends State<PostsProfile> {
                 style: regularTextStyle(
                     fontSize: 11, textColor: AppColors.commentButtonColor),
               ),
-              onPressed: () {
-                print('Button Pressed');
-              },
+              onPressed: () {},
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.symmetric(vertical: 7.h, horizontal: 20.w),
                 shape: RoundedRectangleBorder(
@@ -218,6 +216,7 @@ class _PostsProfileState extends State<PostsProfile> {
   }
 
   Widget _userStatsSection(UserModel userModel, BuildContext context) {
+    print(userModel.uid);
     return Wrap(
       alignment: WrapAlignment.center,
       children: [

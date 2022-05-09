@@ -50,6 +50,7 @@ class LandingHelpers {
       await UserInfoManger.saveUserInfo(UserModel(
           websiteLink: '',
           bio: '',
+          phoneNumber: '',
           uid: Provider.of<Authentication>(context, listen: false).getUserId,
           email: "$anonUsername@mared.ae",
           userName: "@$anonUsername",
@@ -94,6 +95,8 @@ class LandingHelpers {
       await UserInfoManger.setUserId(
           Provider.of<Authentication>(context, listen: false).getUserId);
       await UserInfoManger.saveUserInfo(UserModel(
+          phoneNumber:
+              Provider.of<Authentication>(context, listen: false).googlePhoneNo,
           bio: '',
           websiteLink: '',
           uid: Provider.of<Authentication>(context, listen: false).getUserId,
@@ -174,6 +177,8 @@ class LandingHelpers {
         await UserInfoManger.saveUserInfo(UserModel(
             websiteLink: '',
             bio: '',
+            phoneNumber: Provider.of<Authentication>(context, listen: false)
+                .applePhoneNo,
             uid: Provider.of<Authentication>(context, listen: false).getUserId,
             store: false,
             email: Provider.of<Authentication>(context, listen: false)
@@ -217,6 +222,7 @@ class LandingHelpers {
       await UserInfoManger.saveUserInfo(UserModel(
           uid: Provider.of<Authentication>(context, listen: false).getUserId,
           store: userSnapShot['store'],
+          phoneNumber: userSnapShot['usercontactnumber'],
           bio: GeneralFirebaseHelpers.getStringSafely(
               key: 'bio', doc: userSnapShot),
           websiteLink: GeneralFirebaseHelpers.getStringSafely(

@@ -43,8 +43,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
-    print('@@@@@@@@@');
-    print(rememberMe);
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: true,

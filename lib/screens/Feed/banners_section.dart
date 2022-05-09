@@ -47,6 +47,7 @@ class _BannersSectionState extends State<BannersSection> {
                 userName: bannerItem['username'],
                 email: bannerItem['useremail'],
                 photoUrl: bannerItem['userimage'],
+                phoneNumber: bannerItem['usercontactnumber'],
                 fcmToken: '',
                 store: false,
                 websiteLink: GeneralFirebaseHelpers.getStringSafely(
@@ -68,6 +69,7 @@ class _BannersSectionState extends State<BannersSection> {
                   onIndexChanged: (newIndex) {
                     var bannerItem = bannerSnap.data!.docs[newIndex];
                     selectedUser = UserModel(
+                        phoneNumber: bannerItem['usercontactnumber'],
                         userName: bannerItem['username'],
                         email: bannerItem['useremail'],
                         photoUrl: bannerItem['userimage'],

@@ -69,6 +69,10 @@ class _ReviewPostItemState extends State<ReviewPostItem> {
                             PageTransition(
                                 child: AltProfile(
                                   userModel: UserModel(
+                                      phoneNumber: GeneralFirebaseHelpers
+                                          .getStringSafely(
+                                              key: 'usercontactnumber',
+                                              doc: widget.documentSnapshot),
                                       websiteLink: GeneralFirebaseHelpers
                                           .getStringSafely(
                                               key: 'websiteLink',
@@ -249,6 +253,10 @@ class _ReviewPostItemState extends State<ReviewPostItem> {
                         PageTransition(
                             child: AltProfile(
                               userModel: UserModel(
+                                  phoneNumber:
+                                      GeneralFirebaseHelpers.getStringSafely(
+                                          key: 'usercontactnumber',
+                                          doc: widget.documentSnapshot),
                                   websiteLink:
                                       GeneralFirebaseHelpers.getStringSafely(
                                           key: 'websiteLink',

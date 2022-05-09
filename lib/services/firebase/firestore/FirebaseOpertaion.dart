@@ -192,6 +192,7 @@ class FirebaseOperations with ChangeNotifier {
       await UserInfoManger.saveUserInfo(UserModel(
           websiteLink: websiteLink,
           bio: bio,
+          phoneNumber: doc['usercontactnumber'],
           email: initUserEmail,
           userName: initUserName,
           photoUrl: initUserImage,
@@ -206,6 +207,7 @@ class FirebaseOperations with ChangeNotifier {
       required String userUid,
       required String photoUrl,
       required String bio,
+      required String phoneNumber,
       required String websiteLink}) async {
     FirebaseFirestore.instance
         .collection("users")
@@ -215,13 +217,15 @@ class FirebaseOperations with ChangeNotifier {
         .set(
       {'websiteLink': websiteLink, 'bio': bio, 'userimage': photoUrl},
     );
-    FirebaseFirestore.instance.collection("users").doc(userUid).update({
-      'userimage': photoUrl,
-    });
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(userUid)
+        .update({'userimage': photoUrl, 'usercontactnumber': phoneNumber});
 
     UserModel oldModel = UserInfoManger.getUserInfo();
 
     UserInfoManger.saveUserInfo(UserModel(
+        phoneNumber: phoneNumber,
         userName: oldModel.userName,
         email: oldModel.email,
         photoUrl: photoUrl,

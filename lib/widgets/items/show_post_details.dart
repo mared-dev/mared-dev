@@ -41,7 +41,6 @@ class PostDetails extends StatefulWidget {
 class _PostDetailsState extends State<PostDetails> {
   @override
   Widget build(BuildContext context) {
-    print('%%%%%%%%%%%%%%%%%%');
     return SafeArea(
       bottom: true,
       child: Container(
@@ -83,6 +82,7 @@ class _PostDetailsState extends State<PostDetails> {
                 child: PostHelpers.checkIfPostIsVideo(
                         widget.documentSnapshot['imageslist'])
                     ? VideoPostItem(
+                        userId: widget.documentSnapshot['useruid'],
                         videoUrl: widget.documentSnapshot['imageslist'][0],
                         videoThumbnailLink:
                             widget.documentSnapshot['thumbnail'],

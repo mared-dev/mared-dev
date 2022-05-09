@@ -121,6 +121,10 @@ class _FollowingScreenState extends State<FollowingScreen> {
                             PageTransition(
                                 child: AltProfile(
                                   userModel: UserModel(
+                                      phoneNumber: GeneralFirebaseHelpers
+                                          .getStringSafely(
+                                              key: 'usercontactnumber',
+                                              doc: followingItem),
                                       websiteLink: GeneralFirebaseHelpers
                                           .getStringSafely(
                                               key: 'websiteLink',

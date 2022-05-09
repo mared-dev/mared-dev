@@ -69,6 +69,10 @@ class _ReviewStoryItemState extends State<ReviewStoryItem> {
                               PageTransition(
                                   child: AltProfile(
                                     userModel: UserModel(
+                                        phoneNumber: GeneralFirebaseHelpers
+                                            .getStringSafely(
+                                                key: 'usercontactnumber',
+                                                doc: widget.documentSnapshot),
                                         websiteLink: GeneralFirebaseHelpers
                                             .getStringSafely(
                                                 key: 'websiteLink',
@@ -132,6 +136,7 @@ class _ReviewStoryItemState extends State<ReviewStoryItem> {
                   padding: EdgeInsets.symmetric(horizontal: 15.w),
                   height: 0.6.sh,
                   child: VideoPostItem(
+                      userId: widget.documentSnapshot['useruid'],
                       videoThumbnailLink: widget.documentSnapshot['thumbnail'],
                       videoUrl: widget.documentSnapshot['videourl'])),
               Padding(
@@ -206,6 +211,10 @@ class _ReviewStoryItemState extends State<ReviewStoryItem> {
                         PageTransition(
                             child: AltProfile(
                               userModel: UserModel(
+                                  phoneNumber:
+                                      GeneralFirebaseHelpers.getStringSafely(
+                                          key: 'usercontactnumber',
+                                          doc: widget.documentSnapshot),
                                   websiteLink:
                                       GeneralFirebaseHelpers.getStringSafely(
                                           key: 'websiteLink',

@@ -14,4 +14,15 @@ class GeneralFirebaseHelpers {
     } catch (e) {}
     return result;
   }
+
+  static bool validateMobile(String value) {
+    String pattern = r'^(?:\+971|00971|0)?(?:50|51|52|55|56|2|3|4|6|7|9)\d{7}$';
+    RegExp regExp = new RegExp(pattern);
+    if (value.isEmpty) {
+      return false;
+    } else if (!regExp.hasMatch(value)) {
+      return false;
+    }
+    return true;
+  }
 }

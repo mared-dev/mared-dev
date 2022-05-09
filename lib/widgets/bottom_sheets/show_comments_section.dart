@@ -113,6 +113,13 @@ class _CommentsSectionState extends State<CommentsSection> {
                                             PageTransition(
                                                 child: AltProfile(
                                                   userModel: UserModel(
+                                                      phoneNumber:
+                                                          GeneralFirebaseHelpers
+                                                              .getStringSafely(
+                                                                  key:
+                                                                      'usercontactnumber',
+                                                                  doc:
+                                                                      commentDocSnap),
                                                       websiteLink:
                                                           GeneralFirebaseHelpers
                                                               .getStringSafely(
@@ -120,11 +127,12 @@ class _CommentsSectionState extends State<CommentsSection> {
                                                                       'websiteLink',
                                                                   doc:
                                                                       commentDocSnap),
-                                                      bio: GeneralFirebaseHelpers
-                                                          .getStringSafely(
-                                                              key: 'bio',
-                                                              doc:
-                                                                  commentDocSnap),
+                                                      bio:
+                                                          GeneralFirebaseHelpers
+                                                              .getStringSafely(
+                                                                  key: 'bio',
+                                                                  doc:
+                                                                      commentDocSnap),
                                                       uid: commentDocSnap[
                                                           'useruid'],
                                                       userName: commentDocSnap[

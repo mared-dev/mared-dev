@@ -106,6 +106,10 @@ class _FeedPostItemState extends State<FeedPostItem> {
                         PageTransition(
                             child: AltProfile(
                               userModel: UserModel(
+                                  phoneNumber:
+                                      GeneralFirebaseHelpers.getStringSafely(
+                                          key: 'usercontactnumber',
+                                          doc: documentSnapshotToUse),
                                   websiteLink:
                                       GeneralFirebaseHelpers.getStringSafely(
                                           key: 'websiteLink',
@@ -361,6 +365,10 @@ class _FeedPostItemState extends State<FeedPostItem> {
                         PageTransition(
                             child: AltProfile(
                               userModel: UserModel(
+                                  phoneNumber:
+                                      GeneralFirebaseHelpers.getStringSafely(
+                                          key: 'usercontactnumber',
+                                          doc: documentSnapshotToUse),
                                   websiteLink:
                                       GeneralFirebaseHelpers.getStringSafely(
                                           key: 'websiteLink',

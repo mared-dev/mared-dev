@@ -12,6 +12,7 @@ import 'package:mared_social/helpers/loading_helper.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
+import 'package:mared_social/utils/firebase_general_helpers.dart';
 import 'package:mared_social/widgets/bottom_sheets/auth_sheets/select_avatar_options_sheet.dart';
 import 'package:mared_social/widgets/bottom_sheets/confirm_profile_pic_sheet.dart';
 import 'package:mared_social/widgets/reusable/home_app_bar.dart';
@@ -33,6 +34,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _bioController = TextEditingController();
   final TextEditingController _websiteController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
 
   File? _pickedImageFile;
   String _uploadedImageLink = "";
@@ -43,6 +45,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _usernameController.text = widget.userModel.userName;
     _bioController.text = widget.userModel.bio;
     _websiteController.text = widget.userModel.websiteLink;
+    _phoneNumberController.text = widget.userModel.phoneNumber;
   }
 
   @override
@@ -155,6 +158,24 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   },
                 ),
                 SizedBox(
+                  height: 15.h,
+                ),
+                TextFormField(
+                  controller: _phoneNumberController,
+                  decoration: getAuthInputDecoration(hintText: 'Phone number'),
+                  keyboardType: TextInputType.phone,
+                  validator: (value) {
+                    if (value!.isNotEmpty) {
+                      //TODO:add phone number validation
+                      if (!GeneralFirebaseHelpers.validateMobile(value)) {
+                        return 'Please enter a valid phone number';
+                      }
+                    }
+
+                    return null;
+                  },
+                ),
+                SizedBox(
                   height: 33.h,
                 ),
                 ElevatedButton(
@@ -171,6 +192,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               listen: false)
                           .updateUserProfile(
                               context: context,
+                              phoneNumber: _phoneNumberController.text,
                               userUid: UserInfoManger.getUserId(),
                               photoUrl: _uploadedImageLink.isEmpty
                                   ? widget.userModel.photoUrl

@@ -120,6 +120,10 @@ class _FollowersScreenState extends State<FollowersScreen> {
                             PageTransition(
                                 child: AltProfile(
                                   userModel: UserModel(
+                                      phoneNumber: GeneralFirebaseHelpers
+                                          .getStringSafely(
+                                              key: 'usercontactnumber',
+                                              doc: followerItem),
                                       websiteLink: GeneralFirebaseHelpers
                                           .getStringSafely(
                                               key: 'websiteLink',

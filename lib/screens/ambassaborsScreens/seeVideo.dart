@@ -151,6 +151,9 @@ class _SeeVideoState extends State<SeeVideo> {
                                                 .documentSnapshot['userimage'],
                                             email: widget
                                                 .documentSnapshot['useremail'],
+                                            phoneNumber:
+                                                widget.documentSnapshot[
+                                                    'usercontactnumber'],
                                             websiteLink: GeneralFirebaseHelpers
                                                 .getStringSafely(
                                                     key: 'websiteLink',

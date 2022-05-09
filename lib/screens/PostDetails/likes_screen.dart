@@ -119,6 +119,10 @@ class _LikesScreenState extends State<LikesScreen> {
                             PageTransition(
                                 child: AltProfile(
                                   userModel: UserModel(
+                                      phoneNumber: GeneralFirebaseHelpers
+                                          .getStringSafely(
+                                              key: 'usercontactnumber',
+                                              doc: likeItem),
                                       websiteLink: GeneralFirebaseHelpers
                                           .getStringSafely(
                                               key: 'websiteLink',

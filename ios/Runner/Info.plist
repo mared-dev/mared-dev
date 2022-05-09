@@ -18,11 +18,6 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
-	 <key>LSApplicationQueriesSchemes</key>
-       <array>
-         <string>https</string>
-         <string>http</string>
-       </array>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -46,6 +41,12 @@
 	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>https</string>
+		<string>http</string>
+		<string>tel</string>
+	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>

@@ -28,6 +28,8 @@ class UserResultItem extends StatelessWidget {
                 PageTransition(
                     child: AltProfile(
                       userModel: UserModel(
+                          phoneNumber: GeneralFirebaseHelpers.getStringSafely(
+                              key: 'usercontactnumber', doc: userData),
                           websiteLink: GeneralFirebaseHelpers.getStringSafely(
                               key: 'websiteLink', doc: userData),
                           bio: GeneralFirebaseHelpers.getStringSafely(

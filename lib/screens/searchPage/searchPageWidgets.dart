@@ -81,6 +81,10 @@ class UserSearchResultBody extends StatelessWidget {
                                     screen: AltProfile(
                                       userUid: userData['useruid'],
                                       userModel: UserModel(
+                                          phoneNumber: GeneralFirebaseHelpers
+                                              .getStringSafely(
+                                                  key: 'usercontactnumber',
+                                                  doc: userData),
                                           websiteLink: GeneralFirebaseHelpers
                                               .getStringSafely(
                                                   key: 'websiteLink',
