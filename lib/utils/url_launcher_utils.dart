@@ -9,4 +9,8 @@ class UrlLauncherUtils {
   static Future<void> openWhatsapp(String phoneNumber) async {
     await launch('https://wa.me/$phoneNumber');
   }
+
+  static Future<void> openWebsite(String link) async {
+    await launch(link);
+  }
 }

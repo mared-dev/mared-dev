@@ -18,6 +18,7 @@ import 'package:mared_social/screens/Profile/edit_profile_screen.dart';
 import 'package:mared_social/screens/Profile/profileHelpers.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
+import 'package:mared_social/utils/url_launcher_utils.dart';
 import 'package:mared_social/widgets/bottom_sheets/confirm_post_image_video.dart';
 import 'package:mared_social/widgets/items/profile_post_item.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -423,26 +424,62 @@ class _PostsProfileState extends State<PostsProfile> {
               SizedBox(
                 height: 12.h,
               ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
+            Wrap(
+              crossAxisAlignment: WrapCrossAlignment.center,
+              alignment: WrapAlignment.center,
+              spacing: 8,
+              runSpacing: 10,
               children: [
-                Icon(
-                  EvaIcons.email,
-                  color: AppColors.accentColor,
-                  size: 12.w,
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      EvaIcons.email,
+                      color: AppColors.accentColor,
+                      size: 16.w,
+                    ),
+                    Flexible(
+                      child: Container(
+                        padding: const EdgeInsets.only(left: 6.0),
+                        child: Text(
+                          userModel.email,
+                          textAlign: TextAlign.center,
+                          style: semiBoldTextStyle(
+                              fontSize: 10.sp,
+                              textColor: AppColors.commentButtonColor),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-                Flexible(
-                  child: Container(
-                    padding: const EdgeInsets.only(left: 8.0),
-                    child: Text(
-                      userModel.email,
-                      textAlign: TextAlign.center,
-                      style: semiBoldTextStyle(
-                          fontSize: 8.sp,
-                          textColor: AppColors.commentButtonColor),
+                if (userModel.websiteLink.isNotEmpty)
+                  InkWell(
+                    onTap: () {
+                      UrlLauncherUtils.openWebsite(userModel.websiteLink);
+                    },
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          EvaIcons.globe,
+                          color: AppColors.accentColor,
+                          size: 16.w,
+                        ),
+                        Flexible(
+                          child: Container(
+                            padding: const EdgeInsets.only(left: 6.0),
+                            child: Text(
+                              'Website',
+                              textAlign: TextAlign.center,
+                              style: semiBoldTextStyle(
+                                  fontSize: 10.sp,
+                                  textColor: AppColors.commentButtonColor),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ),
               ],
             ),
             SizedBox(
