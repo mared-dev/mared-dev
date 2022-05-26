@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,8 +16,11 @@ import 'package:mared_social/screens/authentication/forgot_password_screen.dart'
 import 'package:mared_social/screens/authentication/signup_screen.dart';
 import 'package:mared_social/utils/popup_utils.dart';
 import 'package:mared_social/widgets/reusable/auth_checkbox_item.dart';
+import 'package:mared_social/widgets/reusable/sign_in_with_google_button.dart';
 import 'package:mared_social/widgets/reusable/password_text_field.dart';
 import 'package:page_transition/page_transition.dart';
+
+import '../../widgets/reusable/sign_in_with_apple_button.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -40,9 +46,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
   List<UserCredentialsModel> savedCredentials = [];
 
+  late Size _screenSize;
+  late ScreenUtil _screenUtilObject;
   @override
   Widget build(BuildContext context) {
-    var screenSize = MediaQuery.of(context).size;
+    _screenUtilObject = ScreenUtil();
+    _screenSize = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: true,
@@ -51,8 +60,8 @@ class _LoginScreenState extends State<LoginScreen> {
           padding: EdgeInsets.only(
             top: 18.h,
           ),
-          width: screenSize.width,
-          height: screenSize.height,
+          width: _screenSize.width,
+          height: _screenSize.height,
           child: ListView(
             children: [
               Form(
@@ -60,15 +69,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Column(
                   children: [
                     Container(
-                      width: screenSize.width,
-                      height: 291.h,
+                      padding: EdgeInsets.symmetric(horizontal: 75.w),
+                      margin: EdgeInsets.only(top: 48.h),
+                      width: _screenSize.width,
+                      height: 120.h,
                       child: Image.asset(
                         'assets/images/login_top_logo.png',
-                        fit: BoxFit.fill,
+                        fit: BoxFit.contain,
                       ),
                     ),
                     SizedBox(
-                      height: 100.h,
+                      height: 32.h,
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 32.w),
@@ -165,7 +176,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ],
                           ),
                           SizedBox(
-                            width: screenSize.width,
+                            width: _screenSize.width,
                             child: ElevatedButton(
                               onPressed: () async {
                                 if (_emailController.text.isEmpty) {
@@ -213,36 +224,26 @@ class _LoginScreenState extends State<LoginScreen> {
                               child: Text('SIGN IN'),
                             ),
                           ),
-                          SizedBox(
-                            height: 25.h,
+                          _orDivider(),
+                          SignInWithGoogleButton(
+                            buttonText: 'Sign in with google',
+                            callback: () {
+                              LandingHelpers.loginWithGoogle(context);
+                            },
                           ),
-                          RichText(
-                            text: TextSpan(children: [
-                              TextSpan(
-                                text: "I'm a new user .",
-                                style: regularTextStyle(
-                                    fontSize: 12,
-                                    textColor: AppColors.darkGrayTextColor),
-                              ),
-                              TextSpan(
-                                  text: "SIGN UP",
-                                  style: semiBoldTextStyle(
-                                      fontSize: 12,
-                                      textColor: AppColors.darkGrayTextColor),
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      Navigator.pushReplacement(
-                                          context,
-                                          PageTransition(
-                                              child: SignUpScreen(),
-                                              type: PageTransitionType
-                                                  .rightToLeft));
-                                    }),
-                            ]),
-                          ),
-                          SizedBox(
-                            height: 68.h,
-                          ),
+                          if (Platform.isIOS)
+                            SizedBox(
+                              height: 13.h,
+                            ),
+                          if (Platform.isIOS)
+                            SignInWithAppleButton(
+                              buttonText: 'Sign in with Apple',
+                              callback: () async {
+                                LoadingHelper.startLoading();
+                                await LandingHelpers.loginWithApple(context);
+                                LoadingHelper.endLoading();
+                              },
+                            ),
                         ],
                       ),
                     ),
@@ -250,6 +251,32 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ),
             ],
+          ),
+        ),
+        bottomNavigationBar: Container(
+          padding: EdgeInsets.only(bottom: 18.h),
+          width: MediaQuery.of(context).size.width,
+          child: RichText(
+            textAlign: TextAlign.center,
+            text: TextSpan(children: [
+              TextSpan(
+                text: "I'm a new user .",
+                style: regularTextStyle(
+                    fontSize: 12, textColor: AppColors.darkGrayTextColor),
+              ),
+              TextSpan(
+                  text: "SIGN UP",
+                  style: semiBoldTextStyle(
+                      fontSize: 12, textColor: AppColors.darkGrayTextColor),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      Navigator.pushReplacement(
+                          context,
+                          PageTransition(
+                              child: SignUpScreen(),
+                              type: PageTransitionType.rightToLeft));
+                    }),
+            ]),
           ),
         ),
       ),
@@ -261,6 +288,44 @@ class _LoginScreenState extends State<LoginScreen> {
     _passwordController.text = await UserInfoManger.getRememberedPassword();
 
     savedCredentials = UserInfoManger.getSavedCredentials();
+  }
+
+  Widget _orDivider() {
+    return Container(
+      width: _screenSize.width,
+      margin: EdgeInsets.only(
+          top: _screenUtilObject.setHeight(26),
+          bottom: _screenUtilObject.setHeight(24)),
+      padding: EdgeInsets.symmetric(horizontal: _screenUtilObject.setWidth(20)),
+      child: Row(
+        children: [
+          Flexible(
+            flex: 1,
+            child: Divider(
+              color: AppColors.widgetsBackground,
+            ),
+          ),
+          Padding(
+            padding:
+                EdgeInsets.symmetric(horizontal: _screenUtilObject.setWidth(8)),
+            child: Text(
+              'or',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  fontSize: 13.sp,
+                  fontFamily: "Montserrat",
+                  fontWeight: FontWeight.w300),
+            ),
+          ),
+          Flexible(
+            flex: 1,
+            child: Divider(
+              color: AppColors.widgetsBackground,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _rememberMeButton() {

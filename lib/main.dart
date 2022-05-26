@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -28,10 +29,23 @@ import 'config.dart';
 
 void main() async {
   await config();
+
   runApp(Provider<AppleSignInAvailable>.value(
     value: appleSignInAvailable,
     child: const MyApp(),
   ));
+
+  ///TODO: start working on localization
+  // runApp(Provider<AppleSignInAvailable>.value(
+  //   value: appleSignInAvailable,
+  //   child: EasyLocalization(
+  //       supportedLocales: [Locale('en'), Locale('ar')],
+  //       path: 'assets/translations',
+  //       fallbackLocale: const Locale(
+  //         'en',
+  //       ),
+  //       child: const MyApp()),
+  // ));
 }
 
 class MyApp extends StatelessWidget {

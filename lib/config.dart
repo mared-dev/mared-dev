@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +18,7 @@ final getIt = GetIt.instance;
 
 config() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
   SystemChrome.setEnabledSystemUIOverlays([]);
   await Firebase.initializeApp();
   const AndroidNotificationChannel channel = AndroidNotificationChannel(
