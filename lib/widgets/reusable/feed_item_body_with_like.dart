@@ -6,7 +6,7 @@ import 'package:mared_social/constants/text_styles.dart';
 import 'package:mared_social/helpers/loading_helper.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
-import 'package:mared_social/utils/firebase_general_helpers.dart';
+import 'package:mared_social/helpers/firebase_general_helpers.dart';
 import 'package:mared_social/utils/postoptions.dart';
 import 'package:mared_social/utils/url_launcher_utils.dart';
 import 'package:mared_social/widgets/bottom_sheets/is_anon_bottom_sheet.dart';
@@ -67,8 +67,7 @@ class _FeedItemWithLikeState extends State<FeedItemBodyWithLike> {
         } else {}
       },
       onDoubleTap: () {
-        if (Provider.of<Authentication>(context, listen: false).getIsAnon ==
-            false) {
+        if (UserInfoManger.isNotGuest()) {
           if (!isAlreadyLiked) {
             isAnimating = true;
             isAlreadyLiked = true;
@@ -80,8 +79,7 @@ class _FeedItemWithLikeState extends State<FeedItemBodyWithLike> {
             userUid: widget.userId,
             context: context,
             postID: widget.postId,
-            subDocId:
-                Provider.of<Authentication>(context, listen: false).getUserId,
+            subDocId: UserInfoManger.getUserId(),
           );
         } else {
           IsAnonBottomSheet(context);

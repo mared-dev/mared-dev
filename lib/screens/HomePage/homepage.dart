@@ -50,7 +50,6 @@ class _HomePageState extends State<HomePage> {
 
   int pageIndex = 0;
   bool loading = true;
-  bool isAnon = false;
 
   late PersistentTabController _controller;
   late List<Widget> _screens;
@@ -76,8 +75,6 @@ class _HomePageState extends State<HomePage> {
             'Message also contained a notification: ${message.notification!.title}');
       }
     });
-    isAnon = Provider.of<Authentication>(context, listen: false).getIsAnon;
-
     _controller = PersistentTabController(initialIndex: 0);
 
     _screens = UserInfoManger.isAdmin()
@@ -149,7 +146,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: AppColors.backGroundColor,
       body: PersistentTabView(context,
-          floatingActionButton: UserInfoManger.getAnonFlag()
+          floatingActionButton: !UserInfoManger.isNotGuest()
               ? null
               : FloatingActionButton(
                   heroTag: "addPostFeed",
@@ -249,7 +246,7 @@ class _HomePageState extends State<HomePage> {
 
     await FirebaseFirestore.instance
         .collection("users")
-        .doc(Provider.of<Authentication>(context, listen: false).getUserId)
+        .doc(UserInfoManger.getUserId())
         .update({
       'fcmToken': token,
     });

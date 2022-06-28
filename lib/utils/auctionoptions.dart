@@ -15,6 +15,8 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
+import '../mangers/user_info_manger.dart';
+
 class AuctionFuctions with ChangeNotifier {
   TextEditingController auctionCommentController = TextEditingController();
   ConstantColors constantColors = ConstantColors();
@@ -696,10 +698,7 @@ class AuctionFuctions with ChangeNotifier {
                             color: constantColors.whiteColor,
                           ),
                           onPressed: () {
-                            if (Provider.of<Authentication>(context,
-                                        listen: false)
-                                    .getIsAnon ==
-                                false) {
+                            if (UserInfoManger.isNotGuest()) {
                               addAuctionComment(
                                       userUid: snapshot['useruid'],
                                       auctionId: snapshot['auctionid'],

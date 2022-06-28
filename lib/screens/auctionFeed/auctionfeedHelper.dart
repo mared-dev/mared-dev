@@ -8,6 +8,7 @@ import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/auctionFeed/auctionpage.dart';
 import 'package:mared_social/screens/auctionFeed/createAuctionScreen.dart';
@@ -365,10 +366,7 @@ class AuctionFeedHelper with ChangeNotifier {
                                   children: [
                                     InkWell(
                                       onTap: () {
-                                        if (Provider.of<Authentication>(context,
-                                                    listen: false)
-                                                .getIsAnon ==
-                                            false) {
+                                        if (UserInfoManger.isNotGuest()) {
                                           Provider.of<AuctionFuctions>(context,
                                                   listen: false)
                                               .addAuctionLike(
@@ -580,8 +578,7 @@ class AuctionFeedHelper with ChangeNotifier {
     return FloatingActionButton.extended(
       backgroundColor: constantColors.darkColor,
       onPressed: () {
-        if (Provider.of<Authentication>(context, listen: false).getIsAnon ==
-            false) {
+        if (UserInfoManger.isNotGuest()) {
           Navigator.push(
               context,
               PageTransition(

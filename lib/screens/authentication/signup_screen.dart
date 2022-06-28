@@ -12,11 +12,13 @@ import 'package:mared_social/constants/text_styles.dart';
 import 'package:mared_social/helpers/loading_helper.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
+import 'package:mared_social/repositories/auth_repo.dart';
+import 'package:mared_social/repositories/user_repo.dart';
 import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/screens/authentication/login_screen.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
-import 'package:mared_social/utils/firebase_general_helpers.dart';
+import 'package:mared_social/helpers/firebase_general_helpers.dart';
 import 'package:mared_social/widgets/bottom_sheets/auth_sheets/select_avatar_options_sheet.dart';
 import 'package:mared_social/widgets/bottom_sheets/confirm_profile_pic_sheet.dart';
 import 'package:mared_social/widgets/items/pick_image_avatar.dart';
@@ -229,91 +231,44 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             } else if (_formKey.currentState!.validate()) {
                               LoadingHelper.startLoading();
                               try {
-                                await Provider.of<Authentication>(context,
-                                        listen: false)
-                                    .createAccount(_emailController.text,
-                                        _passwordController.text);
+                                String userUid = await AuthRepo.createAccount(
+                                    _emailController.text,
+                                    _passwordController.text);
 
-                                ///remove this section later
-                                SharedPreferences.setMockInitialValues({});
-                                SharedPreferences prefs =
-                                    await SharedPreferences.getInstance();
-                                await prefs.setString(
-                                    'mydata',
-                                    json.encode({
-                                      'userpassword': _passwordController.text,
-                                      'usercontactnumber':
-                                          _phoneNumberController.text,
-                                      'store': isStore == 1,
-                                      'useruid': Provider.of<Authentication>(
-                                              context,
-                                              listen: false)
-                                          .getUserId,
-                                      'useremail': _emailController.text,
-                                      'username': _nameController.text,
-                                      'userimage': _uploadedImageLink,
-                                    }));
+                                if (userUid.isNotEmpty) {
+                                  UserModel registeredUser = UserModel(
+                                      uid: userUid,
+                                      store: isStore == 1,
+                                      email: _emailController.text,
+                                      userName: _nameController.text,
+                                      photoUrl: _uploadedImageLink,
+                                      websiteLink: '',
+                                      phoneNumber: _phoneNumberController.text,
+                                      bio: '',
+                                      fcmToken: '');
 
-                                ///
+                                  await UserInfoManger.setUserId(userUid);
+                                  await UserInfoManger.saveUserInfo(
+                                      registeredUser);
 
-                                await UserInfoManger.setUserId(
-                                  Provider.of<Authentication>(context,
-                                          listen: false)
-                                      .getUserId,
-                                );
-                                await UserInfoManger.saveUserInfo(UserModel(
-                                    uid: Provider.of<Authentication>(context,
-                                            listen: false)
-                                        .getUserId,
-                                    store: isStore == 1,
-                                    email: _emailController.text,
-                                    userName: _nameController.text,
-                                    photoUrl: _uploadedImageLink,
-                                    websiteLink: '',
-                                    phoneNumber: _phoneNumberController.text,
-                                    bio: '',
-                                    fcmToken: ''));
+                                  await UserInfoManger.saveAnonFlag(0);
 
-                                await UserInfoManger.saveAnonFlag(0);
+                                  UsersRepo.addUser(
+                                      userModel: registeredUser, uid: userUid);
 
-                                String name = "${_nameController.text} ";
-
-                                List<String> splitList = name.split(" ");
-                                List<String> indexList = [];
-
-                                for (int i = 0; i < splitList.length; i++) {
-                                  for (int j = 0;
-                                      j < splitList[i].length;
-                                      j++) {
-                                    indexList.add(splitList[i]
-                                        .substring(0, j + 1)
-                                        .toLowerCase());
-                                  }
+                                  Navigator.pushReplacement(
+                                    context,
+                                    PageTransition(
+                                        child: const HomePage(),
+                                        type: PageTransitionType.rightToLeft),
+                                  );
+                                } else {
+                                  CoolAlert.show(
+                                      context: context,
+                                      type: CoolAlertType.error,
+                                      title: "Sign Up Failed",
+                                      text: 'Something went wrong');
                                 }
-
-                                await Provider.of<FirebaseOperations>(context,
-                                        listen: false)
-                                    .createUserCollection(context, {
-                                  'userpassword': _nameController.text,
-                                  'usercontactnumber':
-                                      _phoneNumberController.text,
-                                  'store': isStore == 1,
-                                  'useruid': Provider.of<Authentication>(
-                                          context,
-                                          listen: false)
-                                      .getUserId,
-                                  'useremail': _emailController.text,
-                                  'username': _nameController.text,
-                                  'userimage': _uploadedImageLink,
-                                  'usersearchindex': indexList,
-                                });
-
-                                Navigator.pushReplacement(
-                                  context,
-                                  PageTransition(
-                                      child: const HomePage(),
-                                      type: PageTransitionType.rightToLeft),
-                                );
                               } catch (e) {
                                 CoolAlert.show(
                                     context: context,

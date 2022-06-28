@@ -47,8 +47,7 @@ class Feed extends StatelessWidget {
           height: 21.h,
         ),
         actionCallback: () {
-          if (Provider.of<Authentication>(context, listen: false).getIsAnon ==
-              false) {
+          if (UserInfoManger.isNotGuest()) {
             pushNewScreen(
               context,
               screen: Profile(),

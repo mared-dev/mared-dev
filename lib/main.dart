@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
       designSize: const Size(390, 844),
       minTextAdapt: true,
       splitScreenMode: true,
-      builder: () => MultiProvider(
+      builder: (context, _) => MultiProvider(
         child: MaterialApp(
           builder: EasyLoading.init(),
           home: WillPopScope(

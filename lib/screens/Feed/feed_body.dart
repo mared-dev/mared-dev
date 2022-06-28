@@ -10,7 +10,7 @@ import 'package:mared_social/mangers/posts_refresh_manger.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/screens/Feed/banners_section.dart';
 import 'package:mared_social/screens/Feed/stories_section.dart';
-import 'package:mared_social/utils/firebase_general_helpers.dart';
+import 'package:mared_social/helpers/firebase_general_helpers.dart';
 import 'package:mared_social/widgets/reusable/feed_post_item.dart';
 import 'package:mared_social/widgets/reusable/feed_post_item_body.dart';
 import 'package:mared_social/widgets/reusable/paginate_firestore_edited.dart';
@@ -28,7 +28,10 @@ class _FeedBodyState extends State<FeedBody> {
   @override
   void initState() {
     super.initState();
-    _topSectionItems = [StoriesSection(), BannersSection()];
+    _topSectionItems = [
+      StoriesSection(),
+      BannersSection(),
+    ];
   }
 
   bool flag = false;
@@ -38,13 +41,17 @@ class _FeedBodyState extends State<FeedBody> {
     print('((((((((((((((((((((((');
     //temp changing StreamBuilder to FutureBuilder and .snapshot to .get
     return CustomPaginateFirestore(
-      header: SliverList(
-        delegate: SliverChildBuilderDelegate(
-          (context, index) {
-            return _topSectionItems[index];
-          },
-          childCount: _topSectionItems.length,
-        ),
+      ///TODO:uncomment for stories feature
+      // header: SliverList(
+      //   delegate: SliverChildBuilderDelegate(
+      //     (context, index) {
+      //       return _topSectionItems[index];
+      //     },
+      //     childCount: _topSectionItems.length,
+      //   ),
+      // ),
+      header: SliverPadding(
+        padding: EdgeInsets.only(top: 24.h),
       ),
       //item builder type is compulsory.
       itemBuilder: (context, snapshot, index) {
@@ -57,7 +64,8 @@ class _FeedBodyState extends State<FeedBody> {
       },
       onEmpty: Column(
         children: [
-          _topSectionItems[0],
+          // _topSectionItems[0],
+          ///TODO:uncomment for stories feature
           // _topSectionItems[1],
           Expanded(
             child: Center(

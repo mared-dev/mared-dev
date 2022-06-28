@@ -6,7 +6,7 @@ import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
-import 'package:mared_social/utils/firebase_general_helpers.dart';
+import 'package:mared_social/helpers/firebase_general_helpers.dart';
 import 'package:mared_social/widgets/bottom_sheets/auth_sheets/warning_text.dart';
 import 'package:nanoid/nanoid.dart';
 import 'package:page_transition/page_transition.dart';

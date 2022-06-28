@@ -9,7 +9,6 @@ import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 class Authentication with ChangeNotifier {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
-  late bool isAnon;
 
   late String userUid,
       googleUsername,
@@ -19,7 +18,6 @@ class Authentication with ChangeNotifier {
 
   late String appleUsername, appleUseremail, appleUserImage, applePhoneNo;
 
-  bool get getIsAnon => isAnon;
   String get getUserId => userUid;
   String get getgoogleUsername => googleUsername;
   String get getgoogleUseremail => googleUseremail;
@@ -33,7 +31,7 @@ class Authentication with ChangeNotifier {
 
   Future returningUserLogin(String uid) async {
     userUid = uid;
-    isAnon = false;
+    UserInfoManger.saveAnonFlag(0);
     print("logged in " + userUid);
     notifyListeners();
   }
@@ -44,7 +42,7 @@ class Authentication with ChangeNotifier {
 
     User? user = userCredential.user;
     userUid = user!.uid;
-    isAnon = false;
+    UserInfoManger.saveAnonFlag(0);
     print("logged in " + userUid);
     notifyListeners();
   }
@@ -53,16 +51,16 @@ class Authentication with ChangeNotifier {
     return firebaseAuth.sendPasswordResetEmail(email: email);
   }
 
-  Future createAccount(String email, String password) async {
-    UserCredential userCredential = await firebaseAuth
-        .createUserWithEmailAndPassword(email: email, password: password);
-
-    User? user = userCredential.user;
-    userUid = user!.uid;
-    isAnon = false;
-    print(userUid);
-    notifyListeners();
-  }
+  // Future createAccount(String email, String password) async {
+  //   UserCredential userCredential = await firebaseAuth
+  //       .createUserWithEmailAndPassword(email: email, password: password);
+  //
+  //   User? user = userCredential.user;
+  //   userUid = user!.uid;
+  //   isAnon = false;
+  //   print(userUid);
+  //   notifyListeners();
+  // }
 
   Future logOutViaEmail() {
     return firebaseAuth.signOut();
@@ -85,7 +83,7 @@ class Authentication with ChangeNotifier {
     assert(user!.uid != null);
 
     userUid = user!.uid;
-    isAnon = false;
+    UserInfoManger.saveAnonFlag(0);
     googleUseremail = user.email!;
     googleUsername = user.displayName!;
     googleUserImage = user.photoURL!;
@@ -149,7 +147,8 @@ class Authentication with ChangeNotifier {
       final user = await signInApple(scopes: [Scope.email, Scope.fullName]);
       print(user.email);
       userUid = user.uid;
-      isAnon = false;
+      UserInfoManger.saveAnonFlag(0);
+
       appleUseremail = user.email!;
       appleUsername = user.email!;
       appleUserImage =
@@ -176,7 +175,8 @@ class Authentication with ChangeNotifier {
       User? user = userCredential.user;
 
       userUid = user!.uid;
-      isAnon = true;
+      UserInfoManger.saveAnonFlag(1);
+
       print("logged in " + userUid);
       notifyListeners();
       await saveLocalCredentials(userUid);

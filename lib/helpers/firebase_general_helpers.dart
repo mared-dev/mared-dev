@@ -25,4 +25,18 @@ class GeneralFirebaseHelpers {
     }
     return true;
   }
+
+  static List<String> generateIndices(String text) {
+    String paddedText = "$text ";
+
+    List<String> splitList = paddedText.split(" ");
+    List<String> indexList = [];
+
+    for (int i = 0; i < splitList.length; i++) {
+      for (int j = 0; j < splitList[i].length; j++) {
+        indexList.add(splitList[i].substring(0, j + 1).toLowerCase());
+      }
+    }
+    return indexList;
+  }
 }

@@ -10,7 +10,7 @@ import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/PostDetails/post_details_screen.dart';
 import 'package:mared_social/screens/Profile/profile.dart';
-import 'package:mared_social/utils/firebase_general_helpers.dart';
+import 'package:mared_social/helpers/firebase_general_helpers.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import 'package:get/get.dart';

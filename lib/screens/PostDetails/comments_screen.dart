@@ -13,7 +13,7 @@ import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/Profile/profile.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
-import 'package:mared_social/utils/firebase_general_helpers.dart';
+import 'package:mared_social/helpers/firebase_general_helpers.dart';
 import 'package:mared_social/widgets/bottom_sheets/is_anon_bottom_sheet.dart';
 import 'package:mared_social/widgets/bottom_sheets/show_comments_section.dart';
 import 'package:mared_social/widgets/reusable/interacted_user_item.dart';
@@ -142,9 +142,7 @@ class _CommentsScreenState extends State<CommentsScreen> {
                   suffixIcon: GestureDetector(
                     onTap: () async {
                       FocusManager.instance.primaryFocus?.unfocus();
-                      if (Provider.of<Authentication>(context, listen: false)
-                              .getIsAnon ==
-                          false) {
+                      if (UserInfoManger.isNotGuest()) {
                         LoadingHelper.startLoading();
                         await addComment(
                             userUid: widget.snapshot['useruid'],

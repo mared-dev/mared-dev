@@ -16,6 +16,8 @@ import 'package:mared_social/widgets/bottom_sheets/is_anon_bottom_sheet.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
+import '../../mangers/user_info_manger.dart';
+
 class AuctionStarted extends StatelessWidget {
   AuctionStarted({
     Key? key,
@@ -137,10 +139,7 @@ class AuctionStarted extends StatelessWidget {
                           children: [
                             InkWell(
                               onTap: () {
-                                if (Provider.of<Authentication>(context,
-                                            listen: false)
-                                        .getIsAnon ==
-                                    false) {
+                                if (UserInfoManger.isNotGuest()) {
                                   Provider.of<AuctionFuctions>(context,
                                           listen: false)
                                       .addAuctionLike(
@@ -836,10 +835,7 @@ class AuctionPending extends StatelessWidget {
                       children: [
                         InkWell(
                           onTap: () {
-                            if (Provider.of<Authentication>(context,
-                                        listen: false)
-                                    .getIsAnon ==
-                                false) {
+                            if (UserInfoManger.isNotGuest()) {
                               Provider.of<AuctionFuctions>(context,
                                       listen: false)
                                   .addAuctionLike(

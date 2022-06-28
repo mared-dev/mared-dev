@@ -20,24 +20,50 @@ class UserModel {
       required this.phoneNumber,
       required this.uid});
 
+  // {
+  //
+  //
+  // 'useruid': Provider.of<Authentication>(
+  // context,
+  // listen: false)
+  //     .getUserId,
+  // 'useremail': _emailController.text,
+  // 'username': _nameController.text,
+  // 'userimage': _uploadedImageLink,
+  // 'usersearchindex':
+  // GeneralFirebaseHelpers.generateIndices(
+  // _nameController.text),
+  // }
+
   UserModel.fromJson(obj)
-      : userName = obj['userName'],
-        email = obj['email'],
-        photoUrl = obj['photoUrl'],
+      : userName = obj['username'],
+        email = obj['useremail'],
+        photoUrl = obj['userimage'],
         fcmToken = obj['fcmToken'],
         store = obj['store'],
-        uid = obj['uid'],
+        uid = obj['useruid'],
+        websiteLink = obj['websiteLink'] ?? '',
+        phoneNumber = obj['usercontactnumber'],
+        bio = obj['bio'] ?? '';
+
+  UserModel.fromMap(obj)
+      : userName = obj['username'],
+        email = obj['useremail'],
+        photoUrl = obj['userimage'],
+        fcmToken = obj['fcmToken'],
+        store = obj['store'],
+        uid = obj['useruid'],
         websiteLink = obj['websiteLink'] ?? '',
         phoneNumber = obj['usercontactnumber'],
         bio = obj['bio'] ?? '';
   toJson() {
     return {
-      "userName": userName,
-      "email": email,
+      "username": userName,
+      "useremail": email,
       "store": store,
-      "photoUrl": photoUrl,
+      "userimage": photoUrl,
       "fcmToken": fcmToken,
-      "uid": uid,
+      "useruid": uid,
       "bio": bio,
       'usercontactnumber': phoneNumber,
       "websiteLink": websiteLink

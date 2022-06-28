@@ -61,9 +61,7 @@ class _PostDetailsState extends State<PostDetails> {
             ),
             InkWell(
               onDoubleTap: () {
-                if (Provider.of<Authentication>(context, listen: false)
-                        .getIsAnon ==
-                    false) {
+                if (UserInfoManger.isNotGuest()) {
                   Provider.of<PostFunctions>(context, listen: false).addLike(
                     userUid: widget.documentSnapshot['useruid'],
                     context: context,

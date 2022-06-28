@@ -23,7 +23,7 @@ import 'package:mared_social/screens/Profile/profile.dart';
 import 'package:mared_social/screens/isAnon/isAnon.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
-import 'package:mared_social/utils/firebase_general_helpers.dart';
+import 'package:mared_social/helpers/firebase_general_helpers.dart';
 import 'package:mared_social/utils/postoptions.dart';
 import 'package:mared_social/widgets/bottom_sheets/show_comments_section.dart';
 import 'package:mared_social/widgets/items/post_share_part.dart';

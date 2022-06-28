@@ -12,7 +12,7 @@ import 'package:mared_social/helpers/loading_helper.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
-import 'package:mared_social/utils/firebase_general_helpers.dart';
+import 'package:mared_social/helpers/firebase_general_helpers.dart';
 import 'package:mared_social/widgets/bottom_sheets/auth_sheets/select_avatar_options_sheet.dart';
 import 'package:mared_social/widgets/bottom_sheets/confirm_profile_pic_sheet.dart';
 import 'package:mared_social/widgets/reusable/home_app_bar.dart';

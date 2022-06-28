@@ -245,7 +245,7 @@ packages:
       name: easy_localization
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "3.0.0"
+    version: "3.0.1-dev"
   easy_logger:
     dependency: transitive
     description:
@@ -514,7 +514,7 @@ packages:
       name: flutter_screenutil
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.3.1"
+    version: "5.5.3+2"
   flutter_spinkit:
     dependency: transitive
     description:

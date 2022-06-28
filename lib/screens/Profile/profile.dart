@@ -33,7 +33,7 @@ class _ProfileState extends State<Profile> {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: UserInfoManger.getAnonFlag()
+      floatingActionButton: !UserInfoManger.isNotGuest()
           ? null
           : Container(
               margin: EdgeInsets.only(bottom: 45.h),

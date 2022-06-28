@@ -28,7 +28,7 @@ class _SplashScreenState extends State<SplashScreen> {
     // });
     Future.delayed(Duration(milliseconds: 1500)).then((value) async {
       if (FirebaseAuth.instance.currentUser != null &&
-          !UserInfoManger.getAnonFlag()) {
+          UserInfoManger.isNotGuest()) {
         Provider.of<Authentication>(context, listen: false)
             .returningUserLogin(FirebaseAuth.instance.currentUser!.uid);
         await Provider.of<FirebaseOperations>(context, listen: false)

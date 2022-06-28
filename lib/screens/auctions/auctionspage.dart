@@ -68,10 +68,7 @@ class _AuctionAppState extends State<AuctionApp> {
                 AuctionFeed(),
                 AuctionMap(),
                 MyBids(),
-                Provider.of<Authentication>(context, listen: false).getIsAnon ==
-                        false
-                    ? Profile()
-                    : IsAnonMsg(),
+                UserInfoManger.isNotGuest() ? Profile() : IsAnonMsg(),
               ],
               physics: const NeverScrollableScrollPhysics(),
               onPageChanged: (page) {

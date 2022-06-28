@@ -8,7 +8,7 @@ import 'package:mared_social/models/feed_models/post_details_model.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/fcm_notification_Service.dart';
-import 'package:mared_social/utils/firebase_general_helpers.dart';
+import 'package:mared_social/helpers/firebase_general_helpers.dart';
 import 'package:provider/provider.dart';
 
 class FirebaseOperations with ChangeNotifier {

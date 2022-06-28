@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../utils/firebase_general_helpers.dart';
+import '../../helpers/firebase_general_helpers.dart';
 
 class PostDetailsModel {
   String userName;

@@ -15,6 +15,8 @@ import 'package:mared_social/widgets/bottom_sheets/is_anon_bottom_sheet.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
+import '../../mangers/user_info_manger.dart';
+
 class AuctionMapHelper with ChangeNotifier {
   ConstantColors constantColors = ConstantColors();
   showAuctionDetails(
@@ -262,10 +264,7 @@ class AuctionMapHelper with ChangeNotifier {
                       children: [
                         InkWell(
                           onTap: () {
-                            if (Provider.of<Authentication>(context,
-                                        listen: false)
-                                    .getIsAnon ==
-                                false) {
+                            if (UserInfoManger.isNotGuest()) {
                               Provider.of<AuctionFuctions>(context,
                                       listen: false)
                                   .addAuctionLike(

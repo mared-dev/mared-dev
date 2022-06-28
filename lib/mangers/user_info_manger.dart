@@ -27,7 +27,7 @@ class UserInfoManger {
 
   static UserModel getUserInfo() {
     try {
-      UserModel userModel = UserModel.fromJson(
+      UserModel userModel = UserModel.fromMap(
           json.decode(SharedPreferencesHelper.getString('userInfo')));
       return userModel;
     } catch (e) {
@@ -49,9 +49,9 @@ class UserInfoManger {
     await SharedPreferencesHelper.setInt('anonFlag', value);
   }
 
-  static bool getAnonFlag() {
+  static bool isNotGuest() {
     try {
-      return SharedPreferencesHelper.getInt('anonFlag') == 1;
+      return SharedPreferencesHelper.getInt('anonFlag') == 0;
     } catch (e) {
       return false;
     }
