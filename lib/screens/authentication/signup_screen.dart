@@ -230,55 +230,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               );
                             } else if (_formKey.currentState!.validate()) {
                               LoadingHelper.startLoading();
-                              try {
-                                String userUid = await AuthRepo.createAccount(
-                                    _emailController.text,
-                                    _passwordController.text);
-
-                                if (userUid.isNotEmpty) {
-                                  UserModel registeredUser = UserModel(
-                                      uid: userUid,
-                                      store: isStore == 1,
-                                      email: _emailController.text,
+                              bool success = await AuthRepo.emailSignUp(
+                                  userModel: UserModel(
                                       userName: _nameController.text,
+                                      email: _emailController.text,
                                       photoUrl: _uploadedImageLink,
+                                      fcmToken: '',
+                                      store: isStore == 1,
+                                      bio: '',
                                       websiteLink: '',
                                       phoneNumber: _phoneNumberController.text,
-                                      bio: '',
-                                      fcmToken: '');
+                                      uid: ''),
+                                  password: _passwordController.text);
 
-                                  await UserInfoManger.setUserId(userUid);
-                                  await UserInfoManger.saveUserInfo(
-                                      registeredUser);
-
-                                  await UserInfoManger.saveAnonFlag(0);
-
-                                  UsersRepo.addUser(
-                                      userModel: registeredUser, uid: userUid);
-
-                                  Navigator.pushReplacement(
-                                    context,
-                                    PageTransition(
-                                        child: const HomePage(),
-                                        type: PageTransitionType.rightToLeft),
-                                  );
-                                } else {
-                                  CoolAlert.show(
-                                      context: context,
-                                      type: CoolAlertType.error,
-                                      title: "Sign Up Failed",
-                                      text: 'Something went wrong');
-                                }
-                              } catch (e) {
+                              if (success) {
+                                Navigator.pushReplacement(
+                                  context,
+                                  PageTransition(
+                                      child: const HomePage(),
+                                      type: PageTransitionType.rightToLeft),
+                                );
+                              } else {
                                 CoolAlert.show(
                                     context: context,
                                     type: CoolAlertType.error,
                                     title: "Sign Up Failed",
-                                    text: GeneralFirebaseHelpers
-                                        .getFormattedAuthError(e));
-                              } finally {
-                                LoadingHelper.endLoading();
+                                    text: 'Something went wrong');
                               }
+                              LoadingHelper.endLoading();
                             } else {
                               if (isStore == -1) {
                                 setState(() {

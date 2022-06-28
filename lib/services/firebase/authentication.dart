@@ -10,11 +10,8 @@ class Authentication with ChangeNotifier {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
 
-  late String userUid,
-      googleUsername,
-      googleUseremail,
-      googleUserImage,
-      googlePhoneNo;
+  String userUid = "";
+  late String googleUsername, googleUseremail, googleUserImage, googlePhoneNo;
 
   late String appleUsername, appleUseremail, appleUserImage, applePhoneNo;
 
@@ -168,22 +165,22 @@ class Authentication with ChangeNotifier {
     return googleSignIn.signOut();
   }
 
-  Future signInAnon() async {
-    try {
-      var userCredential = await firebaseAuth.signInAnonymously();
-
-      User? user = userCredential.user;
-
-      userUid = user!.uid;
-      UserInfoManger.saveAnonFlag(1);
-
-      print("logged in " + userUid);
-      notifyListeners();
-      await saveLocalCredentials(userUid);
-    } catch (e) {
-      print("FAILED === ${e.toString()}");
-    }
-  }
+  // Future signInAnon() async {
+  //   try {
+  //     var userCredential = await firebaseAuth.signInAnonymously();
+  //
+  //     User? user = userCredential.user;
+  //
+  //     userUid = user!.uid;
+  //     UserInfoManger.saveAnonFlag(1);
+  //
+  //     print("logged in " + userUid);
+  //     notifyListeners();
+  //     await saveLocalCredentials(userUid);
+  //   } catch (e) {
+  //     print("FAILED === ${e.toString()}");
+  //   }
+  // }
 
   Future<void> saveLocalCredentials(String newUserId) async {
     UserInfoManger.setUserId(newUserId);

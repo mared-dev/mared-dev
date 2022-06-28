@@ -156,7 +156,7 @@ class FirebaseOperations with ChangeNotifier {
   }
 
   Future initUserData(BuildContext context) async {
-    var userId = Provider.of<Authentication>(context, listen: false).getUserId;
+    var userId = UserInfoManger.getUserId();
     String bio = "";
     String websiteLink = "";
     String userImage = "";
@@ -176,7 +176,7 @@ class FirebaseOperations with ChangeNotifier {
 
     return FirebaseFirestore.instance
         .collection("users")
-        .doc(Provider.of<Authentication>(context, listen: false).getUserId)
+        .doc(UserInfoManger.getUserId())
         .get()
         .then((doc) async {
       print('!!!!!!!!!!!!!!!!!!!!!!!&');

@@ -13,67 +13,67 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 class LandingHelpers {
-  static loginAsGuest({context}) async {
-    try {
-      String anonUsername = nanoid(10).toString();
-      await Provider.of<Authentication>(context, listen: false).signInAnon();
-
-      String name = "$anonUsername";
-
-      List<String> splitList = name.split(" ");
-      List<String> indexList = [];
-
-      for (int i = 0; i < splitList.length; i++) {
-        for (int j = 0; j < splitList[i].length; j++) {
-          indexList.add(splitList[i].substring(0, j + 1).toLowerCase());
-        }
-      }
-
-      await Provider.of<FirebaseOperations>(context, listen: false)
-          .createUserCollection(context, {
-        'usercontactnumber': "",
-        'store': false,
-        'useruid':
-            Provider.of<Authentication>(context, listen: false).getUserId,
-        'useremail': "$anonUsername@mared.ae",
-        'username': "@$anonUsername",
-        'usersearchindex': indexList,
-        'userimage':
-            "https://firebasestorage.googleapis.com/v0/b/maredsocial-79a7b.appspot.com/o/userProfileAvatar%2Fprivate%2Fvar%2Fmobile%2FContainers%2FData%2FApplication%2Ficon-mared.png?alt=media&token=eec2b470-f32e-4449-874a-e6929e210c6c",
-      });
-
-      ///setting local data to use it later
-      await UserInfoManger.setUserId(
-        Provider.of<Authentication>(context, listen: false).getUserId,
-      );
-
-      await UserInfoManger.saveUserInfo(UserModel(
-          websiteLink: '',
-          bio: '',
-          phoneNumber: '',
-          uid: Provider.of<Authentication>(context, listen: false).getUserId,
-          email: "$anonUsername@mared.ae",
-          userName: "@$anonUsername",
-          photoUrl:
-              "https://firebasestorage.googleapis.com/v0/b/maredsocial-79a7b.appspot.com/o/userProfileAvatar%2Fprivate%2Fvar%2Fmobile%2FContainers%2FData%2FApplication%2Ficon-mared.png?alt=media&token=eec2b470-f32e-4449-874a-e6929e210c6c",
-          fcmToken: '',
-          store: false));
-
-      await UserInfoManger.saveAnonFlag(1);
-
-      Navigator.pushReplacement(
-          context,
-          PageTransition(
-              child: HomePage(), type: PageTransitionType.rightToLeft));
-    } catch (e) {
-      CoolAlert.show(
-        context: context,
-        type: CoolAlertType.error,
-        title: "Sign In Failed",
-        text: e.toString(),
-      );
-    }
-  }
+  // static loginAsGuest({context}) async {
+  //   try {
+  //     String anonUsername = nanoid(10).toString();
+  //     await Provider.of<Authentication>(context, listen: false).signInAnon();
+  //
+  //     String name = "$anonUsername";
+  //
+  //     List<String> splitList = name.split(" ");
+  //     List<String> indexList = [];
+  //
+  //     for (int i = 0; i < splitList.length; i++) {
+  //       for (int j = 0; j < splitList[i].length; j++) {
+  //         indexList.add(splitList[i].substring(0, j + 1).toLowerCase());
+  //       }
+  //     }
+  //
+  //     await Provider.of<FirebaseOperations>(context, listen: false)
+  //         .createUserCollection(context, {
+  //       'usercontactnumber': "",
+  //       'store': false,
+  //       'useruid':
+  //           Provider.of<Authentication>(context, listen: false).getUserId,
+  //       'useremail': "$anonUsername@mared.ae",
+  //       'username': "@$anonUsername",
+  //       'usersearchindex': indexList,
+  //       'userimage':
+  //           "https://firebasestorage.googleapis.com/v0/b/maredsocial-79a7b.appspot.com/o/userProfileAvatar%2Fprivate%2Fvar%2Fmobile%2FContainers%2FData%2FApplication%2Ficon-mared.png?alt=media&token=eec2b470-f32e-4449-874a-e6929e210c6c",
+  //     });
+  //
+  //     ///setting local data to use it later
+  //     await UserInfoManger.setUserId(
+  //       Provider.of<Authentication>(context, listen: false).getUserId,
+  //     );
+  //
+  //     await UserInfoManger.saveUserInfo(UserModel(
+  //         websiteLink: '',
+  //         bio: '',
+  //         phoneNumber: '',
+  //         uid: Provider.of<Authentication>(context, listen: false).getUserId,
+  //         email: "$anonUsername@mared.ae",
+  //         userName: "@$anonUsername",
+  //         photoUrl:
+  //             "https://firebasestorage.googleapis.com/v0/b/maredsocial-79a7b.appspot.com/o/userProfileAvatar%2Fprivate%2Fvar%2Fmobile%2FContainers%2FData%2FApplication%2Ficon-mared.png?alt=media&token=eec2b470-f32e-4449-874a-e6929e210c6c",
+  //         fcmToken: '',
+  //         store: false));
+  //
+  //     await UserInfoManger.saveAnonFlag(1);
+  //
+  //     Navigator.pushReplacement(
+  //         context,
+  //         PageTransition(
+  //             child: HomePage(), type: PageTransitionType.rightToLeft));
+  //   } catch (e) {
+  //     CoolAlert.show(
+  //       context: context,
+  //       type: CoolAlertType.error,
+  //       title: "Sign In Failed",
+  //       text: e.toString(),
+  //     );
+  //   }
+  // }
 
   static loginWithGoogle(BuildContext context) async {
     try {

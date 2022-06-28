@@ -42,9 +42,7 @@ class PostLikesPart extends StatelessWidget {
             },
             child: SvgPicture.asset(
               likes.any((element) =>
-                      element['useruid'] ==
-                      Provider.of<Authentication>(context, listen: false)
-                          .getUserId)
+                      element['useruid'] == UserInfoManger.getUserId())
                   ? 'assets/icons/post_like_filled_icon.svg'
                   : 'assets/icons/post_like_comment.svg',
               width: 20,

@@ -15,6 +15,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
+import '../../services/shared_preferences_helper.dart';
+
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -60,6 +62,9 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('((((((((((((((((((');
+    print(SharedPreferencesHelper.getInt('anonFlag'));
+    print(UserInfoManger.isNotGuest());
     return Scaffold(
       backgroundColor: AppColors.backGroundColor,
       body: Column(

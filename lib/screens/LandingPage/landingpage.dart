@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,12 +9,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/helpers/loading_helper.dart';
+import 'package:mared_social/repositories/auth_repo.dart';
 import 'package:mared_social/screens/LandingPage/landing_helpers.dart';
 import 'package:mared_social/screens/authentication/login_screen.dart';
 import 'package:mared_social/screens/authentication/signup_screen.dart';
 import 'package:mared_social/widgets/reusable/landing_auth_button.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+
+import '../HomePage/homepage.dart';
 
 class LandingPage extends StatefulWidget {
   LandingPage({Key? key}) : super(key: key);
@@ -168,8 +172,24 @@ class _LandingPageState extends State<LandingPage> {
                           buttonText: 'Guest',
                           callback: () async {
                             LoadingHelper.startLoading();
-                            await LandingHelpers.loginAsGuest(context: context);
+                            bool success =
+                                await AuthRepo.loginAsGuest(context: context);
                             LoadingHelper.endLoading();
+
+                            if (success) {
+                              Navigator.pushReplacement(
+                                  context,
+                                  PageTransition(
+                                      child: HomePage(),
+                                      type: PageTransitionType.rightToLeft));
+                            } else {
+                              CoolAlert.show(
+                                context: context,
+                                type: CoolAlertType.error,
+                                title: "Sign In Failed",
+                                text: "Something went wrong",
+                              );
+                            }
                           }),
                     ],
                   ),

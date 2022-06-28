@@ -27,7 +27,7 @@ class UserInfoManger {
 
   static UserModel getUserInfo() {
     try {
-      UserModel userModel = UserModel.fromMap(
+      UserModel userModel = UserModel.fromJson(
           json.decode(SharedPreferencesHelper.getString('userInfo')));
       return userModel;
     } catch (e) {

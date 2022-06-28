@@ -46,16 +46,6 @@ class UserModel {
         phoneNumber = obj['usercontactnumber'],
         bio = obj['bio'] ?? '';
 
-  UserModel.fromMap(obj)
-      : userName = obj['username'],
-        email = obj['useremail'],
-        photoUrl = obj['userimage'],
-        fcmToken = obj['fcmToken'],
-        store = obj['store'],
-        uid = obj['useruid'],
-        websiteLink = obj['websiteLink'] ?? '',
-        phoneNumber = obj['usercontactnumber'],
-        bio = obj['bio'] ?? '';
   toJson() {
     return {
       "username": userName,
