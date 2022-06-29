@@ -6,6 +6,8 @@ import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 
+
+//TODO:move all functions to (AuthRepo)
 class Authentication with ChangeNotifier {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
   final GoogleSignIn googleSignIn = GoogleSignIn();
@@ -161,26 +163,7 @@ class Authentication with ChangeNotifier {
     }
   }
 
-  Future signOutWithGoogle() async {
-    return googleSignIn.signOut();
-  }
 
-  // Future signInAnon() async {
-  //   try {
-  //     var userCredential = await firebaseAuth.signInAnonymously();
-  //
-  //     User? user = userCredential.user;
-  //
-  //     userUid = user!.uid;
-  //     UserInfoManger.saveAnonFlag(1);
-  //
-  //     print("logged in " + userUid);
-  //     notifyListeners();
-  //     await saveLocalCredentials(userUid);
-  //   } catch (e) {
-  //     print("FAILED === ${e.toString()}");
-  //   }
-  // }
 
   Future<void> saveLocalCredentials(String newUserId) async {
     UserInfoManger.setUserId(newUserId);

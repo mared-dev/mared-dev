@@ -1,3 +1,5 @@
+import '../helpers/firebase_general_helpers.dart';
+
 class UserModel {
   final String userName;
   final String email;
@@ -42,9 +44,10 @@ class UserModel {
         fcmToken = obj['fcmToken'],
         store = obj['store'],
         uid = obj['useruid'],
-        websiteLink = obj['websiteLink'] ?? '',
+        websiteLink = GeneralFirebaseHelpers.getStringSafely(
+            key: 'websiteLink', doc: obj),
         phoneNumber = obj['usercontactnumber'],
-        bio = obj['bio'] ?? '';
+        bio = GeneralFirebaseHelpers.getStringSafely(key: 'bio', doc: obj);
 
   toJson() {
     return {

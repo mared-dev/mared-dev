@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
+import 'package:mared_social/repositories/auth_repo.dart';
 import 'package:mared_social/screens/LandingPage/landingpage.dart';
 import 'package:mared_social/screens/Stories/stories_widget.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
@@ -27,7 +28,7 @@ class ProfileHelpers {
       confirmBtnText: "Log Out",
       onConfirmBtnTap: () async {
         await UserInfoManger.clearUserInfo();
-        Provider.of<Authentication>(context, listen: false).signOutWithGoogle();
+        AuthRepo.signOutWithGoogle();
         Provider.of<Authentication>(context, listen: false)
             .logOutViaEmail()
             .whenComplete(() async {

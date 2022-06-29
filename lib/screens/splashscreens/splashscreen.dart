@@ -33,8 +33,8 @@ class _SplashScreenState extends State<SplashScreen> {
           UserInfoManger.isNotGuest()) {
         Provider.of<Authentication>(context, listen: false)
             .returningUserLogin(FirebaseAuth.instance.currentUser!.uid);
-        await Provider.of<FirebaseOperations>(context, listen: false)
-            .initUserData(context);
+        // await Provider.of<FirebaseOperations>(context, listen: false)
+        //     .initUserData(context);
 
         bool _shouldUpdate = await _checkIfShouldUpdate();
 

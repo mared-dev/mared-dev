@@ -155,52 +155,52 @@ class FirebaseOperations with ChangeNotifier {
     });
   }
 
-  Future initUserData(BuildContext context) async {
-    var userId = UserInfoManger.getUserId();
-    String bio = "";
-    String websiteLink = "";
-    String userImage = "";
-
-    var extraInfo = await FirebaseFirestore.instance
-        .collection("users")
-        .doc(userId)
-        .collection("extrainfo")
-        .doc(userId)
-        .get();
-
-    if (extraInfo.data() != null) {
-      bio = extraInfo.data()!['bio'];
-      websiteLink = extraInfo.data()!['websiteLink'];
-      userImage = extraInfo.data()!['userimage'];
-    }
-
-    return FirebaseFirestore.instance
-        .collection("users")
-        .doc(UserInfoManger.getUserId())
-        .get()
-        .then((doc) async {
-      print('!!!!!!!!!!!!!!!!!!!!!!!&');
-      print(doc['store']);
-      initUserName = doc['username'];
-      initUserEmail = doc['useremail'];
-      initUserImage = userImage.isNotEmpty ? userImage : doc['userimage'];
-      store = doc['store'];
-      fcmToken = doc['fcmToken'];
-
-      await UserInfoManger.setUserId(
-          Provider.of<Authentication>(context, listen: false).getUserId);
-      await UserInfoManger.saveUserInfo(UserModel(
-          websiteLink: websiteLink,
-          bio: bio,
-          phoneNumber: doc['usercontactnumber'],
-          email: initUserEmail,
-          userName: initUserName,
-          photoUrl: initUserImage,
-          store: store,
-          uid: Provider.of<Authentication>(context, listen: false).getUserId,
-          fcmToken: fcmToken));
-    });
-  }
+  // Future initUserData(BuildContext context) async {
+  //   var userId = UserInfoManger.getUserId();
+  //   String bio = "";
+  //   String websiteLink = "";
+  //   String userImage = "";
+  //
+  //   var extraInfo = await FirebaseFirestore.instance
+  //       .collection("users")
+  //       .doc(userId)
+  //       .collection("extrainfo")
+  //       .doc(userId)
+  //       .get();
+  //
+  //   if (extraInfo.data() != null) {
+  //     bio = extraInfo.data()!['bio'];
+  //     websiteLink = extraInfo.data()!['websiteLink'];
+  //     userImage = extraInfo.data()!['userimage'];
+  //   }
+  //
+  //   return FirebaseFirestore.instance
+  //       .collection("users")
+  //       .doc(UserInfoManger.getUserId())
+  //       .get()
+  //       .then((doc) async {
+  //     print('!!!!!!!!!!!!!!!!!!!!!!!&');
+  //     print(doc['store']);
+  //     initUserName = doc['username'];
+  //     initUserEmail = doc['useremail'];
+  //     initUserImage = userImage.isNotEmpty ? userImage : doc['userimage'];
+  //     store = doc['store'];
+  //     fcmToken = doc['fcmToken'];
+  //
+  //     await UserInfoManger.setUserId(
+  //         Provider.of<Authentication>(context, listen: false).getUserId);
+  //     await UserInfoManger.saveUserInfo(UserModel(
+  //         websiteLink: websiteLink,
+  //         bio: bio,
+  //         phoneNumber: doc['usercontactnumber'],
+  //         email: initUserEmail,
+  //         userName: initUserName,
+  //         photoUrl: initUserImage,
+  //         store: store,
+  //         uid: Provider.of<Authentication>(context, listen: false).getUserId,
+  //         fcmToken: fcmToken));
+  //   });
+  // }
 
   Future updateUserProfile(
       {required BuildContext context,

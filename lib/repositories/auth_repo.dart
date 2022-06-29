@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/repositories/user_repo.dart';
 import 'package:nanoid/nanoid.dart';
@@ -7,6 +8,8 @@ import '../mangers/user_info_manger.dart';
 
 class AuthRepo {
   static final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+
+  static final GoogleSignIn googleSignIn = GoogleSignIn();
 
   static Future<String> createFirebaseAccount(
       String email, String password) async {
@@ -105,5 +108,103 @@ class AuthRepo {
       return false;
     }
     return true;
+  }
+
+  static Future<UserModel?> signInWithGoogle() async {
+    final GoogleSignInAccount? googleSignInAccount =
+        await googleSignIn.signIn();
+    final GoogleSignInAuthentication googleSignInAuthentication =
+        await googleSignInAccount!.authentication;
+    final AuthCredential authCredential = GoogleAuthProvider.credential(
+      accessToken: googleSignInAuthentication.accessToken,
+      idToken: googleSignInAuthentication.idToken,
+    );
+
+    final UserCredential userCredential =
+        await firebaseAuth.signInWithCredential(authCredential);
+
+    final User? user = userCredential.user;
+
+    if (user == null) {
+      return null;
+    }
+
+    return UserModel(
+        userName: user.displayName!,
+        email: user.email!,
+        photoUrl: user.photoURL!,
+        fcmToken: '',
+        store: false,
+        bio: '',
+        websiteLink: '',
+        phoneNumber: user.phoneNumber ?? "No Number",
+        uid: user.uid);
+  }
+
+  static Future<UserModel?> loginWithGoogle() async {
+    try {
+      UserModel? userModel = await signInWithGoogle();
+      return userModel;
+
+      //
+      // String name =
+      //     "${Provider.of<Authentication>(context, listen: false).getgoogleUsername} ";
+      //
+      // List<String> splitList = name.split(" ");
+      // List<String> indexList = [];
+      //
+      // for (int i = 0; i < splitList.length; i++) {
+      //   for (int j = 0; j < splitList[i].length; j++) {
+      //     indexList.add(splitList[i].substring(0, j + 1).toLowerCase());
+      //   }
+      // }
+
+      //   await UserInfoManger.setUserId(userModel.uid);
+      //   await UserInfoManger.saveUserInfo(userModel);
+      //   await UserInfoManger.saveAnonFlag(0);
+      //
+      //
+      //   UserModel? storeUser=await UsersRepo.getUser(userModel.uid);
+      //   if(storeUser==null){
+      //
+      //   }
+      //   await Provider.of<FirebaseOperations>(context, listen: false)
+      //       .createUserCollection(context, {
+      //     'usercontactnumber': Provider.of<Authentication>(context, listen: false)
+      //         .getgooglePhoneNo,
+      //     'usersearchindex': indexList,
+      //     'store': false,
+      //     'useruid':
+      //     Provider.of<Authentication>(context, listen: false).getUserId,
+      //     'useremail': Provider.of<Authentication>(context, listen: false)
+      //         .getgoogleUseremail,
+      //     'username': Provider.of<Authentication>(context, listen: false)
+      //         .getgoogleUsername,
+      //     'userimage': Provider.of<Authentication>(context, listen: false)
+      //         .getgoogleUserImage,
+      //   });
+      //
+
+      // } catch (e) {
+
+      // }
+    } catch (e) {
+      print('------- error ---------- :');
+      print(e);
+      return Future.value(null);
+    }
+  }
+
+  static Future signOut() async {
+    await signOutWithGoogle();
+    await logOutViaEmail();
+  }
+
+  static Future signOutWithGoogle() async {
+    return googleSignIn.signOut();
+  }
+
+  static Future logOutViaEmail() {
+    return firebaseAuth.signOut();
   }
 }

@@ -11,10 +11,14 @@ class UsersRepo {
     return collection.snapshots();
   }
 
-  static Future<UserModel> getUser(String uid) async {
-    var userObj = await collection.doc(uid).get();
+  static Future<UserModel?> getUser(String uid) async {
+    try {
+      var userObj = await collection.doc(uid).get();
 
-    return Future.value(UserModel.fromJson(userObj));
+      return Future.value(UserModel.fromJson(userObj));
+    } catch (e) {
+      return Future.value(null);
+    }
   }
 
   static Future<void> addUser(

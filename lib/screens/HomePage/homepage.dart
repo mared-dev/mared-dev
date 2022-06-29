@@ -124,8 +124,8 @@ class _HomePageState extends State<HomePage> {
     WidgetsBinding.instance!.addPostFrameCallback(
         (_) => DynamicLinkService.retrieveDynamicLink(context));
 
-    Provider.of<FirebaseOperations>(context, listen: false)
-        .initUserData(context);
+    // Provider.of<FirebaseOperations>(context, listen: false)
+    //     .initUserData(context);
 
     _globalMessagesController = Get.find();
     _globalMessagesController.messageToShow.listen((newValue) {
@@ -143,6 +143,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print('*****************');
+    print(UserInfoManger.getUserId());
     return Scaffold(
       backgroundColor: AppColors.backGroundColor,
       body: PersistentTabView(context,

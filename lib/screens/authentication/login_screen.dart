@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -11,7 +12,10 @@ import 'package:mared_social/constants/text_styles.dart';
 import 'package:mared_social/helpers/loading_helper.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_cedentials_model.dart';
+import 'package:mared_social/repositories/auth_repo.dart';
+import 'package:mared_social/repositories/user_repo.dart';
 import 'package:mared_social/screens/LandingPage/landing_helpers.dart';
+import 'package:mared_social/screens/authentication/fill_remaining_info.dart';
 import 'package:mared_social/screens/authentication/forgot_password_screen.dart';
 import 'package:mared_social/screens/authentication/signup_screen.dart';
 import 'package:mared_social/utils/popup_utils.dart';
@@ -20,7 +24,9 @@ import 'package:mared_social/widgets/reusable/sign_in_with_google_button.dart';
 import 'package:mared_social/widgets/reusable/password_text_field.dart';
 import 'package:page_transition/page_transition.dart';
 
+import '../../models/user_model.dart';
 import '../../widgets/reusable/sign_in_with_apple_button.dart';
+import '../HomePage/homepage.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -227,8 +233,47 @@ class _LoginScreenState extends State<LoginScreen> {
                           _orDivider(),
                           SignInWithGoogleButton(
                             buttonText: 'Sign in with google',
-                            callback: () {
-                              LandingHelpers.loginWithGoogle(context);
+                            callback: () async {
+                              LoadingHelper.startLoading();
+                              UserModel? loggedInUser =
+                                  await AuthRepo.loginWithGoogle();
+                              if (loggedInUser != null) {
+                                UserModel? storedUser =
+                                    await UsersRepo.getUser(loggedInUser.uid);
+                                LoadingHelper.endLoading();
+                                if (storedUser == null) {
+                                  await AuthRepo.signOut();
+
+                                  Navigator.pushReplacement(
+                                      context,
+                                      PageTransition(
+                                          child: FillRemainingInfo(
+                                            userModel: loggedInUser,
+                                          ),
+                                          type:
+                                              PageTransitionType.rightToLeft));
+                                } else {
+                                  await UserInfoManger.setUserId(
+                                      storedUser.uid);
+                                  await UserInfoManger.saveUserInfo(storedUser);
+                                  await UserInfoManger.saveAnonFlag(0);
+                                  LoadingHelper.endLoading();
+                                  Navigator.pushReplacement(
+                                      context,
+                                      PageTransition(
+                                          child: const HomePage(),
+                                          type:
+                                              PageTransitionType.rightToLeft));
+                                }
+                              } else {
+                                LoadingHelper.endLoading();
+                                CoolAlert.show(
+                                  context: context,
+                                  type: CoolAlertType.error,
+                                  title: "Sign In Failed",
+                                  text: "Something went wrong",
+                                );
+                              }
                             },
                           ),
                           if (Platform.isIOS)

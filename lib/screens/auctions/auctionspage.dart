@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
+import 'package:mared_social/repositories/auth_repo.dart';
 import 'package:mared_social/screens/LandingPage/landingpage.dart';
 import 'package:mared_social/screens/Profile/profile.dart';
 import 'package:mared_social/screens/auctionFeed/auctionFeed.dart';
@@ -96,8 +97,7 @@ class _AuctionAppState extends State<AuctionApp> {
                       padding: const EdgeInsets.only(top: 20.0),
                       child: ElevatedButton.icon(
                           onPressed: () {
-                            Provider.of<Authentication>(context, listen: false)
-                                .signOutWithGoogle();
+                            AuthRepo.signOutWithGoogle();
                             Provider.of<Authentication>(context, listen: false)
                                 .logOutViaEmail()
                                 .whenComplete(() async {

@@ -7,6 +7,7 @@ import 'package:mared_social/constants/appleSignInCheck.dart';
 import 'package:mared_social/screens/Categories/categoryHelpers.dart';
 import 'package:mared_social/screens/Chatroom/chatroom_helpers.dart';
 import 'package:mared_social/screens/Chatroom/privateChatHelpers.dart';
+import 'package:mared_social/screens/LandingPage/landingpage.dart';
 import 'package:mared_social/screens/Messaging/groupmessagehelper.dart';
 import 'package:mared_social/screens/Messaging/privateMessageHelper.dart';
 import 'package:mared_social/screens/SearchFeed/searchfeedhelper.dart';
@@ -15,6 +16,7 @@ import 'package:mared_social/screens/auctionFeed/auctionfeedHelper.dart';
 import 'package:mared_social/screens/auctionFeed/placebidhelper.dart';
 import 'package:mared_social/screens/auctionMap/auctionMapHelper.dart';
 import 'package:mared_social/screens/auctions/auctionPageHelper.dart';
+import 'package:mared_social/screens/authentication/fill_remaining_info.dart';
 import 'package:mared_social/screens/isAnon/isAnonHelper.dart';
 import 'package:mared_social/screens/promotePost/promotePostHelper.dart';
 import 'package:mared_social/screens/splashscreens/splashscreen.dart';
@@ -62,6 +64,7 @@ class MyApp extends StatelessWidget {
           builder: EasyLoading.init(),
           home: WillPopScope(
             onWillPop: () async => false,
+            // child: FillRemainingInfo(),
             child: SplashScreen(),
             // child: LandingPage(),
           ),
