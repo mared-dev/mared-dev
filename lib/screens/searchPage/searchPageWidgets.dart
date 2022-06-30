@@ -92,6 +92,14 @@ class UserSearchResultBody extends StatelessWidget {
                                           bio: GeneralFirebaseHelpers
                                               .getStringSafely(
                                                   key: 'bio', doc: userData),
+                                          address: GeneralFirebaseHelpers
+                                              .getStringSafely(
+                                                  key: 'address',
+                                                  doc: userData),
+                                          geoPoint: GeneralFirebaseHelpers
+                                              .getGeoPointSafely(
+                                                  key: 'geoPoint',
+                                                  doc: userData),
                                           uid: userData['useruid'],
                                           userName: userData['username'],
                                           photoUrl: userData['userimage'],

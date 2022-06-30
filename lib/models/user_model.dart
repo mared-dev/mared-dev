@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../helpers/firebase_general_helpers.dart';
 
 class UserModel {
@@ -10,9 +12,13 @@ class UserModel {
   final String uid;
   final bool store;
   final String phoneNumber;
+  final String address;
+  final GeoPoint geoPoint;
 
   UserModel(
-      {required this.userName,
+      {required this.address,
+      required this.geoPoint,
+      required this.userName,
       required this.email,
       required this.photoUrl,
       required this.fcmToken,
@@ -22,21 +28,6 @@ class UserModel {
       required this.phoneNumber,
       required this.uid});
 
-  // {
-  //
-  //
-  // 'useruid': Provider.of<Authentication>(
-  // context,
-  // listen: false)
-  //     .getUserId,
-  // 'useremail': _emailController.text,
-  // 'username': _nameController.text,
-  // 'userimage': _uploadedImageLink,
-  // 'usersearchindex':
-  // GeneralFirebaseHelpers.generateIndices(
-  // _nameController.text),
-  // }
-
   UserModel.fromJson(obj)
       : userName = obj['username'],
         email = obj['useremail'],
@@ -44,6 +35,10 @@ class UserModel {
         fcmToken = obj['fcmToken'],
         store = obj['store'],
         uid = obj['useruid'],
+        address =
+            GeneralFirebaseHelpers.getStringSafely(key: 'address', doc: obj),
+        geoPoint =
+            GeneralFirebaseHelpers.getGeoPointSafely(key: 'geoPoint', doc: obj),
         websiteLink = GeneralFirebaseHelpers.getStringSafely(
             key: 'websiteLink', doc: obj),
         phoneNumber = obj['usercontactnumber'],
@@ -59,7 +54,9 @@ class UserModel {
       "useruid": uid,
       "bio": bio,
       'usercontactnumber': phoneNumber,
-      "websiteLink": websiteLink
+      "websiteLink": websiteLink,
+      "address": address,
+      'geoPoint': GeneralFirebaseHelpers.geoPointToString(geoPoint)
     };
   }
 }

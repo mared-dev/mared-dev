@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class GeneralFirebaseHelpers {
   static String getStringSafely({required String key, required doc}) {
     String result = "";
@@ -5,6 +7,37 @@ class GeneralFirebaseHelpers {
       result = doc[key];
     } catch (e) {}
     return result;
+  }
+
+  static GeoPoint getGeoPointSafely({required String key, required doc}) {
+    GeoPoint result = const GeoPoint(0, 0);
+    try {
+      String stringForm = doc[key];
+      result = stringToGeopoint(stringForm);
+    } catch (e) {}
+    return result;
+  }
+
+  static String geoPointToString(GeoPoint geoPoint) {
+    String result = "0,0";
+    try {
+      result = '${geoPoint.latitude},${geoPoint.longitude}';
+    } catch (e) {
+      print(e);
+    }
+    return result;
+  }
+
+  static GeoPoint stringToGeopoint(String location) {
+    try {
+      GeoPoint result = GeoPoint(double.parse(location.split(',')[0]),
+          double.parse(location.split(',')[1]));
+      return result;
+    } catch (e) {
+      print('@@@@@@@@@@@@@@@@@');
+      print(e);
+      return GeoPoint(0, 0);
+    }
   }
 
   static String getFormattedAuthError(e) {

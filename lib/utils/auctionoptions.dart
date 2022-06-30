@@ -505,6 +505,10 @@ class AuctionFuctions with ChangeNotifier {
                                                               email: commentDocSnap[
                                                                   'useremail'],
                                                               fcmToken: "",
+                                                              address: "",
+                                                              geoPoint:
+                                                                  GeoPoint(
+                                                                      0, 0),
 
                                                               ///later you have to give this the right value
                                                               store: false),
@@ -818,6 +822,8 @@ class AuctionFuctions with ChangeNotifier {
                                                       'userimage'],
                                                   email: documentSnapshot[
                                                       'useremail'],
+                                                  address: "",
+                                                  geoPoint: GeoPoint(0, 0),
                                                   fcmToken: "",
 
                                                   ///later you have to give this the right value

@@ -107,6 +107,14 @@ class _CommentsScreenState extends State<CommentsScreen> {
                                           bio: GeneralFirebaseHelpers
                                               .getStringSafely(
                                                   key: 'bio', doc: commentItem),
+                                          address: GeneralFirebaseHelpers
+                                              .getStringSafely(
+                                                  key: 'address',
+                                                  doc: commentItem),
+                                          geoPoint: GeneralFirebaseHelpers
+                                              .getGeoPointSafely(
+                                                  key: 'geoPoint',
+                                                  doc: commentItem),
                                           uid: commentItem['useruid'],
                                           userName: commentItem['username'],
                                           photoUrl: commentItem['userimage'],

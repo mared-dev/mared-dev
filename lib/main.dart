@@ -79,7 +79,6 @@ class MyApp extends StatelessWidget {
           ChangeNotifierProvider(create: (_) => PromotePostHelper()),
           ChangeNotifierProvider(create: (_) => PlaceBidHelpers()),
           ChangeNotifierProvider(create: (_) => AuctionMapHelper()),
-          ChangeNotifierProvider(create: (_) => AuctionFuctions()),
           ChangeNotifierProvider(create: (_) => AuctionFeedHelper()),
           ChangeNotifierProvider(create: (_) => AuctionAppHelper()),
           ChangeNotifierProvider(create: (_) => IsAnonHelper()),

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,6 +19,8 @@ import 'package:mared_social/widgets/bottom_sheets/confirm_profile_pic_sheet.dar
 import 'package:mared_social/widgets/reusable/home_app_bar.dart';
 import 'package:mared_social/widgets/reusable/simple_appbar_with_back.dart';
 import 'package:provider/provider.dart';
+
+import '../../widgets/reusable/select_address_widget.dart';
 
 class EditProfileScreen extends StatefulWidget {
   final UserModel userModel;
@@ -38,7 +41,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   File? _pickedImageFile;
   String _uploadedImageLink = "";
-
+  String selectedLocation = "", selectedLat = "", selectedLng = "";
+  late UserModel oldUserModel;
   @override
   void initState() {
     super.initState();
@@ -46,6 +50,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     _bioController.text = widget.userModel.bio;
     _websiteController.text = widget.userModel.websiteLink;
     _phoneNumberController.text = widget.userModel.phoneNumber;
+
+    oldUserModel = UserInfoManger.getUserInfo();
+    selectedLocation = oldUserModel.address;
+    selectedLat = oldUserModel.geoPoint.latitude.toString();
+    selectedLng = oldUserModel.geoPoint.longitude.toString();
   }
 
   @override
@@ -176,6 +185,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   },
                 ),
                 SizedBox(
+                  height: 15.h,
+                ),
+                SelectAddressWidget(
+                    startingAddress: selectedLocation,
+                    setSelectedAddress:
+                        (String address, String lat, String lng) {
+                      selectedLocation = address;
+                      selectedLat = lat;
+                      selectedLng = lng;
+                    },
+                    buttonText: 'Set your location'),
+                SizedBox(
                   height: 33.h,
                 ),
                 ElevatedButton(
@@ -198,6 +219,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                   ? widget.userModel.photoUrl
                                   : _uploadedImageLink,
                               bio: _bioController.text,
+                              address: selectedLocation,
+                              store: oldUserModel.store,
+                              fcmToken: oldUserModel.fcmToken,
+                              geoPoint: GeoPoint(double.parse(selectedLat),
+                                  double.parse(selectedLng)),
                               websiteLink: _websiteController.text);
 
                       LoadingHelper.endLoading();

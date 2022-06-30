@@ -145,6 +145,10 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     print('*****************');
     print(UserInfoManger.getUserId());
+    print('-------------------');
+    print(UserInfoManger.getUserInfo().geoPoint.latitude);
+    print(UserInfoManger.getUserInfo().geoPoint.longitude);
+    print(UserInfoManger.getUserInfo().address);
     return Scaffold(
       backgroundColor: AppColors.backGroundColor,
       body: PersistentTabView(context,

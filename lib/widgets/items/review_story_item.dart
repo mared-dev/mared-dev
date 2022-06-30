@@ -77,9 +77,16 @@ class _ReviewStoryItemState extends State<ReviewStoryItem> {
                                             .getStringSafely(
                                                 key: 'websiteLink',
                                                 doc: widget.documentSnapshot),
-                                        bio: GeneralFirebaseHelpers
+                                        bio: GeneralFirebaseHelpers.getStringSafely(
+                                            key: 'bio',
+                                            doc: widget.documentSnapshot),
+                                        address: GeneralFirebaseHelpers
                                             .getStringSafely(
-                                                key: 'bio',
+                                                key: 'address',
+                                                doc: widget.documentSnapshot),
+                                        geoPoint: GeneralFirebaseHelpers
+                                            .getGeoPointSafely(
+                                                key: 'geoPoint',
                                                 doc: widget.documentSnapshot),
                                         uid: widget.documentSnapshot['useruid'],
                                         userName:
@@ -221,6 +228,14 @@ class _ReviewStoryItemState extends State<ReviewStoryItem> {
                                           doc: widget.documentSnapshot),
                                   bio: GeneralFirebaseHelpers.getStringSafely(
                                       key: 'bio', doc: widget.documentSnapshot),
+                                  address:
+                                      GeneralFirebaseHelpers.getStringSafely(
+                                          key: 'address',
+                                          doc: widget.documentSnapshot),
+                                  geoPoint:
+                                      GeneralFirebaseHelpers.getGeoPointSafely(
+                                          key: 'geoPoint',
+                                          doc: widget.documentSnapshot),
                                   uid: widget.documentSnapshot['useruid'],
                                   userName: widget.documentSnapshot['username'],
                                   photoUrl:

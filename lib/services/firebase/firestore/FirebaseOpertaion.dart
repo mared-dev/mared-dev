@@ -15,7 +15,7 @@ class FirebaseOperations with ChangeNotifier {
   UploadTask? imageUploadTask;
   late String initUserEmail, initUserName, initUserImage;
   late bool store;
-  late String fcmToken;
+  String fcmToken = "";
   int? unReadMsgs;
 
   int? get getUnReadMsgs => unReadMsgs;
@@ -208,6 +208,10 @@ class FirebaseOperations with ChangeNotifier {
       required String photoUrl,
       required String bio,
       required String phoneNumber,
+      required String address,
+      required GeoPoint geoPoint,
+      required bool store,
+      required String fcmToken,
       required String websiteLink}) async {
     FirebaseFirestore.instance
         .collection("users")
@@ -217,10 +221,12 @@ class FirebaseOperations with ChangeNotifier {
         .set(
       {'websiteLink': websiteLink, 'bio': bio, 'userimage': photoUrl},
     );
-    FirebaseFirestore.instance
-        .collection("users")
-        .doc(userUid)
-        .update({'userimage': photoUrl, 'usercontactnumber': phoneNumber});
+    FirebaseFirestore.instance.collection("users").doc(userUid).update({
+      'userimage': photoUrl,
+      'usercontactnumber': phoneNumber,
+      'address': address,
+      'geoPoint': geoPoint
+    });
 
     UserModel oldModel = UserInfoManger.getUserInfo();
 
@@ -228,6 +234,8 @@ class FirebaseOperations with ChangeNotifier {
         phoneNumber: phoneNumber,
         userName: oldModel.userName,
         email: oldModel.email,
+        address: address,
+        geoPoint: geoPoint,
         photoUrl: photoUrl,
         fcmToken: fcmToken,
         store: store,

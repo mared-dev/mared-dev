@@ -30,7 +30,8 @@ class _FeedBodyState extends State<FeedBody> {
     super.initState();
     _topSectionItems = [
       StoriesSection(),
-      BannersSection(),
+
+      // BannersSection(),
     ];
   }
 

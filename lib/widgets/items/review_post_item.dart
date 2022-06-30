@@ -81,6 +81,14 @@ class _ReviewPostItemState extends State<ReviewPostItem> {
                                           .getStringSafely(
                                               key: 'bio',
                                               doc: widget.documentSnapshot),
+                                      address: GeneralFirebaseHelpers
+                                          .getStringSafely(
+                                              key: 'address',
+                                              doc: widget.documentSnapshot),
+                                      geoPoint: GeneralFirebaseHelpers
+                                          .getGeoPointSafely(
+                                              key: 'geoPoint',
+                                              doc: widget.documentSnapshot),
                                       uid: widget.documentSnapshot['useruid'],
                                       userName:
                                           widget.documentSnapshot['username'],
@@ -263,6 +271,14 @@ class _ReviewPostItemState extends State<ReviewPostItem> {
                                           doc: widget.documentSnapshot),
                                   bio: GeneralFirebaseHelpers.getStringSafely(
                                       key: 'bio', doc: widget.documentSnapshot),
+                                  address:
+                                      GeneralFirebaseHelpers.getStringSafely(
+                                          key: 'address',
+                                          doc: widget.documentSnapshot),
+                                  geoPoint:
+                                      GeneralFirebaseHelpers.getGeoPointSafely(
+                                          key: 'geoPoint',
+                                          doc: widget.documentSnapshot),
                                   uid: widget.documentSnapshot['useruid'],
                                   userName: widget.documentSnapshot['username'],
                                   photoUrl:

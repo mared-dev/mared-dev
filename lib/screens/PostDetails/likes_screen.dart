@@ -130,6 +130,12 @@ class _LikesScreenState extends State<LikesScreen> {
                                       bio: GeneralFirebaseHelpers
                                           .getStringSafely(
                                               key: 'bio', doc: likeItem),
+                                      address: GeneralFirebaseHelpers
+                                          .getStringSafely(
+                                              key: 'address', doc: likeItem),
+                                      geoPoint: GeneralFirebaseHelpers
+                                          .getGeoPointSafely(
+                                              key: 'geoPoint', doc: likeItem),
                                       uid: likeItem['useruid'],
                                       userName: likeItem['username'],
                                       photoUrl: likeItem['userimage'],

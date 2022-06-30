@@ -131,6 +131,14 @@ class _FollowersScreenState extends State<FollowersScreen> {
                                       bio: GeneralFirebaseHelpers
                                           .getStringSafely(
                                               key: 'bio', doc: followerItem),
+                                      address: GeneralFirebaseHelpers
+                                          .getStringSafely(
+                                              key: 'address',
+                                              doc: followerItem),
+                                      geoPoint: GeneralFirebaseHelpers
+                                          .getGeoPointSafely(
+                                              key: 'geoPoint',
+                                              doc: followerItem),
                                       uid: followerItem['useruid'],
                                       userName: followerItem['username'],
                                       photoUrl: followerItem['userimage'],

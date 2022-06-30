@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,8 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../widgets/reusable/select_address_widget.dart';
+
 class FillRemainingInfo extends StatefulWidget {
   final UserModel userModel;
 
@@ -38,6 +41,7 @@ class FillRemainingInfo extends StatefulWidget {
   _FillRemainingInfoState createState() => _FillRemainingInfoState();
 }
 
+//TODO:add the location picker
 class _FillRemainingInfoState extends State<FillRemainingInfo> {
   File? _pickedImageFile;
   String _uploadedImageLink = "";
@@ -49,6 +53,7 @@ class _FillRemainingInfoState extends State<FillRemainingInfo> {
 
   int isStore = -1;
   String userTypeError = "";
+  String selectedLocation = "", selectedLat = "", selectedLng = "";
 
   @override
   void initState() {
@@ -142,6 +147,18 @@ class _FillRemainingInfoState extends State<FillRemainingInfo> {
                         },
                       ),
                       SizedBox(
+                        height: 18.h,
+                      ),
+                      SelectAddressWidget(
+                          startingAddress: "",
+                          setSelectedAddress:
+                              (String address, String lat, String lng) {
+                            selectedLocation = address;
+                            selectedLat = lat;
+                            selectedLng = lng;
+                          },
+                          buttonText: 'Set your location'),
+                      SizedBox(
                         width: screenSize.width,
                         child: AuthCheckBoxGroup(
                           changeSelectedItemCallback: (newIndex) {
@@ -193,6 +210,9 @@ class _FillRemainingInfoState extends State<FillRemainingInfo> {
                                   store: isStore == 1,
                                   bio: '',
                                   websiteLink: '',
+                                  address: selectedLocation,
+                                  geoPoint: GeoPoint(double.parse(selectedLat),
+                                      double.parse(selectedLng)),
                                   phoneNumber: _phoneNumberController.text,
                                   uid: widget.userModel.uid);
                               await UsersRepo.addUser(

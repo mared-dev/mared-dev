@@ -195,10 +195,11 @@ class _StoriesState extends State<Stories> {
                                 PageTransition(
                                     child: AltProfile(
                                       userModel: UserModel(
-                                          phoneNumber: GeneralFirebaseHelpers.getStringSafely(
-                                              key: 'usercontactnumber',
-                                              doc: widget.querySnapshot.data!
-                                                  .docs[indexCheck]),
+                                          phoneNumber:
+                                              GeneralFirebaseHelpers.getStringSafely(
+                                                  key: 'usercontactnumber',
+                                                  doc: widget.querySnapshot
+                                                      .data!.docs[indexCheck]),
                                           websiteLink:
                                               GeneralFirebaseHelpers.getStringSafely(
                                                   key: 'websiteLink',
@@ -208,12 +209,16 @@ class _StoriesState extends State<Stories> {
                                               key: 'bio',
                                               doc: widget.querySnapshot.data!
                                                   .docs[indexCheck]),
-                                          uid: widget.querySnapshot.data!
-                                              .docs[indexCheck]['useruid'],
-                                          userName: widget.querySnapshot.data!
-                                              .docs[indexCheck]['username'],
-                                          photoUrl: widget.querySnapshot.data!
-                                              .docs[indexCheck]['userimage'],
+                                          address: GeneralFirebaseHelpers.getStringSafely(
+                                              key: 'address',
+                                              doc: widget.querySnapshot.data!
+                                                  .docs[indexCheck]),
+                                          geoPoint: GeneralFirebaseHelpers.getGeoPointSafely(
+                                              key: 'geoPoint',
+                                              doc: widget.querySnapshot.data!.docs[indexCheck]),
+                                          uid: widget.querySnapshot.data!.docs[indexCheck]['useruid'],
+                                          userName: widget.querySnapshot.data!.docs[indexCheck]['username'],
+                                          photoUrl: widget.querySnapshot.data!.docs[indexCheck]['userimage'],
                                           email: widget.querySnapshot.data!.docs[indexCheck]['useremail'],
                                           fcmToken: "",
 

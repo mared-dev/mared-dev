@@ -116,6 +116,14 @@ class _FeedPostItemState extends State<FeedPostItem> {
                                           doc: documentSnapshotToUse),
                                   bio: GeneralFirebaseHelpers.getStringSafely(
                                       key: 'bio', doc: documentSnapshotToUse),
+                                  address:
+                                      GeneralFirebaseHelpers.getStringSafely(
+                                          key: 'address',
+                                          doc: documentSnapshotToUse),
+                                  geoPoint:
+                                      GeneralFirebaseHelpers.getGeoPointSafely(
+                                          key: 'geoPoint',
+                                          doc: documentSnapshotToUse),
                                   uid: documentSnapshotToUse['useruid'],
                                   userName: documentSnapshotToUse['username'],
                                   photoUrl:
@@ -375,6 +383,14 @@ class _FeedPostItemState extends State<FeedPostItem> {
                                           doc: documentSnapshotToUse),
                                   bio: GeneralFirebaseHelpers.getStringSafely(
                                       key: 'bio', doc: documentSnapshotToUse),
+                                  address:
+                                      GeneralFirebaseHelpers.getStringSafely(
+                                          key: 'address',
+                                          doc: documentSnapshotToUse),
+                                  geoPoint:
+                                      GeneralFirebaseHelpers.getGeoPointSafely(
+                                          key: 'geoPoint',
+                                          doc: documentSnapshotToUse),
                                   uid: documentSnapshotToUse['useruid'],
                                   userName: documentSnapshotToUse['username'],
                                   photoUrl: documentSnapshotToUse['userimage'],

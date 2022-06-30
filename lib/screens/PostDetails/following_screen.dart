@@ -132,6 +132,14 @@ class _FollowingScreenState extends State<FollowingScreen> {
                                       bio: GeneralFirebaseHelpers
                                           .getStringSafely(
                                               key: 'bio', doc: followingItem),
+                                      address: GeneralFirebaseHelpers
+                                          .getStringSafely(
+                                              key: 'address',
+                                              doc: followingItem),
+                                      geoPoint: GeneralFirebaseHelpers
+                                          .getGeoPointSafely(
+                                              key: 'geoPoint',
+                                              doc: followingItem),
                                       uid: followingItem['useruid'],
                                       userName: followingItem['username'],
                                       photoUrl: followingItem['userimage'],

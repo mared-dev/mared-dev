@@ -113,26 +113,35 @@ class _CommentsSectionState extends State<CommentsSection> {
                                             PageTransition(
                                                 child: AltProfile(
                                                   userModel: UserModel(
-                                                      phoneNumber:
+                                                      phoneNumber: GeneralFirebaseHelpers
+                                                          .getStringSafely(
+                                                              key:
+                                                                  'usercontactnumber',
+                                                              doc:
+                                                                  commentDocSnap),
+                                                      websiteLink: GeneralFirebaseHelpers
+                                                          .getStringSafely(
+                                                              key:
+                                                                  'websiteLink',
+                                                              doc:
+                                                                  commentDocSnap),
+                                                      bio: GeneralFirebaseHelpers
+                                                          .getStringSafely(
+                                                              key: 'bio',
+                                                              doc:
+                                                                  commentDocSnap),
+                                                      address:
                                                           GeneralFirebaseHelpers
                                                               .getStringSafely(
                                                                   key:
-                                                                      'usercontactnumber',
+                                                                      'address',
                                                                   doc:
                                                                       commentDocSnap),
-                                                      websiteLink:
-                                                          GeneralFirebaseHelpers
-                                                              .getStringSafely(
-                                                                  key:
-                                                                      'websiteLink',
-                                                                  doc:
-                                                                      commentDocSnap),
-                                                      bio:
-                                                          GeneralFirebaseHelpers
-                                                              .getStringSafely(
-                                                                  key: 'bio',
-                                                                  doc:
-                                                                      commentDocSnap),
+                                                      geoPoint: GeneralFirebaseHelpers
+                                                          .getGeoPointSafely(
+                                                              key: 'geoPoint',
+                                                              doc:
+                                                                  commentDocSnap),
                                                       uid: commentDocSnap[
                                                           'useruid'],
                                                       userName: commentDocSnap[

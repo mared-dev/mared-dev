@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -29,6 +30,8 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../widgets/reusable/select_address_widget.dart';
+
 class SignUpScreen extends StatefulWidget {
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
@@ -48,6 +51,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   int isStore = -1;
   String userTypeError = "";
+  String selectedLocation = "", selectedLat = "", selectedLng = "";
 
   @override
   void initState() {
@@ -215,7 +219,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         ),
                       SizedBox(
-                        height: 28.h,
+                        height: 18.h,
+                      ),
+                      SelectAddressWidget(
+                          startingAddress: "",
+                          setSelectedAddress:
+                              (String address, String lat, String lng) {
+                            selectedLocation = address;
+                            selectedLat = lat;
+                            selectedLng = lng;
+                          },
+                          buttonText: 'Set your location'),
+                      SizedBox(
+                        height: 21.h,
                       ),
                       SizedBox(
                         width: screenSize.width,
@@ -227,6 +243,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 type: CoolAlertType.error,
                                 title: "Error",
                                 text: "Please select a profile picture",
+                              );
+                            } else if (selectedLocation.isEmpty) {
+                              CoolAlert.show(
+                                context: context,
+                                type: CoolAlertType.error,
+                                title: "Error",
+                                text: "Please pick a location",
                               );
                             } else if (_formKey.currentState!.validate()) {
                               LoadingHelper.startLoading();
@@ -240,6 +263,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       bio: '',
                                       websiteLink: '',
                                       phoneNumber: _phoneNumberController.text,
+                                      address: selectedLocation,
+                                      geoPoint: GeoPoint(
+                                          double.parse(selectedLat),
+                                          double.parse(selectedLng)),
                                       uid: ''),
                                   password: _passwordController.text);
 

@@ -50,6 +50,8 @@ class LandingHelpers {
         await UserInfoManger.saveUserInfo(UserModel(
             websiteLink: '',
             bio: '',
+            address: '',
+            geoPoint: GeoPoint(0, 0),
             phoneNumber: Provider.of<Authentication>(context, listen: false)
                 .applePhoneNo,
             uid: Provider.of<Authentication>(context, listen: false).getUserId,
@@ -87,11 +89,15 @@ class LandingHelpers {
         Provider.of<Authentication>(context, listen: false).getUserId,
       );
 
+      //TODO:use "UserRepo" instead
       var userSnapShot = await FirebaseFirestore.instance
           .collection("users")
           .doc(Provider.of<Authentication>(context, listen: false).getUserId)
           .get();
 
+      var test = GeneralFirebaseHelpers.getGeoPointSafely(
+          key: 'geoPoint', doc: userSnapShot);
+      print(test);
       await UserInfoManger.saveUserInfo(UserModel(
           uid: Provider.of<Authentication>(context, listen: false).getUserId,
           store: userSnapShot['store'],
@@ -100,6 +106,10 @@ class LandingHelpers {
               key: 'bio', doc: userSnapShot),
           websiteLink: GeneralFirebaseHelpers.getStringSafely(
               key: 'websiteLink', doc: userSnapShot),
+          address: GeneralFirebaseHelpers.getStringSafely(
+              key: 'address', doc: userSnapShot),
+          geoPoint: GeneralFirebaseHelpers.getGeoPointSafely(
+              key: 'geoPoint', doc: userSnapShot),
           email: email,
           userName: userSnapShot['username'],
           photoUrl: userSnapShot.data()!['userimage'],

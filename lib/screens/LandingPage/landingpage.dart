@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/helpers/loading_helper.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/repositories/auth_repo.dart';
 import 'package:mared_social/screens/LandingPage/landing_helpers.dart';
 import 'package:mared_social/screens/authentication/login_screen.dart';

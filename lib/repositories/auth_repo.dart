@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mared_social/models/user_model.dart';
@@ -33,6 +34,10 @@ class AuthRepo {
       String userUid =
           await AuthRepo.createFirebaseAccount(userModel.email, password);
 
+      print('))))))))))))))))))');
+      print(userModel.geoPoint.runtimeType);
+      print(userModel.geoPoint.longitude);
+      print(userModel.geoPoint.latitude);
       if (userUid.isNotEmpty) {
         UserModel registeredUser = UserModel(
             userName: userModel.userName,
@@ -43,6 +48,8 @@ class AuthRepo {
             bio: userModel.bio,
             websiteLink: userModel.websiteLink,
             phoneNumber: userModel.phoneNumber,
+            geoPoint: userModel.geoPoint,
+            address: userModel.address,
             uid: userUid);
 
         await UserInfoManger.setUserId(userUid);
@@ -137,6 +144,8 @@ class AuthRepo {
         store: false,
         bio: '',
         websiteLink: '',
+        address: '',
+        geoPoint: GeoPoint(0, 0),
         phoneNumber: user.phoneNumber ?? "No Number",
         uid: user.uid);
   }
@@ -145,49 +154,6 @@ class AuthRepo {
     try {
       UserModel? userModel = await signInWithGoogle();
       return userModel;
-
-      //
-      // String name =
-      //     "${Provider.of<Authentication>(context, listen: false).getgoogleUsername} ";
-      //
-      // List<String> splitList = name.split(" ");
-      // List<String> indexList = [];
-      //
-      // for (int i = 0; i < splitList.length; i++) {
-      //   for (int j = 0; j < splitList[i].length; j++) {
-      //     indexList.add(splitList[i].substring(0, j + 1).toLowerCase());
-      //   }
-      // }
-
-      //   await UserInfoManger.setUserId(userModel.uid);
-      //   await UserInfoManger.saveUserInfo(userModel);
-      //   await UserInfoManger.saveAnonFlag(0);
-      //
-      //
-      //   UserModel? storeUser=await UsersRepo.getUser(userModel.uid);
-      //   if(storeUser==null){
-      //
-      //   }
-      //   await Provider.of<FirebaseOperations>(context, listen: false)
-      //       .createUserCollection(context, {
-      //     'usercontactnumber': Provider.of<Authentication>(context, listen: false)
-      //         .getgooglePhoneNo,
-      //     'usersearchindex': indexList,
-      //     'store': false,
-      //     'useruid':
-      //     Provider.of<Authentication>(context, listen: false).getUserId,
-      //     'useremail': Provider.of<Authentication>(context, listen: false)
-      //         .getgoogleUseremail,
-      //     'username': Provider.of<Authentication>(context, listen: false)
-      //         .getgoogleUsername,
-      //     'userimage': Provider.of<Authentication>(context, listen: false)
-      //         .getgoogleUserImage,
-      //   });
-      //
-
-      // } catch (e) {
-
-      // }
     } catch (e) {
       print('------- error ---------- :');
       print(e);

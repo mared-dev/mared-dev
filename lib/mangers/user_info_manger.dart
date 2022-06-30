@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:mared_social/models/user_cedentials_model.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/services/shared_preferences_helper.dart';
@@ -31,6 +32,7 @@ class UserInfoManger {
           json.decode(SharedPreferencesHelper.getString('userInfo')));
       return userModel;
     } catch (e) {
+      print('&&&&&&&&&&&&&&&&&');
       print(e);
       return UserModel(
           userName: '',
@@ -41,7 +43,9 @@ class UserInfoManger {
           store: false,
           bio: '',
           websiteLink: '',
-          uid: '');
+          uid: '',
+          address: '',
+          geoPoint: GeoPoint(0, 0));
     }
   }
 

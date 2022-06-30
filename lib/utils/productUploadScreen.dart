@@ -297,6 +297,7 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
         descriptionController.text.isNotEmpty;
   }
 
+  //TODO: use the one in the widgets folder instead
   Widget _selectAddressLocation() {
     return Column(
       mainAxisSize: MainAxisSize.min,
