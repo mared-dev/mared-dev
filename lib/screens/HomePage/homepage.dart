@@ -143,16 +143,11 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print('*****************');
-    print(UserInfoManger.getUserId());
-    print('-------------------');
-    print(UserInfoManger.getUserInfo().geoPoint.latitude);
-    print(UserInfoManger.getUserInfo().geoPoint.longitude);
-    print(UserInfoManger.getUserInfo().address);
     return Scaffold(
       backgroundColor: AppColors.backGroundColor,
       body: PersistentTabView(context,
-          floatingActionButton: !UserInfoManger.isNotGuest()
+          floatingActionButton: !UserInfoManger.isNotGuest() &&
+                  !UserInfoManger.getUserInfo().store
               ? null
               : FloatingActionButton(
                   heroTag: "addPostFeed",
