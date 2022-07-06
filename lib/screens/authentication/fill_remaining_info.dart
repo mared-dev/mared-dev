@@ -54,6 +54,7 @@ class _FillRemainingInfoState extends State<FillRemainingInfo> {
   int isStore = -1;
   String userTypeError = "";
   String selectedLocation = "", selectedLat = "", selectedLng = "";
+  String? _selectedCategory;
 
   @override
   void initState() {
@@ -65,6 +66,8 @@ class _FillRemainingInfoState extends State<FillRemainingInfo> {
   @override
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
+    List<String> catNames =
+        Provider.of<FirebaseOperations>(context, listen: false).catNames;
     return SafeArea(
       child: Scaffold(
         resizeToAvoidBottomInset: true,
@@ -147,6 +150,70 @@ class _FillRemainingInfoState extends State<FillRemainingInfo> {
                         },
                       ),
                       SizedBox(
+                        height: isStore == 1 ? 18.h : 0,
+                      ),
+                      if (isStore == 1)
+                        Container(
+                          height: 35.h,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(6),
+                              color: AppColors.commentButtonColor),
+                          padding: EdgeInsets.symmetric(horizontal: 21.w),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SvgPicture.asset(
+                                  'assets/icons/category_icon.svg'),
+                              SizedBox(
+                                width: 6.w,
+                              ),
+                              DropdownButton(
+                                underline: SizedBox(),
+                                dropdownColor: AppColors.backGroundColor,
+                                hint: Container(
+                                  margin: EdgeInsets.only(right: 6.w),
+                                  alignment: Alignment.centerLeft,
+                                  child: Text('choose a category',
+                                      style: regularTextStyle(
+                                          fontSize: 11,
+                                          textColor:
+                                              AppColors.backGroundColor)),
+                                ),
+                                value: _selectedCategory,
+                                onChanged: (String? newValue) {
+                                  setState(() {
+                                    _selectedCategory = newValue;
+                                  });
+                                },
+                                icon: SvgPicture.asset(
+                                    'assets/icons/select_category_arrow.svg'),
+                                selectedItemBuilder: (context) {
+                                  return catNames
+                                      .map<Widget>((item) => Container(
+                                            alignment: Alignment.centerLeft,
+                                            child: Text(item,
+                                                style: regularTextStyle(
+                                                    fontSize: 11,
+                                                    textColor: AppColors
+                                                        .backGroundColor)),
+                                          ))
+                                      .toList();
+                                },
+                                items: catNames.map((category) {
+                                  return DropdownMenuItem(
+                                    child: Text(category,
+                                        style: regularTextStyle(
+                                            fontSize: 11,
+                                            textColor:
+                                                AppColors.commentButtonColor)),
+                                    value: category,
+                                  );
+                                }).toList(),
+                              ),
+                            ],
+                          ),
+                        ),
+                      SizedBox(
                         height: 18.h,
                       ),
                       SelectAddressWidget(
@@ -162,11 +229,13 @@ class _FillRemainingInfoState extends State<FillRemainingInfo> {
                         width: screenSize.width,
                         child: AuthCheckBoxGroup(
                           changeSelectedItemCallback: (newIndex) {
-                            if (newIndex == 0) {
-                              isStore = 0;
-                            } else {
-                              isStore = 1;
-                            }
+                            setState(() {
+                              if (newIndex == 0) {
+                                isStore = 0;
+                              } else {
+                                isStore = 1;
+                              }
+                            });
                           },
                           options: ['individual', 'buisness'],
                         ),
@@ -200,12 +269,24 @@ class _FillRemainingInfoState extends State<FillRemainingInfo> {
                               setState(() {
                                 userTypeError = 'This field is required';
                               });
+                            } else if (_selectedCategory == null ||
+                                (_selectedCategory != null &&
+                                    _selectedCategory!.isEmpty)) {
+                              if (isStore == 1) {
+                                CoolAlert.show(
+                                  context: context,
+                                  type: CoolAlertType.error,
+                                  title: "Error",
+                                  text: "Please pick a category",
+                                );
+                              }
                             } else if (_formKey.currentState!.validate()) {
                               LoadingHelper.startLoading();
                               UserModel userToAdd = UserModel(
                                   userName: _nameController.text,
                                   email: widget.userModel.email,
                                   photoUrl: _uploadedImageLink,
+                                  postCategory: _selectedCategory!,
                                   fcmToken: '',
                                   store: isStore == 1,
                                   bio: '',

@@ -136,6 +136,10 @@ class _LikesScreenState extends State<LikesScreen> {
                                       geoPoint: GeneralFirebaseHelpers
                                           .getGeoPointSafely(
                                               key: 'geoPoint', doc: likeItem),
+                                      postCategory: GeneralFirebaseHelpers
+                                          .getStringSafely(
+                                              key: 'postcategory',
+                                              doc: likeItem),
                                       uid: likeItem['useruid'],
                                       userName: likeItem['username'],
                                       photoUrl: likeItem['userimage'],

@@ -34,6 +34,8 @@ class UserResultItem extends StatelessWidget {
                               key: 'websiteLink', doc: userData),
                           bio: GeneralFirebaseHelpers.getStringSafely(
                               key: 'bio', doc: userData),
+                          postCategory: GeneralFirebaseHelpers.getStringSafely(
+                              key: 'postcategory', doc: userData),
                           address: GeneralFirebaseHelpers.getStringSafely(
                               key: 'address', doc: userData),
                           geoPoint: GeneralFirebaseHelpers.getGeoPointSafely(

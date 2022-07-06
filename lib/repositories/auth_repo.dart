@@ -46,6 +46,7 @@ class AuthRepo {
             fcmToken: userModel.fcmToken,
             store: userModel.store,
             bio: userModel.bio,
+            postCategory: userModel.postCategory,
             websiteLink: userModel.websiteLink,
             phoneNumber: userModel.phoneNumber,
             geoPoint: userModel.geoPoint,
@@ -63,7 +64,6 @@ class AuthRepo {
         return false;
       }
     } catch (e) {
-      print('*************');
       print(e);
       return false;
     }
@@ -145,6 +145,7 @@ class AuthRepo {
         bio: '',
         websiteLink: '',
         address: '',
+        postCategory: "",
         geoPoint: GeoPoint(0, 0),
         phoneNumber: user.phoneNumber ?? "No Number",
         uid: user.uid);

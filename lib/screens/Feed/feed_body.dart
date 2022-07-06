@@ -40,7 +40,6 @@ class _FeedBodyState extends State<FeedBody> {
 
   @override
   Widget build(BuildContext context) {
-    print('((((((((((((((((((((((');
     //temp changing StreamBuilder to FutureBuilder and .snapshot to .get
     return CustomPaginateFirestore(
       ///TODO:uncomment for stories feature
@@ -57,7 +56,6 @@ class _FeedBodyState extends State<FeedBody> {
       // ),
       //item builder type is compulsory.
       itemBuilder: (context, snapshot, index) {
-        print('item builder');
         dynamic documentSnapshot = snapshot[index].data()!;
         return FeedPostItem(
           documentSnapshot: documentSnapshot,

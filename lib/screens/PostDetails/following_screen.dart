@@ -140,6 +140,10 @@ class _FollowingScreenState extends State<FollowingScreen> {
                                           .getGeoPointSafely(
                                               key: 'geoPoint',
                                               doc: followingItem),
+                                      postCategory: GeneralFirebaseHelpers
+                                          .getStringSafely(
+                                              key: 'postcategory',
+                                              doc: followingItem),
                                       uid: followingItem['useruid'],
                                       userName: followingItem['username'],
                                       photoUrl: followingItem['userimage'],

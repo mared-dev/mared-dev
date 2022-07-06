@@ -73,16 +73,20 @@ class _ReviewPostItemState extends State<ReviewPostItem> {
                                           .getStringSafely(
                                               key: 'usercontactnumber',
                                               doc: widget.documentSnapshot),
-                                      websiteLink: GeneralFirebaseHelpers
-                                          .getStringSafely(
+                                      websiteLink:
+                                          GeneralFirebaseHelpers.getStringSafely(
                                               key: 'websiteLink',
                                               doc: widget.documentSnapshot),
-                                      bio: GeneralFirebaseHelpers
-                                          .getStringSafely(
+                                      postCategory:
+                                          GeneralFirebaseHelpers.getStringSafely(
+                                              key: 'postcategory',
+                                              doc: widget.documentSnapshot),
+                                      bio:
+                                          GeneralFirebaseHelpers.getStringSafely(
                                               key: 'bio',
                                               doc: widget.documentSnapshot),
-                                      address: GeneralFirebaseHelpers
-                                          .getStringSafely(
+                                      address:
+                                          GeneralFirebaseHelpers.getStringSafely(
                                               key: 'address',
                                               doc: widget.documentSnapshot),
                                       geoPoint: GeneralFirebaseHelpers
@@ -271,6 +275,10 @@ class _ReviewPostItemState extends State<ReviewPostItem> {
                                           doc: widget.documentSnapshot),
                                   bio: GeneralFirebaseHelpers.getStringSafely(
                                       key: 'bio', doc: widget.documentSnapshot),
+                                  postCategory:
+                                      GeneralFirebaseHelpers.getStringSafely(
+                                          key: 'postcategory',
+                                          doc: widget.documentSnapshot),
                                   address:
                                       GeneralFirebaseHelpers.getStringSafely(
                                           key: 'address',

@@ -95,6 +95,7 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
 
   TextEditingController captionController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
   TextEditingController adrController = TextEditingController();
   GooglePlace googlePlace =
       GooglePlace("AIzaSyCHjJlqqJ-eLChGmUX0RH2iJH5TtdU3RrI");
@@ -105,15 +106,12 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
   bool adrSelected = false;
 
   final _formKey = GlobalKey<FormState>();
-  String? _selectedCategory;
 
   late UserModel userModel;
   var size;
 
   @override
   Widget build(BuildContext context) {
-    List<String> catNames =
-        Provider.of<FirebaseOperations>(context, listen: false).catNames;
     userModel = UserInfoManger.getUserInfo();
     size = MediaQuery.of(context).size;
     return Scaffold(
@@ -184,7 +182,7 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
                     minLines: 3,
                     cursorColor: Colors.black,
                     decoration: getAuthInputDecoration(
-                        hintText: "Give your picture a caption...",
+                        hintText: "Give your post a caption...",
                         backGroundColor: AppColors.addPostInputBackground),
                     controller: descriptionController,
                     validator: (value) {
@@ -194,67 +192,27 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
                       return null;
                     },
                   ),
-                  _selectAddressLocation(),
-                  Container(
-                    height: 35.h,
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(6),
-                        color: AppColors.commentButtonColor),
-                    padding: EdgeInsets.symmetric(horizontal: 21.w),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SvgPicture.asset('assets/icons/category_icon.svg'),
-                        SizedBox(
-                          width: 6.w,
-                        ),
-                        DropdownButton(
-                          underline: SizedBox(),
-                          dropdownColor: AppColors.backGroundColor,
-                          hint: Container(
-                            margin: EdgeInsets.only(right: 6.w),
-                            alignment: Alignment.centerLeft,
-                            child: Text('choose a category',
-                                style: regularTextStyle(
-                                    fontSize: 11,
-                                    textColor: AppColors.backGroundColor)),
-                          ),
-                          value: _selectedCategory,
-                          onChanged: (String? newValue) {
-                            setState(() {
-                              _selectedCategory = newValue;
-                            });
-                          },
-                          icon: SvgPicture.asset(
-                              'assets/icons/select_category_arrow.svg'),
-                          selectedItemBuilder: (context) {
-                            return catNames
-                                .map<Widget>((item) => Container(
-                                      alignment: Alignment.centerLeft,
-                                      child: Text(item,
-                                          style: regularTextStyle(
-                                              fontSize: 11,
-                                              textColor:
-                                                  AppColors.backGroundColor)),
-                                    ))
-                                .toList();
-                          },
-                          items: catNames.map((category) {
-                            return DropdownMenuItem(
-                              child: Text(category,
-                                  style: regularTextStyle(
-                                      fontSize: 11,
-                                      textColor: AppColors.commentButtonColor)),
-                              value: category,
-                            );
-                          }).toList(),
-                        ),
-                      ],
-                    ),
-                  ),
                   SizedBox(
-                    height: 37.h,
+                    height: 16.h,
                   ),
+                  TextFormField(
+                    keyboardType: TextInputType.number,
+                    maxLines: 1,
+                    textCapitalization: TextCapitalization.words,
+                    cursorColor: Colors.black,
+                    decoration: getAuthInputDecoration(
+                        verticalContentPadding: 13,
+                        hintText: 'Starting price...',
+                        backGroundColor: AppColors.addPostInputBackground),
+                    controller: priceController,
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'This field is required';
+                      }
+                      return null;
+                    },
+                  ),
+                  _selectAddressLocation(),
                   SizedBox(
                     height: 35.h,
                     child: Opacity(
@@ -291,9 +249,7 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
   }
 
   bool _canSharePost() {
-    return _selectedCategory != null &&
-        _selectedCategory!.isNotEmpty &&
-        captionController.text.isNotEmpty &&
+    return captionController.text.isNotEmpty &&
         descriptionController.text.isNotEmpty;
   }
 
@@ -460,9 +416,7 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
   _sharePost() async {
     //let's comment address and category and make them optional for now
 
-    if (_selectedCategory != null &&
-        _selectedCategory!.isNotEmpty &&
-        _formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate()) {
       try {
         LoadingHelper.startLoading();
         String postId = nanoid(14).toString();
@@ -495,13 +449,13 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
           'searchindex': indexList,
           'likes': [],
           'comments': [],
-          'postcategory': _selectedCategory,
           'caption': captionController.text,
           'username': userModel.userName,
           'userimage': userModel.photoUrl,
           'useruid': userModel.uid,
           'time': Timestamp.now(),
           'useremail': userModel.email,
+          'postcategory': userModel.postCategory,
           'description': descriptionController.text,
           'thumbnail': widget.postType == PostType.VIDEO
               ? getMuxThumbnailImage(playBackId)
@@ -512,11 +466,12 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
           'address': address,
           'lat': lat,
           'lng': lng,
+          'price': priceController.text
         });
 
         FirebaseFirestore.instance
             .collection("users")
-            .doc(Provider.of<Authentication>(context, listen: false).getUserId)
+            .doc(UserInfoManger.getUserId())
             .collection("posts")
             .doc(postId)
             .set({
@@ -525,7 +480,6 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
           'likes': [],
           'comments': [],
           'searchindex': indexList,
-          'postcategory': _selectedCategory,
           'caption': captionController.text,
           'username': userModel.userName,
           'userimage': userModel.photoUrl,
@@ -542,13 +496,12 @@ class _PostUploadScreenState extends State<PostUploadScreen> {
           'address': address,
           'lat': lat,
           'lng': lng,
+          'postcategory': userModel.postCategory,
         });
         Navigator.of(context).pop();
         _globalMessagesController.displayNewMessage(
             {'title': 'Success', 'body': 'Your post in under review !'});
       } catch (e) {
-        print('&&&&&&&&&&&&&');
-        print(widget.postType);
         print(e);
         // CoolAlert.show(
         //   context: context,

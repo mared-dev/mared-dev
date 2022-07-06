@@ -62,9 +62,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
-    print('((((((((((((((((((');
-    print(SharedPreferencesHelper.getInt('anonFlag'));
-    print(UserInfoManger.isNotGuest());
     return Scaffold(
       backgroundColor: AppColors.backGroundColor,
       body: Column(

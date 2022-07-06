@@ -14,6 +14,7 @@ class UserModel {
   final String phoneNumber;
   final String address;
   final GeoPoint geoPoint;
+  final String postCategory;
 
   UserModel(
       {required this.address,
@@ -26,6 +27,7 @@ class UserModel {
       required this.bio,
       required this.websiteLink,
       required this.phoneNumber,
+      required this.postCategory,
       required this.uid});
 
   UserModel.fromJson(obj)
@@ -41,6 +43,8 @@ class UserModel {
             GeneralFirebaseHelpers.getGeoPointSafely(key: 'geoPoint', doc: obj),
         websiteLink = GeneralFirebaseHelpers.getStringSafely(
             key: 'websiteLink', doc: obj),
+        postCategory = GeneralFirebaseHelpers.getStringSafely(
+            key: 'postcategory', doc: obj),
         phoneNumber = obj['usercontactnumber'],
         bio = GeneralFirebaseHelpers.getStringSafely(key: 'bio', doc: obj);
 
@@ -56,7 +60,8 @@ class UserModel {
       'usercontactnumber': phoneNumber,
       "websiteLink": websiteLink,
       "address": address,
-      'geoPoint': GeneralFirebaseHelpers.geoPointToString(geoPoint)
+      'geoPoint': GeneralFirebaseHelpers.geoPointToString(geoPoint),
+      'postcategory': postCategory
     };
   }
 }

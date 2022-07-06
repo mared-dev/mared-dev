@@ -494,6 +494,7 @@ class AuctionFuctions with ChangeNotifier {
                                                               phoneNumber: '',
                                                               websiteLink: '',
                                                               bio: '',
+                                                              postCategory: "",
                                                               uid: commentDocSnap[
                                                                   'useruid'],
                                                               userName:
@@ -814,6 +815,7 @@ class AuctionFuctions with ChangeNotifier {
                                                   phoneNumber: '',
                                                   websiteLink: '',
                                                   bio: '',
+                                                  postCategory: "",
                                                   uid: documentSnapshot[
                                                       'useruid'],
                                                   userName: documentSnapshot[

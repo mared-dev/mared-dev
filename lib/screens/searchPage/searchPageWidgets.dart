@@ -9,7 +9,6 @@ import 'package:mared_social/constants/text_styles.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
-import 'package:mared_social/screens/auctionFeed/auctionpage.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/helpers/firebase_general_helpers.dart';
 import 'package:mared_social/widgets/reusable/empty_search_result.dart';
@@ -95,6 +94,10 @@ class UserSearchResultBody extends StatelessWidget {
                                           address: GeneralFirebaseHelpers
                                               .getStringSafely(
                                                   key: 'address',
+                                                  doc: userData),
+                                          postCategory: GeneralFirebaseHelpers
+                                              .getStringSafely(
+                                                  key: 'postcategory',
                                                   doc: userData),
                                           geoPoint: GeneralFirebaseHelpers
                                               .getGeoPointSafely(
@@ -255,15 +258,7 @@ class AuctionSearch extends StatelessWidget {
                       return Padding(
                         padding: const EdgeInsets.only(bottom: 8.0),
                         child: ListTile(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                PageTransition(
-                                    child: AuctionPage(
-                                      auctionId: auctionData['auctionid'],
-                                    ),
-                                    type: PageTransitionType.rightToLeft));
-                          },
+                          onTap: () {},
                           leading: SizedBox(
                             height: size.height * 0.2,
                             width: size.width * 0.2,

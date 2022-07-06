@@ -89,6 +89,8 @@ class _FeedPostItemState extends State<FeedPostItem> {
   }
 
   Widget _postContent(documentSnapshotToUse) {
+    String price = GeneralFirebaseHelpers.getStringSafely(
+        key: 'price', doc: documentSnapshotToUse);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,6 +118,10 @@ class _FeedPostItemState extends State<FeedPostItem> {
                                           doc: documentSnapshotToUse),
                                   bio: GeneralFirebaseHelpers.getStringSafely(
                                       key: 'bio', doc: documentSnapshotToUse),
+                                  postCategory:
+                                      GeneralFirebaseHelpers.getStringSafely(
+                                          key: 'postcategory',
+                                          doc: documentSnapshotToUse),
                                   address:
                                       GeneralFirebaseHelpers.getStringSafely(
                                           key: 'address',
@@ -211,6 +217,22 @@ class _FeedPostItemState extends State<FeedPostItem> {
                   ),
                 ),
               ),
+              SizedBox(
+                height: price.isEmpty ? 0 : 8.h,
+              ),
+              if (price.isNotEmpty)
+                SizedBox(
+                  width: MediaQuery.of(context).size.width,
+                  child: Text(
+                    '${GeneralFirebaseHelpers.getStringSafely(key: 'price', doc: documentSnapshotToUse)} AED',
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: regularTextStyle(
+                      textColor: AppColors.acceptColor,
+                      fontSize: 14.sp,
+                    ),
+                  ),
+                ),
               SizedBox(
                 height: 8.h,
               ),
@@ -383,6 +405,10 @@ class _FeedPostItemState extends State<FeedPostItem> {
                                           doc: documentSnapshotToUse),
                                   bio: GeneralFirebaseHelpers.getStringSafely(
                                       key: 'bio', doc: documentSnapshotToUse),
+                                  postCategory:
+                                      GeneralFirebaseHelpers.getStringSafely(
+                                          key: 'postcategory',
+                                          doc: documentSnapshotToUse),
                                   address:
                                       GeneralFirebaseHelpers.getStringSafely(
                                           key: 'address',

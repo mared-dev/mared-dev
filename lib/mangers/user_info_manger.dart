@@ -45,6 +45,7 @@ class UserInfoManger {
           websiteLink: '',
           uid: '',
           address: '',
+          postCategory: "",
           geoPoint: GeoPoint(0, 0));
     }
   }

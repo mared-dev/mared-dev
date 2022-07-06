@@ -239,6 +239,7 @@ class FirebaseOperations with ChangeNotifier {
         photoUrl: photoUrl,
         fcmToken: fcmToken,
         store: store,
+        postCategory: oldModel.postCategory,
         bio: bio,
         websiteLink: websiteLink,
         uid: UserInfoManger.getUserId()));

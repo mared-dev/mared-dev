@@ -115,6 +115,10 @@ class _CommentsScreenState extends State<CommentsScreen> {
                                               .getGeoPointSafely(
                                                   key: 'geoPoint',
                                                   doc: commentItem),
+                                          postCategory: GeneralFirebaseHelpers
+                                              .getStringSafely(
+                                                  key: 'postcategory',
+                                                  doc: commentItem),
                                           uid: commentItem['useruid'],
                                           userName: commentItem['username'],
                                           photoUrl: commentItem['userimage'],

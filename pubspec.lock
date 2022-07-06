@@ -288,6 +288,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "6.1.2"
+  filter_list:
+    dependency: "direct main"
+    description:
+      name: filter_list
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   firebase_auth:
     dependency: "direct main"
     description:
@@ -636,7 +643,7 @@ packages:
       name: google_maps_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.1.1"
+    version: "2.1.7"
   google_maps_flutter_platform_interface:
     dependency: transitive
     description:
@@ -763,6 +770,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "4.4.0"
+  label_marker:
+    dependency: "direct main"
+    description:
+      name: label_marker
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.1"
   lints:
     dependency: transitive
     description:

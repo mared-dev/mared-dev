@@ -52,6 +52,7 @@ class LandingHelpers {
             bio: '',
             address: '',
             geoPoint: GeoPoint(0, 0),
+            postCategory: "",
             phoneNumber: Provider.of<Authentication>(context, listen: false)
                 .applePhoneNo,
             uid: Provider.of<Authentication>(context, listen: false).getUserId,
@@ -108,6 +109,8 @@ class LandingHelpers {
               key: 'websiteLink', doc: userSnapShot),
           address: GeneralFirebaseHelpers.getStringSafely(
               key: 'address', doc: userSnapShot),
+          postCategory: GeneralFirebaseHelpers.getStringSafely(
+              key: 'postcategory', doc: userSnapShot),
           geoPoint: GeneralFirebaseHelpers.getGeoPointSafely(
               key: 'geoPoint', doc: userSnapShot),
           email: email,

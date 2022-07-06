@@ -125,31 +125,31 @@ class _CommentsSectionState extends State<CommentsSection> {
                                                                   'websiteLink',
                                                               doc:
                                                                   commentDocSnap),
+                                                      postCategory: GeneralFirebaseHelpers
+                                                          .getStringSafely(
+                                                              key:
+                                                                  'postcategory',
+                                                              doc:
+                                                                  commentDocSnap),
                                                       bio: GeneralFirebaseHelpers
                                                           .getStringSafely(
                                                               key: 'bio',
                                                               doc:
                                                                   commentDocSnap),
-                                                      address:
-                                                          GeneralFirebaseHelpers
-                                                              .getStringSafely(
-                                                                  key:
-                                                                      'address',
-                                                                  doc:
-                                                                      commentDocSnap),
+                                                      address: GeneralFirebaseHelpers
+                                                          .getStringSafely(
+                                                              key: 'address',
+                                                              doc:
+                                                                  commentDocSnap),
                                                       geoPoint: GeneralFirebaseHelpers
                                                           .getGeoPointSafely(
                                                               key: 'geoPoint',
                                                               doc:
                                                                   commentDocSnap),
-                                                      uid: commentDocSnap[
-                                                          'useruid'],
-                                                      userName: commentDocSnap[
-                                                          'username'],
-                                                      photoUrl: commentDocSnap[
-                                                          'userimage'],
-                                                      email: commentDocSnap[
-                                                          'useremail'],
+                                                      uid: commentDocSnap['useruid'],
+                                                      userName: commentDocSnap['username'],
+                                                      photoUrl: commentDocSnap['userimage'],
+                                                      email: commentDocSnap['useremail'],
                                                       fcmToken: "",
 
                                                       ///later you have to give this the right value

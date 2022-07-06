@@ -6,7 +6,6 @@ import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:the_apple_sign_in/the_apple_sign_in.dart';
 
-
 //TODO:move all functions to (AuthRepo)
 class Authentication with ChangeNotifier {
   final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
@@ -144,7 +143,6 @@ class Authentication with ChangeNotifier {
   Future<void> signInWithApple(BuildContext context) async {
     try {
       final user = await signInApple(scopes: [Scope.email, Scope.fullName]);
-      print(user.email);
       userUid = user.uid;
       UserInfoManger.saveAnonFlag(0);
 
@@ -162,8 +160,6 @@ class Authentication with ChangeNotifier {
       print(e);
     }
   }
-
-
 
   Future<void> saveLocalCredentials(String newUserId) async {
     UserInfoManger.setUserId(newUserId);

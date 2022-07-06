@@ -131,6 +131,10 @@ class _FollowersScreenState extends State<FollowersScreen> {
                                       bio: GeneralFirebaseHelpers
                                           .getStringSafely(
                                               key: 'bio', doc: followerItem),
+                                      postCategory: GeneralFirebaseHelpers
+                                          .getStringSafely(
+                                              key: 'postcategory',
+                                              doc: followerItem),
                                       address: GeneralFirebaseHelpers
                                           .getStringSafely(
                                               key: 'address',
