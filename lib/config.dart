@@ -9,9 +9,12 @@ import 'package:get/get.dart';
 import 'package:get_it/get_it.dart';
 import 'package:mared_social/constants/appleSignInCheck.dart';
 import 'package:mared_social/controllers/global_messages_controller.dart';
+import 'package:mared_social/models/categories_list.dart';
 import 'package:mared_social/services/get_http_client.dart';
 import 'package:mared_social/services/shared_preferences_helper.dart';
 import 'package:paginate_firestore/bloc/pagination_listeners.dart';
+
+import 'helpers/marker_with_text.dart';
 
 late final appleSignInAvailable;
 final getIt = GetIt.instance;
@@ -58,3 +61,5 @@ _defineGetxControllers() {
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print("Handling a background message: ${message.messageId}");
 }
+
+loadAppData({required BuildContext context}) async {}

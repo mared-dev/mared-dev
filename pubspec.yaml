@@ -120,6 +120,7 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - assets/icons/map_markers/
     - assets/animations/
     - assets/logo/
     - assets/translations/

@@ -10,6 +10,7 @@ import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/helpers/firebase_general_helpers.dart';
 import 'package:mared_social/helpers/loading_helper.dart';
 import 'package:mared_social/mangers/user_info_manger.dart';
+import 'package:mared_social/models/categories_list.dart';
 import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
 import 'package:mared_social/screens/PostDetails/post_details_screen.dart';
@@ -21,6 +22,7 @@ import 'package:provider/provider.dart';
 import 'dart:ui' as ui;
 
 import '../../constants/text_styles.dart';
+import '../../helpers/marker_with_text.dart';
 import '../../models/category_model.dart';
 import '../../services/firebase/firestore/FirebaseOpertaion.dart';
 
@@ -39,10 +41,7 @@ class _MapScreenState extends State<MapScreen> {
   void initState() {
 // make sure to initialize before map loading
 
-    getBytesFromAsset('assets/icons/store_icon.png', 100).then((d) {
-      customIcon = BitmapDescriptor.fromBytes(d);
-      getMarkerData();
-    });
+    getMarkerData();
 
     super.initState();
   }
@@ -133,14 +132,23 @@ class _MapScreenState extends State<MapScreen> {
   void initMarker({required UserModel storeItem}) async {
     var markerIdVal = storeItem.uid;
     final MarkerId markerId = MarkerId(markerIdVal);
+    print('!!!!!!!!!!!!!!!!!!');
+    print(storeItem.userName);
+    print(storeItem.postCategory);
 
+    BitmapDescriptor bitmapDescriptor = await BitmapDescriptor.fromAssetImage(
+        ImageConfiguration(size: Size(12, 12)),
+        categories[storeItem.postCategory.isEmpty
+                ? 'Business & Industry'
+                : storeItem.postCategory]!
+            .markerIconText);
     GeoPoint geoPoint = storeItem.geoPoint;
     final Marker marker = Marker(
       markerId: markerId,
-      icon: customIcon,
+      icon: bitmapDescriptor,
       position: LatLng(geoPoint.latitude, geoPoint.longitude),
       infoWindow: InfoWindow(
-        title: 'Latest Post',
+        title: storeItem.userName,
         onTap: () async {
           LoadingHelper.startLoading();
           var dynamicPost = await FirebaseFirestore.instance
@@ -180,9 +188,9 @@ class _MapScreenState extends State<MapScreen> {
         .collection("users")
         .where('store', isEqualTo: true)
         .get()
-        .then((posts) {
-      for (int i = 0; i < posts.docs.length; i++) {
-        initMarker(storeItem: UserModel.fromJson(posts.docs[i]));
+        .then((users) {
+      for (int i = 0; i < users.docs.length; i++) {
+        initMarker(storeItem: UserModel.fromJson(users.docs[i]));
       }
     });
   }
@@ -208,6 +216,18 @@ class _MapScreenState extends State<MapScreen> {
       }
     });
     setState(() {});
+  }
+
+  Future<BitmapDescriptor> _bitmapDescriptorFromSvgAsset(
+      BuildContext context, String assetName) async {
+    String svgString =
+        await DefaultAssetBundle.of(context).loadString(assetName);
+    //Draws string representation of svg to DrawableRoot
+    DrawableRoot svgDrawableRoot = await svg.fromSvgString(svgString, '');
+    ui.Picture picture = svgDrawableRoot.toPicture();
+    ui.Image image = await picture.toImage(26, 37);
+    ByteData? bytes = await image.toByteData(format: ui.ImageByteFormat.png);
+    return BitmapDescriptor.fromBytes(bytes!.buffer.asUint8List());
   }
 
   Future<Uint8List> getBytesFromAsset(String path, int width) async {

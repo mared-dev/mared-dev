@@ -32,20 +32,20 @@ class _ProfileState extends State<Profile> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-      floatingActionButton: !UserInfoManger.isNotGuest()
-          ? null
-          : Container(
-              margin: EdgeInsets.only(bottom: 45.h),
-              child: FloatingActionButton(
-                heroTag: "addPostProfile",
-                onPressed: () {
-                  ProfileHelpers.postSelectType(context: context);
-                },
-                child:
-                    SvgPicture.asset('assets/icons/home_add_post_button.svg'),
-              ),
-            ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      // floatingActionButton: !UserInfoManger.isNotGuest() || ()
+      //     ? null
+      //     : Container(
+      //         margin: EdgeInsets.only(bottom: 45.h),
+      //         child: FloatingActionButton(
+      //           heroTag: "addPostProfile",
+      //           onPressed: () {
+      //             ProfileHelpers.postSelectType(context: context);
+      //           },
+      //           child:
+      //               SvgPicture.asset('assets/icons/home_add_post_button.svg'),
+      //         ),
+      //       ),
       backgroundColor: AppColors.backGroundColor,
       appBar: homeAppBar(
         context,

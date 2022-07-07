@@ -15,6 +15,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
+import '../../config.dart';
 import '../../services/shared_preferences_helper.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -29,6 +30,8 @@ class _SplashScreenState extends State<SplashScreen> {
     //
     // });
     Future.delayed(Duration(milliseconds: 1500)).then((value) async {
+      await loadAppData(context: context);
+
       if (FirebaseAuth.instance.currentUser != null &&
           UserInfoManger.isNotGuest()) {
         Provider.of<Authentication>(context, listen: false)

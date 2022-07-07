@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:mared_social/models/category_model.dart';
 
+import '../../models/categories_list.dart';
 import '../../widgets/reusable/simple_appbar_with_back.dart';
 
 class FilterPage extends StatelessWidget {
@@ -34,7 +35,7 @@ class FilterPage extends StatelessWidget {
         child: FilterListWidget<CategoryModel>(
           themeData: FilterListThemeData(context),
           hideSelectedTextCount: true,
-          listData: categories,
+          listData: categories.values.toList(),
           selectedListData: selectedCategoryList,
           onApplyButtonClick: (list) {
             onApplySelected(list);
