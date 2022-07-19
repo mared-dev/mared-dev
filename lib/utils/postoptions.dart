@@ -353,10 +353,13 @@ class PostFunctions with ChangeNotifier {
             .doc(subDocId)
             .get()
             .then((likingUser) async {
+          print('---------------------');
+          print(postUser['fcmToken']!);
           await _fcmNotificationService.sendNotificationToUser(
               to: postUser['fcmToken']!, //To change once set up
               title: "${likingUser['username']} liked your post",
               body: "");
+          print('@@@@@@@@@@@@@@@@@');
         });
       });
     }

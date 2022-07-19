@@ -243,6 +243,7 @@ class _HomePageState extends State<HomePage> {
     _fcm.getAPNSToken().then((value) => print("APN Token === $value"));
 
     String? token = await _fcm.getToken();
+    print(token);
     assert(token != null);
 
     await FirebaseFirestore.instance
