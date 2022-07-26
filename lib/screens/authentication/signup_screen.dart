@@ -30,6 +30,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../services/firebase/fcm_notification_Service.dart';
 import '../../widgets/reusable/select_address_widget.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -42,6 +43,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
   String _uploadedImageLink = "";
 
   final _formKey = GlobalKey<FormState>();
+  final FCMNotificationService _fcmNotificationService =
+      FCMNotificationService();
 
   late TextEditingController _nameController;
   late TextEditingController _emailController;
@@ -236,10 +239,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           },
                           buttonText: 'Set your location'),
                       SizedBox(
-                        height: isStore == 1 ? 18.h : 0,
+                        height: (isStore == 1 || isStore == 0) ? 18.h : 0,
                       ),
                       Visibility(
-                        visible: isStore == 1,
+                        visible: (isStore == 1 || isStore == 0),
                         child: Container(
                           height: 35.h,
                           decoration: BoxDecoration(
@@ -260,7 +263,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 hint: Container(
                                   margin: EdgeInsets.only(right: 6.w),
                                   alignment: Alignment.centerLeft,
-                                  child: Text('choose a category',
+                                  child: Text(
+                                      isStore == 1
+                                          ? 'choose a category'
+                                          : 'choose your interests',
                                       style: regularTextStyle(
                                           fontSize: 11,
                                           textColor:
@@ -308,7 +314,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         width: screenSize.width,
                         child: ElevatedButton(
                           onPressed: () async {
-                            if (_pickedImageFile == null) {
+                            if (_pickedImageFile != null) {
                               CoolAlert.show(
                                 context: context,
                                 type: CoolAlertType.error,
@@ -337,7 +343,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   userModel: UserModel(
                                       userName: _nameController.text,
                                       email: _emailController.text,
-                                      photoUrl: _uploadedImageLink,
+                                      photoUrl: '',
                                       fcmToken: '',
                                       store: isStore == 1,
                                       bio: '',
@@ -358,6 +364,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                       child: const HomePage(),
                                       type: PageTransitionType.rightToLeft),
                                 );
+
+                                if (isStore == 0) {
+                                  _fcmNotificationService
+                                      .subscribeUserToTopic(_selectedCategory!);
+                                } else {
+                                  _fcmNotificationService
+                                      .sendNotificationToTopic(
+                                          title: 'New store',
+                                          body:
+                                              'a new store launched near you!',
+                                          topic: _selectedCategory!);
+                                }
                               } else {
                                 CoolAlert.show(
                                     context: context,

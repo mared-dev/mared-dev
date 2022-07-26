@@ -30,6 +30,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../services/firebase/fcm_notification_Service.dart';
 import '../../widgets/reusable/select_address_widget.dart';
 
 class FillRemainingInfo extends StatefulWidget {
@@ -302,6 +303,8 @@ class _FillRemainingInfoState extends State<FillRemainingInfo> {
                               await UserInfoManger.setUserId(userToAdd.uid);
                               await UserInfoManger.saveUserInfo(userToAdd);
                               await UserInfoManger.saveAnonFlag(0);
+                              FCMNotificationService()
+                                  .subscribeUserToTopic(_selectedCategory!);
 
                               Navigator.pushReplacement(
                                 context,

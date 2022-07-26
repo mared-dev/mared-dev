@@ -12,6 +12,8 @@ import 'package:nanoid/nanoid.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
+import '../../services/firebase/fcm_notification_Service.dart';
+
 class LandingHelpers {
   static loginWithApple(context) async {
     try {
@@ -123,6 +125,9 @@ class LandingHelpers {
           ? userSnapShot.data()!['role']
           : "");
       print(UserInfoManger.isAdmin());
+      FCMNotificationService().subscribeUserToTopic(
+          GeneralFirebaseHelpers.getStringSafely(
+              key: 'postcategory', doc: userSnapShot));
 
       Navigator.pushReplacement(
         context,

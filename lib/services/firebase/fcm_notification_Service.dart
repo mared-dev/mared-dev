@@ -58,4 +58,36 @@ class FCMNotificationService {
       print("ERROR FCM ==== ${e.toString()}");
     }
   }
+
+  Future<http.Response?> sendNotificationToTopic({
+    required String title,
+    required String body,
+    required String topic,
+  }) async {
+    try {
+      final dynamic data = json.encode({
+        'to': '/topics/$topic',
+        'priority': 'high',
+        'notification': {
+          'title': title,
+          'body': body,
+        },
+        'content_available': true,
+      });
+
+      http.Response response =
+          await http.post(Uri.parse(_endpoint), body: data, headers: {
+        'Content-Type': _contentType,
+        'Authorization': _authorization,
+      });
+
+      return response;
+    } catch (e) {
+      print("ERROR FCM ==== ${e.toString()}");
+    }
+  }
+
+  Future subscribeUserToTopic(String topic) async {
+    await FirebaseMessaging.instance.subscribeToTopic(topic);
+  }
 }

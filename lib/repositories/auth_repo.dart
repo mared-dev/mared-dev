@@ -34,10 +34,6 @@ class AuthRepo {
       String userUid =
           await AuthRepo.createFirebaseAccount(userModel.email, password);
 
-      print('))))))))))))))))))');
-      print(userModel.geoPoint.runtimeType);
-      print(userModel.geoPoint.longitude);
-      print(userModel.geoPoint.latitude);
       if (userUid.isNotEmpty) {
         UserModel registeredUser = UserModel(
             userName: userModel.userName,
@@ -58,6 +54,12 @@ class AuthRepo {
         await UserInfoManger.saveAnonFlag(0);
 
         UsersRepo.addUser(userModel: registeredUser, uid: userUid);
+
+        //the user should subscribe to a topic when he signs up
+        // /the buisness should send a message to all users
+
+        if (userModel.store) {
+        } else {}
 
         return true;
       } else {

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cool_alert/cool_alert.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -24,7 +25,9 @@ import 'package:mared_social/widgets/reusable/sign_in_with_google_button.dart';
 import 'package:mared_social/widgets/reusable/password_text_field.dart';
 import 'package:page_transition/page_transition.dart';
 
+import '../../helpers/firebase_general_helpers.dart';
 import '../../models/user_model.dart';
+import '../../services/firebase/fcm_notification_Service.dart';
 import '../../widgets/reusable/sign_in_with_apple_button.dart';
 import '../HomePage/homepage.dart';
 
@@ -215,7 +218,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                           savedCredentials);
                                     }
                                   }
-
                                   LoadingHelper.endLoading();
                                 }
                               },
@@ -258,6 +260,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   await UserInfoManger.saveUserInfo(storedUser);
                                   await UserInfoManger.saveAnonFlag(0);
                                   LoadingHelper.endLoading();
+                                  FCMNotificationService().subscribeUserToTopic(
+                                      storedUser.postCategory);
                                   Navigator.pushReplacement(
                                       context,
                                       PageTransition(
@@ -265,6 +269,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           type:
                                               PageTransitionType.rightToLeft));
                                 }
+
+                                //TODO: let the user subscribe to some category
                               } else {
                                 LoadingHelper.endLoading();
                                 CoolAlert.show(

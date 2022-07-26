@@ -143,6 +143,8 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print('@@@@@@@@@@@@@@');
+    print(UserInfoManger.getUserInfo().postCategory);
     return Scaffold(
       backgroundColor: AppColors.backGroundColor,
       body: PersistentTabView(context,
