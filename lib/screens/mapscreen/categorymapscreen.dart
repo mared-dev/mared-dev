@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
-import 'package:mared_social/screens/mapscreen/category_mapscreenhelper.dart';
+import 'package:mared_social/widgets/items/show_post_details.dart';
 import 'package:provider/provider.dart';
 
 class CategoryMapScreen extends StatefulWidget {
@@ -30,8 +30,7 @@ class _CategoryMapScreenState extends State<CategoryMapScreen> {
       infoWindow: InfoWindow(
         title: specify['caption'],
         onTap: () {
-          Provider.of<CategoryMapScreenHelper>(context, listen: false)
-              .showDetails(context: context, documentSnapshot: specify);
+          showPostDetail(context: context, documentSnapshot: specify);
         },
         snippet: specify['description'],
       ),

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/constants/stripe_const.dart';
-import 'package:mared_social/screens/splitter/splitter.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 

@@ -1,9 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
-import 'package:mared_social/screens/AltProfile/altProfileHelper.dart';
+import 'package:mared_social/constants/colors.dart';
+import 'package:mared_social/constants/text_styles.dart';
+import 'package:mared_social/screens/PostDetails/post_details_screen.dart';
 import 'package:mared_social/widgets/items/show_post_details.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:provider/provider.dart';
 
 class PostResultData extends StatelessWidget {
@@ -18,14 +22,23 @@ class PostResultData extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8.0),
       child: ListTile(
         onTap: () {
-          showPostDetail(context: context, documentSnapshot: postData);
+          pushNewScreen(
+            context,
+            screen: PostDetailsScreen(
+              postId: postData['postid'],
+              userId: postData['useruid'],
+            ),
+            withNavBar: false, // OPTIONAL VALUE. True by default.
+            pageTransitionAnimation: PageTransitionAnimation.cupertino,
+          );
         },
         leading: SizedBox(
-          height: size.height * 0.2,
-          width: size.width * 0.2,
+          height: 80,
+          width: 80,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(5),
             child: Swiper(
+              loop: false,
               itemBuilder: (BuildContext context, int index) {
                 return CachedNetworkImage(
                   fit: BoxFit.cover,
@@ -46,19 +59,18 @@ class PostResultData extends StatelessWidget {
             ),
           ),
         ),
-        title: Text(
-          postData['caption'],
-          overflow: TextOverflow.ellipsis,
-          maxLines: 1,
-          style: TextStyle(color: constantColors.whiteColor),
-        ),
+        title: Text(postData['caption'],
+            overflow: TextOverflow.ellipsis,
+            maxLines: 1,
+            style: semiBoldTextStyle(
+                fontSize: 15.sp, textColor: AppColors.accentColor)),
         subtitle: Text(
           postData['description'],
           overflow: TextOverflow.ellipsis,
           maxLines: 1,
-          style: TextStyle(
-            color: constantColors.blueColor,
-            fontSize: 10,
+          style: lightTextStyle(
+            textColor: AppColors.commentButtonColor,
+            fontSize: 11,
           ),
         ),
       ),

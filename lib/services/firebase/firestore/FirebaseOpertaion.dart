@@ -1,16 +1,21 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:mared_social/screens/LandingPage/landingUtils.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
+import 'package:mared_social/models/feed_models/post_details_model.dart';
+import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/fcm_notification_Service.dart';
+import 'package:mared_social/helpers/firebase_general_helpers.dart';
 import 'package:provider/provider.dart';
 
 class FirebaseOperations with ChangeNotifier {
   UploadTask? imageUploadTask;
   late String initUserEmail, initUserName, initUserImage;
   late bool store;
-  late String fcmToken;
+  String fcmToken = "";
   int? unReadMsgs;
 
   int? get getUnReadMsgs => unReadMsgs;
@@ -23,23 +28,24 @@ class FirebaseOperations with ChangeNotifier {
   final FCMNotificationService _fcmNotificationService =
       FCMNotificationService();
 
-  Future uploadUserAvatar(BuildContext context) async {
-    Reference imageReference = FirebaseStorage.instance.ref().child(
-        "userProfileAvatar/${Provider.of<LandingUtils>(context, listen: false).getUserAvatar.path}/${TimeOfDay.now()}");
-    imageUploadTask = imageReference.putFile(
-        Provider.of<LandingUtils>(context, listen: false).getUserAvatar);
+  Future uploadUserAvatar(
+      {required BuildContext context, required File pickedFile}) async {
+    // Reference imageReference = FirebaseStorage.instance.ref().child(
+    //     "userProfileAvatar/${Provider.of<LandingUtils>(context, listen: false).getUserAvatar.path}/${TimeOfDay.now()}");
+    // imageUploadTask = imageReference.putFile(
+    //     Provider.of<LandingUtils>(context, listen: false).getUserAvatar);
+
+    Reference imageReference = FirebaseStorage.instance
+        .ref()
+        .child("userProfileAvatar/${pickedFile.path}/${TimeOfDay.now()}");
+    imageUploadTask = imageReference.putFile(pickedFile);
     await imageUploadTask!.whenComplete(
       () {
         print("Image uploaded!");
       },
     );
-    imageReference.getDownloadURL().then((url) {
-      Provider.of<LandingUtils>(context, listen: false).userAvatarUrl =
-          url.toString();
-      print(
-          "The user profile avatar url => ${Provider.of<LandingUtils>(context, listen: false).userAvatarUrl}");
-      notifyListeners();
-    });
+    String uploadedImageUrl = await imageReference.getDownloadURL();
+    return uploadedImageUrl;
   }
 
   Future createBannerCollection(
@@ -149,23 +155,94 @@ class FirebaseOperations with ChangeNotifier {
     });
   }
 
-  Future initUserData(BuildContext context) async {
-    return FirebaseFirestore.instance
-        .collection("users")
-        .doc(Provider.of<Authentication>(context, listen: false).getUserId)
-        .get()
-        .then((doc) {
-      print("fetching user data");
-      initUserName = doc['username'];
-      initUserEmail = doc['useremail'];
-      initUserImage = doc['userimage'];
-      store = doc['store'];
-      fcmToken = doc['fcmToken'];
+  // Future initUserData(BuildContext context) async {
+  //   var userId = UserInfoManger.getUserId();
+  //   String bio = "";
+  //   String websiteLink = "";
+  //   String userImage = "";
+  //
+  //   var extraInfo = await FirebaseFirestore.instance
+  //       .collection("users")
+  //       .doc(userId)
+  //       .collection("extrainfo")
+  //       .doc(userId)
+  //       .get();
+  //
+  //   if (extraInfo.data() != null) {
+  //     bio = extraInfo.data()!['bio'];
+  //     websiteLink = extraInfo.data()!['websiteLink'];
+  //     userImage = extraInfo.data()!['userimage'];
+  //   }
+  //
+  //   return FirebaseFirestore.instance
+  //       .collection("users")
+  //       .doc(UserInfoManger.getUserId())
+  //       .get()
+  //       .then((doc) async {
+  //     print('!!!!!!!!!!!!!!!!!!!!!!!&');
+  //     print(doc['store']);
+  //     initUserName = doc['username'];
+  //     initUserEmail = doc['useremail'];
+  //     initUserImage = userImage.isNotEmpty ? userImage : doc['userimage'];
+  //     store = doc['store'];
+  //     fcmToken = doc['fcmToken'];
+  //
+  //     await UserInfoManger.setUserId(
+  //         Provider.of<Authentication>(context, listen: false).getUserId);
+  //     await UserInfoManger.saveUserInfo(UserModel(
+  //         websiteLink: websiteLink,
+  //         bio: bio,
+  //         phoneNumber: doc['usercontactnumber'],
+  //         email: initUserEmail,
+  //         userName: initUserName,
+  //         photoUrl: initUserImage,
+  //         store: store,
+  //         uid: Provider.of<Authentication>(context, listen: false).getUserId,
+  //         fcmToken: fcmToken));
+  //   });
+  // }
 
-      print(fcmToken);
-      print(initUserName);
-      notifyListeners();
+  Future updateUserProfile(
+      {required BuildContext context,
+      required String userUid,
+      required String photoUrl,
+      required String bio,
+      required String phoneNumber,
+      required String address,
+      required GeoPoint geoPoint,
+      required bool store,
+      required String fcmToken,
+      required String websiteLink}) async {
+    FirebaseFirestore.instance
+        .collection("users")
+        .doc(userUid)
+        .collection("extrainfo")
+        .doc(userUid)
+        .set(
+      {'websiteLink': websiteLink, 'bio': bio, 'userimage': photoUrl},
+    );
+    FirebaseFirestore.instance.collection("users").doc(userUid).update({
+      'userimage': photoUrl,
+      'usercontactnumber': phoneNumber,
+      'address': address,
+      'geoPoint': geoPoint
     });
+
+    UserModel oldModel = UserInfoManger.getUserInfo();
+
+    UserInfoManger.saveUserInfo(UserModel(
+        phoneNumber: phoneNumber,
+        userName: oldModel.userName,
+        email: oldModel.email,
+        address: address,
+        geoPoint: geoPoint,
+        photoUrl: photoUrl,
+        fcmToken: fcmToken,
+        store: store,
+        postCategory: oldModel.postCategory,
+        bio: bio,
+        websiteLink: websiteLink,
+        uid: UserInfoManger.getUserId()));
   }
 
   Future initChatData(BuildContext context) async {
@@ -311,12 +388,30 @@ class FirebaseOperations with ChangeNotifier {
 
   Future deleteUserComment(
       {required String postId, required String commentId}) async {
-    return FirebaseFirestore.instance
-        .collection("posts")
+    var post =
+        await FirebaseFirestore.instance.collection('posts').doc(postId).get();
+
+    //fix this
+    UserModel userModel = UserInfoManger.getUserInfo();
+
+    var newCommentsList = [];
+    var commentsList = post.data()!['comments'];
+    for (var i = 0; i < commentsList.length; i++) {
+      if (commentsList[i]['commentid'] != commentId) {
+        newCommentsList.add(commentsList[i]);
+      }
+    }
+
+    await FirebaseFirestore.instance
+        .collection("users")
+        .doc(post['useruid'])
+        .collection('posts')
         .doc(postId)
-        .collection("comments")
-        .doc(commentId)
-        .delete();
+        .update({'comments': newCommentsList});
+    await FirebaseFirestore.instance
+        .collection('posts')
+        .doc(postId)
+        .update({'comments': newCommentsList});
   }
 
   Future deleteAuctionUserComment(
@@ -339,10 +434,11 @@ class FirebaseOperations with ChangeNotifier {
 
   Future updateDescription(
       {required String postId,
-      required AsyncSnapshot<DocumentSnapshot> postDoc,
-      String? description,
+      required PostDetailsModel postDetailsModel,
+      required String description,
+      required String title,
       required BuildContext context}) async {
-    String name = "${postDoc.data!['caption']} ${description}";
+    String name = "${postDetailsModel.caption} ${description}";
 
     List<String> splitList = name.split(" ");
     List<String> indexList = [];
@@ -356,15 +452,17 @@ class FirebaseOperations with ChangeNotifier {
         .collection("posts")
         .doc(postId)
         .update({
+      'caption': title,
       'description': description,
       'searchindex': indexList,
     }).whenComplete(() async {
       return await FirebaseFirestore.instance
           .collection("users")
-          .doc(Provider.of<Authentication>(context, listen: false).getUserId)
+          .doc(UserInfoManger.getUserId())
           .collection("posts")
           .doc(postId)
           .update({
+        'caption': title,
         'description': description,
         'searchindex': indexList,
       });

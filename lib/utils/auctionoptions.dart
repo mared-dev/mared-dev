@@ -4,15 +4,18 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
-import 'package:mared_social/screens/Feed/feedhelpers.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/services/firebase/fcm_notification_Service.dart';
+import 'package:mared_social/widgets/bottom_sheets/is_anon_bottom_sheet.dart';
 import 'package:nanoid/nanoid.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
+
+import '../mangers/user_info_manger.dart';
 
 class AuctionFuctions with ChangeNotifier {
   TextEditingController auctionCommentController = TextEditingController();
@@ -360,6 +363,7 @@ class AuctionFuctions with ChangeNotifier {
     required BuildContext context,
   }) async {
     String commentId = nanoid(14).toString();
+
     await FirebaseFirestore.instance
         .collection('auctions')
         .doc(auctionId)
@@ -486,6 +490,29 @@ class AuctionFuctions with ChangeNotifier {
                                                     context,
                                                     PageTransition(
                                                         child: AltProfile(
+                                                          userModel: UserModel(
+                                                              phoneNumber: '',
+                                                              websiteLink: '',
+                                                              bio: '',
+                                                              postCategory: "",
+                                                              uid: commentDocSnap[
+                                                                  'useruid'],
+                                                              userName:
+                                                                  commentDocSnap[
+                                                                      'username'],
+                                                              photoUrl:
+                                                                  commentDocSnap[
+                                                                      'userimage'],
+                                                              email: commentDocSnap[
+                                                                  'useremail'],
+                                                              fcmToken: "",
+                                                              address: "",
+                                                              geoPoint:
+                                                                  GeoPoint(
+                                                                      0, 0),
+
+                                                              ///later you have to give this the right value
+                                                              store: false),
                                                           userUid:
                                                               commentDocSnap[
                                                                   'useruid'],
@@ -676,10 +703,7 @@ class AuctionFuctions with ChangeNotifier {
                             color: constantColors.whiteColor,
                           ),
                           onPressed: () {
-                            if (Provider.of<Authentication>(context,
-                                        listen: false)
-                                    .getIsAnon ==
-                                false) {
+                            if (UserInfoManger.isNotGuest()) {
                               addAuctionComment(
                                       userUid: snapshot['useruid'],
                                       auctionId: snapshot['auctionid'],
@@ -690,8 +714,7 @@ class AuctionFuctions with ChangeNotifier {
                                 notifyListeners();
                               });
                             } else {
-                              Provider.of<FeedHelpers>(context, listen: false)
-                                  .IsAnonBottomSheet(context);
+                              IsAnonBottomSheet(context);
                             }
                           },
                         ),
@@ -788,6 +811,25 @@ class AuctionFuctions with ChangeNotifier {
                                         context,
                                         PageTransition(
                                             child: AltProfile(
+                                              userModel: UserModel(
+                                                  phoneNumber: '',
+                                                  websiteLink: '',
+                                                  bio: '',
+                                                  postCategory: "",
+                                                  uid: documentSnapshot[
+                                                      'useruid'],
+                                                  userName: documentSnapshot[
+                                                      'username'],
+                                                  photoUrl: documentSnapshot[
+                                                      'userimage'],
+                                                  email: documentSnapshot[
+                                                      'useremail'],
+                                                  address: "",
+                                                  geoPoint: GeoPoint(0, 0),
+                                                  fcmToken: "",
+
+                                                  ///later you have to give this the right value
+                                                  store: false),
                                               userUid:
                                                   documentSnapshot['useruid'],
                                             ),

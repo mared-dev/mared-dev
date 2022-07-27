@@ -6,10 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 import 'package:mared_social/helpers/post_helpers.dart';
-import 'package:mared_social/screens/Feed/feedhelpers.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
 import 'package:mared_social/utils/postoptions.dart';
+import 'package:mared_social/widgets/bottom_sheets/is_anon_bottom_sheet.dart';
+import 'package:mared_social/widgets/bottom_sheets/show_comments_section.dart';
 import 'package:mared_social/widgets/items/video_post_item.dart';
+import 'package:mared_social/widgets/reusable/post_comments_part.dart';
+import 'package:mared_social/widgets/reusable/post_likes_part.dart';
 import 'package:provider/provider.dart';
 
 showPostDetail(
@@ -57,9 +61,7 @@ class _PostDetailsState extends State<PostDetails> {
             ),
             InkWell(
               onDoubleTap: () {
-                if (Provider.of<Authentication>(context, listen: false)
-                        .getIsAnon ==
-                    false) {
+                if (UserInfoManger.isNotGuest()) {
                   Provider.of<PostFunctions>(context, listen: false).addLike(
                     userUid: widget.documentSnapshot['useruid'],
                     context: context,
@@ -69,8 +71,7 @@ class _PostDetailsState extends State<PostDetails> {
                             .getUserId,
                   );
                 } else {
-                  Provider.of<FeedHelpers>(context, listen: false)
-                      .IsAnonBottomSheet(context);
+                  IsAnonBottomSheet(context);
                 }
               },
               child: SizedBox(
@@ -79,9 +80,13 @@ class _PostDetailsState extends State<PostDetails> {
                 child: PostHelpers.checkIfPostIsVideo(
                         widget.documentSnapshot['imageslist'])
                     ? VideoPostItem(
+                        userId: widget.documentSnapshot['useruid'],
                         videoUrl: widget.documentSnapshot['imageslist'][0],
+                        videoThumbnailLink:
+                            widget.documentSnapshot['thumbnail'],
                       )
                     : Swiper(
+                        loop: false,
                         itemBuilder: (BuildContext context, int index) {
                           return CachedNetworkImage(
                             fit: BoxFit.contain,
@@ -134,158 +139,25 @@ class _PostDetailsState extends State<PostDetails> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      InkWell(
-                        onTap: () {
-                          Provider.of<PostFunctions>(context, listen: false)
-                              .showLikes(
-                                  context: context,
-                                  postId: widget.documentSnapshot['postid']);
-                        },
-                        child: StreamBuilder<QuerySnapshot>(
-                            stream: FirebaseFirestore.instance
-                                .collection("posts")
-                                .doc(widget.documentSnapshot['postid'])
-                                .collection('likes')
-                                .snapshots(),
-                            builder: (context, likeSnap) {
-                              return SizedBox(
-                                width: 60,
-                                height: 50,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(left: 8.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Icon(
-                                        likeSnap.data!.docs.any((element) =>
-                                                element.id ==
-                                                Provider.of<Authentication>(
-                                                        context,
-                                                        listen: false)
-                                                    .getUserId)
-                                            ? EvaIcons.heart
-                                            : EvaIcons.heartOutline,
-                                        color: constantColors.redColor,
-                                        size: 18,
-                                      ),
-                                      Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 8.0),
-                                        child: Text(
-                                          likeSnap.data!.docs.length.toString(),
-                                          style: TextStyle(
-                                            color: constantColors.whiteColor,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            }),
+                      PostLikesPart(
+                        postId: widget.documentSnapshot['postid'],
+                        likes: widget.documentSnapshot['likes'],
+                        userId: widget.documentSnapshot['useruid'],
                       ),
                       InkWell(
-                        onTap: () {
-                          Provider.of<PostFunctions>(context, listen: false)
-                              .showCommentsSheet(
-                                  snapshot: widget.documentSnapshot,
-                                  context: context,
-                                  postId: widget.documentSnapshot['postid']);
-                        },
-                        child: SizedBox(
-                          width: 60,
-                          height: 50,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Icon(
-                                  FontAwesomeIcons.comment,
-                                  color: constantColors.blueColor,
-                                  size: 16,
-                                ),
-                                StreamBuilder<QuerySnapshot>(
-                                  stream: FirebaseFirestore.instance
-                                      .collection("posts")
-                                      .doc(widget.documentSnapshot['postid'])
-                                      .collection('comments')
-                                      .snapshots(),
-                                  builder: (context, commentSnap) {
-                                    return Padding(
-                                      padding: const EdgeInsets.only(left: 8.0),
-                                      child: Text(
-                                        commentSnap.data!.docs.length
-                                            .toString(),
-                                        style: TextStyle(
-                                          color: constantColors.whiteColor,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          Provider.of<PostFunctions>(context, listen: false)
-                              .showRewards(
-                                  context: context,
-                                  postId: widget.documentSnapshot['postid']);
-                        },
-                        child: SizedBox(
-                          width: 60,
-                          height: 50,
-                          child: Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                Icon(
-                                  FontAwesomeIcons.award,
-                                  color: constantColors.yellowColor,
-                                  size: 16,
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 8.0),
-                                  child: StreamBuilder<QuerySnapshot>(
-                                    stream: FirebaseFirestore.instance
-                                        .collection("posts")
-                                        .doc(widget.documentSnapshot['postid'])
-                                        .collection('awards')
-                                        .snapshots(),
-                                    builder: (context, awardSnap) {
-                                      return Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 8.0),
-                                        child: Text(
-                                          awardSnap.data!.docs.length
-                                              .toString(),
-                                          style: TextStyle(
-                                            color: constantColors.whiteColor,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 14,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
+                          onTap: () {
+                            showCommentsSheet(
+                                snapshot: widget.documentSnapshot,
+                                context: context,
+                                postId: widget.documentSnapshot['postid']);
+                          },
+                          child: PostCommentsPart(
+                            documentSnapshot: widget.documentSnapshot,
+                          )),
                       const Spacer(),
-                      Provider.of<Authentication>(context, listen: false)
-                                  .getUserId ==
+
+                      ///change here if you want the posts to be deleted by anyone
+                      UserInfoManger.getUserId() ==
                               widget.documentSnapshot['useruid']
                           ? IconButton(
                               onPressed: () {
