@@ -3,11 +3,20 @@ import 'dart:async';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/constants/colors.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
+import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/screens/LandingPage/landingpage.dart';
-import 'package:mared_social/screens/splitter/splitter.dart';
+import 'package:mared_social/screens/authentication/update_screen.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
+import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
+import 'package:mared_social/services/firebase/firestore/firestore_update.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+
+import '../../config.dart';
+import '../../services/shared_preferences_helper.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -15,19 +24,34 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
-  ConstantColors constantColors = ConstantColors();
-
   @override
   void initState() {
-    Timer(
-        const Duration(
-          seconds: 3,
-        ), () async {
-      if (FirebaseAuth.instance.currentUser != null) {
+    // WidgetsBinding.instance!.addPostFrameCallback((_) async {
+    //
+    // });
+    Future.delayed(Duration(milliseconds: 1500)).then((value) async {
+      await loadAppData(context: context);
+
+      if (FirebaseAuth.instance.currentUser != null &&
+          UserInfoManger.isNotGuest()) {
         Provider.of<Authentication>(context, listen: false)
             .returningUserLogin(FirebaseAuth.instance.currentUser!.uid);
-        Navigator.pushReplacement(context,
-            PageTransition(child: SplitPages(), type: PageTransitionType.fade));
+        // await Provider.of<FirebaseOperations>(context, listen: false)
+        //     .initUserData(context);
+
+        bool _shouldUpdate = await _checkIfShouldUpdate();
+
+        if (_shouldUpdate) {
+          Navigator.pushReplacement(
+              context,
+              PageTransition(
+                  child: UpdateScreen(), type: PageTransitionType.fade));
+        } else {
+          Navigator.pushReplacement(
+              context,
+              PageTransition(
+                  child: const HomePage(), type: PageTransitionType.fade));
+        }
         // signed in
       } else {
         Navigator.pushReplacement(
@@ -42,21 +66,26 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: constantColors.lightBlueColor,
+      backgroundColor: AppColors.backGroundColor,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
-            color: constantColors.lightBlueColor,
-            height: 500,
+            color: AppColors.backGroundColor,
+            height: MediaQuery.of(context).size.height,
+            width: MediaQuery.of(context).size.width,
             child: Image.asset(
-              "assets/logo/animatedLogo.gif",
+              "assets/animations/mared_logo_animation_white.gif",
               fit: BoxFit.fitWidth,
             ),
           ),
         ],
       ),
     );
+  }
+
+  _checkIfShouldUpdate() async {
+    return await FireStoreUpdate.checkIfShouldUpdate(context);
   }
 }

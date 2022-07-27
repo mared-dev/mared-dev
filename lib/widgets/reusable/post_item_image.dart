@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
 
 class PostItemImage extends StatelessWidget {
@@ -9,6 +10,7 @@ class PostItemImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
+      height: 350.h,
       fit: BoxFit.cover,
       imageUrl: imageUrl,
       progressIndicatorBuilder: (context, url, downloadProgress) => SizedBox(

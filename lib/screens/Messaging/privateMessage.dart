@@ -33,7 +33,6 @@ class _PrivateMessageState extends State<PrivateMessage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     load().whenComplete(() {

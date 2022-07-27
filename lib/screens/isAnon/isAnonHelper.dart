@@ -73,11 +73,11 @@ class IsAnonHelper with ChangeNotifier {
           await Provider.of<Authentication>(context, listen: false)
               .logOutViaEmail()
               .whenComplete(() {
-            Navigator.pushReplacement(
+            Navigator.push(
                 context,
                 PageTransition(
                     child: LandingPage(),
-                    type: PageTransitionType.bottomToTop));
+                    type: PageTransitionType.rightToLeft));
           });
         },
         child: Container(

@@ -6,16 +6,23 @@ import 'package:cool_alert/cool_alert.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/constants/colors.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
+import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/HomePage/homepage.dart';
 import 'package:mared_social/screens/Stories/stories_helper.dart';
-import 'package:mared_social/screens/splitter/splitter.dart';
 import 'package:mared_social/services/firebase/firestore/FirebaseOpertaion.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
+import 'package:mared_social/services/mux/mux_video_stream.dart';
 import 'package:mared_social/utils/pick_files_helper.dart';
+import 'package:mared_social/widgets/reusable/bottom_sheet_top_divider.dart';
+import 'package:mared_social/widgets/reusable/simple_button_icon.dart';
 import 'package:nanoid/nanoid.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
@@ -54,10 +61,10 @@ class StoryWidgets {
           bottom: true,
           child: StatefulBuilder(builder: (context, innerState) {
             return Container(
-              height: MediaQuery.of(context).size.height * 0.2,
+              height: 100.h,
               width: MediaQuery.of(context).size.width,
               decoration: BoxDecoration(
-                color: constantColors.darkColor,
+                color: AppColors.commentButtonColor,
                 borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(12),
                   topRight: Radius.circular(12),
@@ -65,99 +72,64 @@ class StoryWidgets {
               ),
               child: Column(
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 150),
-                    child: Divider(
-                      thickness: 4,
-                      color: constantColors.whiteColor,
-                    ),
-                  ),
+                  BottomSheetTopDivider(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      Column(
-                        children: [
-                          FloatingActionButton(
-                            heroTag: "Gallery",
-                            backgroundColor: constantColors.greenColor,
-                            child: Icon(
-                              Icons.photo_album,
-                              color: constantColors.whiteColor,
-                            ),
-                            onPressed: () async {
-                              XFile? video = await PickFilesHelper.pickVide(
-                                  source: ImageSource.gallery);
+                      SimpleButtonIcon(
+                        buttonText: "Gallery",
+                        buttonIcon: SvgPicture.asset(
+                          'assets/icons/select_image_icon.svg',
+                          width: 14,
+                          height: 14,
+                        ),
+                        buttonCallback: () async {
+                          XFile? video = await PickFilesHelper.pickVide(
+                              source: ImageSource.gallery);
 
-                              innerState(() {
-                                _video = video;
-                              });
+                          innerState(() {
+                            _video = video;
+                          });
 
-                              print(_video!.path);
+                          print(_video!.path);
 
-                              _videoPlayerController =
-                                  VideoPlayerController.file(
-                                      File(_video!.path));
+                          _videoPlayerController =
+                              VideoPlayerController.file(File(_video!.path));
 
-                              _videoPlayerController!
-                                ..initialize().then((value) {
-                                  _videoPlayerController!.play();
-                                  previewStoryImage(
-                                      context: context,
-                                      storyImage: File(_video!.path));
-                                });
-                            },
-                          ),
-                          Text(
-                            "Gallery",
-                            style: TextStyle(
-                              color: constantColors.whiteColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
+                          await _videoPlayerController!.initialize();
+                          _videoPlayerController!.play();
+                          previewStoryImage(
+                              context: context, storyImage: File(_video!.path));
+                        },
                       ),
-                      Column(
-                        children: [
-                          FloatingActionButton(
-                            heroTag: "Camera",
-                            backgroundColor: constantColors.blueColor,
-                            child: Icon(
-                              FontAwesomeIcons.camera,
-                              color: constantColors.whiteColor,
-                            ),
-                            onPressed: () async {
-                              XFile? video = await PickFilesHelper.pickVide(
-                                  source: ImageSource.camera);
+                      SimpleButtonIcon(
+                        buttonText: "Camera",
+                        buttonIcon: SvgPicture.asset(
+                          'assets/icons/camera_icon.svg',
+                          width: 14,
+                          height: 14,
+                        ),
+                        buttonCallback: () async {
+                          XFile? video = await PickFilesHelper.pickVide(
+                              source: ImageSource.camera);
 
-                              innerState(() {
-                                _video = video;
-                              });
+                          innerState(() {
+                            _video = video;
+                          });
 
-                              print(_video!.path);
+                          print(_video!.path);
 
-                              _videoPlayerController =
-                                  VideoPlayerController.file(
-                                      File(_video!.path));
+                          _videoPlayerController =
+                              VideoPlayerController.file(File(_video!.path));
 
-                              _videoPlayerController!
-                                ..initialize().then((value) {
-                                  _videoPlayerController!.play();
-                                  previewStoryImage(
-                                      context: context,
-                                      storyImage: File(_video!.path));
-                                });
-                            },
-                          ),
-                          Text(
-                            "Camera",
-                            style: TextStyle(
-                              color: constantColors.whiteColor,
-                              fontWeight: FontWeight.bold,
-                              fontSize: 14,
-                            ),
-                          ),
-                        ],
+                          _videoPlayerController!
+                            ..initialize().then((value) {
+                              _videoPlayerController!.play();
+                              previewStoryImage(
+                                  context: context,
+                                  storyImage: File(_video!.path));
+                            });
+                        },
                       ),
                     ],
                   ),
@@ -171,6 +143,7 @@ class StoryWidgets {
   }
 
   previewStoryImage({required BuildContext context, required File storyImage}) {
+    UserModel userModel = UserInfoManger.getUserInfo();
     return showModalBottomSheet(
       isScrollControlled: true,
       context: context,
@@ -178,7 +151,6 @@ class StoryWidgets {
         return SafeArea(
           bottom: true,
           child: Container(
-            height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             decoration: BoxDecoration(
               color: constantColors.darkColor,
@@ -196,13 +168,17 @@ class StoryWidgets {
                     height: MediaQuery.of(context).size.height,
                     width: MediaQuery.of(context).size.width,
                     color: constantColors.whiteColor,
-                    child: AspectRatio(
-                      aspectRatio: 16 / 9,
-                      child: _videoPlayerController!.value.isInitialized
-                          ? VideoPlayer(
-                              _videoPlayerController!,
-                            )
-                          : LoadingWidget(constantColors: constantColors),
+                    child: FittedBox(
+                      fit: BoxFit.cover,
+                      child: SizedBox(
+                        height: _videoPlayerController!.value.size.height,
+                        width: _videoPlayerController!.value.size.width,
+                        child: _videoPlayerController!.value.isInitialized
+                            ? VideoPlayer(
+                                _videoPlayerController!,
+                              )
+                            : LoadingWidget(constantColors: constantColors),
+                      ),
                     ),
                     // child: Image.file(storyImage),
                   ),
@@ -215,7 +191,7 @@ class StoryWidgets {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         FloatingActionButton(
-                          heroTag: "Reselect Image",
+                          heroTag: "Reselect Story Image",
                           backgroundColor: constantColors.redColor,
                           child: Icon(
                             FontAwesomeIcons.backspace,
@@ -248,6 +224,10 @@ class StoryWidgets {
                             await uploadStoryVideo(context: context)
                                 .whenComplete(() async {
                               try {
+                                String playBackId =
+                                    await getPlayBackId(videoUrl);
+                                videoUrl = getMuxVideoUrl(playBackId);
+
                                 String storyId = nanoid(14).toString();
                                 await FirebaseFirestore.instance
                                     .collection("stories")
@@ -255,60 +235,36 @@ class StoryWidgets {
                                     .set({
                                   'storyid': storyId,
                                   'videourl': videoUrl,
-                                  'username': Provider.of<FirebaseOperations>(
-                                          context,
-                                          listen: false)
-                                      .getInitUserName,
-                                  'userimage': Provider.of<FirebaseOperations>(
-                                          context,
-                                          listen: false)
-                                      .getInitUserImage,
-                                  'useremail': Provider.of<FirebaseOperations>(
-                                          context,
-                                          listen: false)
-                                      .getInitUserEmail,
-                                  'useruid': Provider.of<Authentication>(
-                                          context,
-                                          listen: false)
-                                      .getUserId,
+                                  'thumbnail': getMuxThumbnailImage(playBackId),
+                                  'username': userModel.userName,
+                                  'userimage': userModel.photoUrl,
+                                  'useremail': userModel.email,
+                                  'useruid': userModel.uid,
+                                  'approvedForPosting': false,
                                   'time': Timestamp.now(),
-                                }).whenComplete(() async {
-                                  await FirebaseFirestore.instance
-                                      .collection("users")
-                                      .doc(Provider.of<Authentication>(context,
-                                              listen: false)
-                                          .getUserId)
-                                      .collection("stories")
-                                      .doc(storyId)
-                                      .set({
-                                    'storyid': storyId,
-                                    'videourl': videoUrl,
-                                    'username': Provider.of<FirebaseOperations>(
-                                            context,
-                                            listen: false)
-                                        .getInitUserName,
-                                    'userimage':
-                                        Provider.of<FirebaseOperations>(context,
-                                                listen: false)
-                                            .getInitUserImage,
-                                    'useremail':
-                                        Provider.of<FirebaseOperations>(context,
-                                                listen: false)
-                                            .getInitUserEmail,
-                                    'useruid': Provider.of<Authentication>(
-                                            context,
-                                            listen: false)
-                                        .getUserId,
-                                    'time': Timestamp.now(),
-                                  }).whenComplete(() {
-                                    Navigator.pushReplacement(
-                                        context,
-                                        PageTransition(
-                                            child: SplitPages(),
-                                            type: PageTransitionType
-                                                .rightToLeft));
-                                  });
                                 });
+
+                                await FirebaseFirestore.instance
+                                    .collection("users")
+                                    .doc(UserInfoManger.getUserId())
+                                    .collection("stories")
+                                    .doc(storyId)
+                                    .set({
+                                  'storyid': storyId,
+                                  'videourl': videoUrl,
+                                  'thumbnail': getMuxThumbnailImage(playBackId),
+                                  'username': userModel.userName,
+                                  'userimage': userModel.photoUrl,
+                                  'useremail': userModel.email,
+                                  'useruid': userModel.uid,
+                                  'approvedForPosting': false,
+                                  'time': Timestamp.now(),
+                                });
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop();
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pop();
                               } catch (e) {
                                 CoolAlert.show(
                                   context: context,

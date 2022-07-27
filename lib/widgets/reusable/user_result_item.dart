@@ -1,9 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
+import 'package:mared_social/constants/colors.dart';
+import 'package:mared_social/mangers/user_info_manger.dart';
+import 'package:mared_social/models/user_model.dart';
 import 'package:mared_social/screens/AltProfile/altProfile.dart';
-import 'package:mared_social/screens/Feed/feedhelpers.dart';
 import 'package:mared_social/services/firebase/authentication.dart';
+import 'package:mared_social/helpers/firebase_general_helpers.dart';
+import 'package:mared_social/widgets/bottom_sheets/is_anon_bottom_sheet.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
@@ -18,18 +22,37 @@ class UserResultItem extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 8.0),
       child: ListTile(
         onTap: () {
-          if (userData['useruid'] !=
-              Provider.of<Authentication>(context, listen: false).getUserId) {
+          if (userData['useruid'] != UserInfoManger.getUserId()) {
             Navigator.push(
                 context,
                 PageTransition(
                     child: AltProfile(
+                      userModel: UserModel(
+                          phoneNumber: GeneralFirebaseHelpers.getStringSafely(
+                              key: 'usercontactnumber', doc: userData),
+                          websiteLink: GeneralFirebaseHelpers.getStringSafely(
+                              key: 'websiteLink', doc: userData),
+                          bio: GeneralFirebaseHelpers.getStringSafely(
+                              key: 'bio', doc: userData),
+                          postCategory: GeneralFirebaseHelpers.getStringSafely(
+                              key: 'postcategory', doc: userData),
+                          address: GeneralFirebaseHelpers.getStringSafely(
+                              key: 'address', doc: userData),
+                          geoPoint: GeneralFirebaseHelpers.getGeoPointSafely(
+                              key: 'geoPoint', doc: userData),
+                          uid: userData['useruid'],
+                          userName: userData['username'],
+                          photoUrl: userData['userimage'],
+                          email: userData['useremail'],
+                          fcmToken: "",
+
+                          ///later you have to give this the right value
+                          store: false),
                       userUid: userData['useruid'],
                     ),
-                    type: PageTransitionType.bottomToTop));
+                    type: PageTransitionType.rightToLeft));
           } else {
-            Provider.of<FeedHelpers>(context, listen: false)
-                .IsAnonBottomSheet(context);
+            IsAnonBottomSheet(context);
           }
         },
         leading: ClipRRect(
@@ -48,7 +71,7 @@ class UserResultItem extends StatelessWidget {
         ),
         title: Text(
           userData['username'],
-          style: TextStyle(color: constantColors.whiteColor),
+          style: TextStyle(color: AppColors.commentButtonColor),
         ),
       ),
     );
