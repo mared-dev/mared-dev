@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cool_alert/cool_alert.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -96,7 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'Login to Mared App',
+                            'login_to_mared_app'.tr(),
                             style: regularTextStyle(
                                 fontSize: 14.sp,
                                 textColor: AppColors.darkGrayTextColor),
@@ -113,7 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               scrollPadding: EdgeInsets.only(bottom: 120.h),
                               decoration: getAuthInputDecoration(
                                 prefixIcon: Icons.email_outlined,
-                                hintText: 'Email address',
+                                hintText: 'email_address'.tr(),
                               ),
                             ),
                             suggestionsCallback: (pattern) async {
@@ -154,7 +155,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               if (value!.isNotEmpty) {
                                 return null;
                               }
-                              return "This field can't be empty";
+                              return "field_cant_be_empty".tr();
                             },
                           ),
                           Row(
@@ -174,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   padding:
                                       EdgeInsets.only(top: 17.h, bottom: 28.h),
                                   child: Text(
-                                    'Forgot password ?',
+                                    'forgot_password'.tr(),
                                     textAlign: TextAlign.end,
                                     style: regularTextStyle(
                                         fontSize: 14.sp,
@@ -190,8 +191,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               onPressed: () async {
                                 if (_emailController.text.isEmpty) {
                                   PopupUtils.showFailurePopup(
-                                      title: 'Failed',
-                                      body: "Email address can't be empty",
+                                      title: 'failed'.tr(),
+                                      body: "email_address_cant_be_empty".tr(),
                                       context: context);
                                 } else if (_formKey.currentState!.validate()) {
                                   LoadingHelper.startLoading();
@@ -229,12 +230,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                         BorderRadius.all(Radius.circular(6)),
                                   ),
                                   primary: AppColors.widgetsBackground),
-                              child: Text('SIGN IN'),
+                              child: Text('sign_in'.tr()),
                             ),
                           ),
                           _orDivider(),
                           SignInWithGoogleButton(
-                            buttonText: 'Sign in with google',
+                            buttonText: 'sign_in_with_google'.tr(),
                             callback: () async {
                               LoadingHelper.startLoading();
                               UserModel? loggedInUser =
@@ -276,8 +277,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                 CoolAlert.show(
                                   context: context,
                                   type: CoolAlertType.error,
-                                  title: "Sign In Failed",
-                                  text: "Something went wrong",
+                                  title: "sign_in_failed".tr(),
+                                  text: "something_went_wrong".tr(),
                                 );
                               }
                             },
@@ -288,7 +289,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           if (Platform.isIOS)
                             SignInWithAppleButton(
-                              buttonText: 'Sign in with Apple',
+                              buttonText: 'sign_in_with_apple'.tr(),
                               callback: () async {
                                 LoadingHelper.startLoading();
                                 await LandingHelpers.loginWithApple(context);
@@ -311,12 +312,12 @@ class _LoginScreenState extends State<LoginScreen> {
             textAlign: TextAlign.center,
             text: TextSpan(children: [
               TextSpan(
-                text: "I'm a new user .",
+                text: "Im_new_user".tr(),
                 style: regularTextStyle(
                     fontSize: 12, textColor: AppColors.darkGrayTextColor),
               ),
               TextSpan(
-                  text: "SIGN UP",
+                  text: "sign_up".tr(),
                   style: semiBoldTextStyle(
                       fontSize: 12, textColor: AppColors.darkGrayTextColor),
                   recognizer: TapGestureRecognizer()
@@ -360,7 +361,7 @@ class _LoginScreenState extends State<LoginScreen> {
             padding:
                 EdgeInsets.symmetric(horizontal: _screenUtilObject.setWidth(8)),
             child: Text(
-              'or',
+              'or'.tr(),
               textAlign: TextAlign.center,
               style: TextStyle(
                   fontSize: 13.sp,
@@ -392,7 +393,7 @@ class _LoginScreenState extends State<LoginScreen> {
           child: Padding(
             padding: EdgeInsets.only(left: 6, bottom: 22.h),
             child: AuthCheckboxItem(
-              optionText: 'Remeber me',
+              optionText: 'remember_me'.tr(),
               isSelected: rememberMe,
             ),
           ),

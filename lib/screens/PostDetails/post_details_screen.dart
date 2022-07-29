@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -34,7 +35,7 @@ class _PostDetailsScreenState extends State<PostDetailsScreen> {
     return Scaffold(
       backgroundColor: AppColors.backGroundColor,
       appBar: simpleAppBarWithBack(context,
-          title: 'Posts',
+          title: 'posts'.tr(),
           leadingIcon: SvgPicture.asset(
             'assets/icons/back_icon.svg',
             fit: BoxFit.fill,

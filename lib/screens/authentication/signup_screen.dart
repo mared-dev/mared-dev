@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -104,7 +105,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        'Create Account',
+                        'create_account'.tr(),
                         style: regularTextStyle(
                             fontSize: 27.sp,
                             textColor: AppColors.darkGrayTextColor),
@@ -124,12 +125,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         cursorColor: Colors.black,
                         keyboardType: TextInputType.text,
                         decoration: getAuthInputDecoration(
-                          hintText: 'Full Name',
+                          hintText: 'full_name'.tr(),
                         ),
                         controller: _nameController,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'This field is required';
+                            return 'this_field_is_required'.tr();
                           }
                           return null;
                         },
@@ -141,14 +142,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         cursorColor: Colors.black,
                         keyboardType: TextInputType.phone,
                         decoration: getAuthInputDecoration(
-                          hintText: 'Phone Number',
+                          hintText: 'phone_number'.tr(),
                         ),
                         controller: _phoneNumberController,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'This field is required';
+                            return 'this_field_is_required'.tr();
                           } else if (value.length < 10) {
-                            return "Please enter a valid phone number";
+                            return "please_enter_valid_phone_number".tr();
                           }
                           return null;
                         },
@@ -160,13 +161,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         cursorColor: Colors.black,
                         keyboardType: TextInputType.emailAddress,
                         decoration: getAuthInputDecoration(
-                          hintText: 'Email Address',
+                          hintText: 'email_address'.tr(),
                         ),
 
                         ///add email validation later
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'This field is required';
+                            return 'this_field_is_required'.tr();
                           }
                           return null;
                         },
@@ -179,9 +180,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         passwordController: _passwordController,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'This field is required';
+                            return 'this_field_is_required'.tr();
                           } else if (value.length < 6) {
-                            return "password should be at least 6 characters";
+                            return "password_should_be_at_least".tr();
                           }
                           return null;
                         },
@@ -193,9 +194,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         passwordController: _confirmPasswordController,
                         validator: (value) {
                           if (value!.isEmpty) {
-                            return 'This field is required';
+                            return 'this_field_is_required'.tr();
                           } else if (value != _passwordController.text) {
-                            return "Passwords need to match";
+                            return "passwords_need_to_match".tr();
                           }
                           return null;
                         },
@@ -212,7 +213,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               }
                             });
                           },
-                          options: ['individual', 'buisness'],
+                          options: ['individual'.tr(), 'business'.tr()],
                         ),
                       ),
                       if (userTypeError.isNotEmpty)
@@ -237,7 +238,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             selectedLat = lat;
                             selectedLng = lng;
                           },
-                          buttonText: 'Set your location'),
+                          buttonText: 'set_your_location'.tr()),
                       SizedBox(
                         height: (isStore == 1 || isStore == 0) ? 18.h : 0,
                       ),
@@ -265,8 +266,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                   alignment: Alignment.centerLeft,
                                   child: Text(
                                       isStore == 1
-                                          ? 'choose a category'
-                                          : 'choose your interests',
+                                          ? 'choose_a_category'.tr()
+                                          : 'choose_your_interests'.tr(),
                                       style: regularTextStyle(
                                           fontSize: 11,
                                           textColor:
@@ -318,15 +319,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               CoolAlert.show(
                                 context: context,
                                 type: CoolAlertType.error,
-                                title: "Error",
-                                text: "Please select a profile picture",
+                                title: "error".tr(),
+                                text: "please_select_a_profile_picture".tr(),
                               );
                             } else if (selectedLocation.isEmpty) {
                               CoolAlert.show(
                                 context: context,
                                 type: CoolAlertType.error,
-                                title: "Error",
-                                text: "Please pick a location",
+                                title: "error".tr(),
+                                text: "please_pick_a_location".tr(),
                               );
                             } else if (_selectedCategory == null ||
                                 (_selectedCategory != null &&
@@ -334,8 +335,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                               CoolAlert.show(
                                 context: context,
                                 type: CoolAlertType.error,
-                                title: "Error",
-                                text: "Please pick a category",
+                                title: "error".tr(),
+                                text: "please_pick_a_category".tr(),
                               );
                             } else if (_formKey.currentState!.validate()) {
                               LoadingHelper.startLoading();
@@ -371,23 +372,23 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 } else {
                                   _fcmNotificationService
                                       .sendNotificationToTopic(
-                                          title: 'New store',
-                                          body:
-                                              'a new store launched near you!',
+                                          title: 'new_store'.tr(),
+                                          body: 'new_store_launched_near_you'
+                                              .tr(),
                                           topic: _selectedCategory!);
                                 }
                               } else {
                                 CoolAlert.show(
                                     context: context,
                                     type: CoolAlertType.error,
-                                    title: "Sign Up Failed",
-                                    text: 'Something went wrong');
+                                    title: "sign_up_failed".tr(),
+                                    text: 'something_went_wrong'.tr());
                               }
                               LoadingHelper.endLoading();
                             } else {
                               if (isStore == -1) {
                                 setState(() {
-                                  userTypeError = 'This field is required';
+                                  userTypeError = 'this_field_is_required'.tr();
                                 });
                               }
                             }
@@ -400,7 +401,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                     BorderRadius.all(Radius.circular(6)),
                               ),
                               primary: AppColors.widgetsBackground),
-                          child: Text('SIGN UP'),
+                          child: Text('sign_up'.tr()),
                         ),
                       ),
                       SizedBox(
@@ -409,13 +410,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       RichText(
                         text: TextSpan(children: [
                           TextSpan(
-                            text: "I'm already a member. ",
+                            text: "im_already_member".tr(),
                             style: regularTextStyle(
                                 fontSize: 12,
                                 textColor: AppColors.darkGrayTextColor),
                           ),
                           TextSpan(
-                              text: "SIGN IN",
+                              text: "sign_in".tr(),
                               style: semiBoldTextStyle(
                                   fontSize: 12,
                                   textColor: AppColors.darkGrayTextColor),

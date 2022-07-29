@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -49,7 +50,7 @@ class PostCommentsPart extends StatelessWidget {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 8.0),
-              child: Text('comment',
+              child: Text('comments'.tr(),
                   style: regularTextStyle(
                       fontSize: 11.sp,
                       textColor: AppColors.commentButtonColor)),

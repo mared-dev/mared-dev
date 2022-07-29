@@ -2,6 +2,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -141,7 +142,7 @@ class _PostsProfileState extends State<PostsProfile> {
                           : AppColors.commentButtonColor,
                     ),
                     label: Text(
-                      isFollowed ? 'unfollow' : 'follow',
+                      isFollowed ? 'unfollow'.tr() : 'follow'.tr(),
                       style: regularTextStyle(
                           fontSize: 11,
                           textColor: isFollowed
@@ -198,7 +199,7 @@ class _PostsProfileState extends State<PostsProfile> {
                 color: AppColors.commentButtonColor,
               ),
               label: Text(
-                'message',
+                'message'.tr(),
                 style: regularTextStyle(
                     fontSize: 11, textColor: AppColors.commentButtonColor),
               ),
@@ -231,10 +232,10 @@ class _PostsProfileState extends State<PostsProfile> {
                 .snapshots(),
             builder: (context, userPostSnaps) {
               if (!userPostSnaps.hasData) {
-                return _statItem(statText: 'Posts', statValue: '0');
+                return _statItem(statText: 'posts'.tr(), statValue: '0');
               } else {
                 return _statItem(
-                  statText: 'Posts',
+                  statText: 'posts'.tr(),
                   statValue: userPostSnaps.data!.docs.length.toString(),
                 );
               }
@@ -268,7 +269,7 @@ class _PostsProfileState extends State<PostsProfile> {
                     }
                   },
                   child: _statItem(
-                      statText: 'Followers',
+                      statText: 'followers'.tr(),
                       statValue: followerSnap.hasData
                           ? followerSnap.data!.docs.length.toString()
                           : "0"));
@@ -285,7 +286,7 @@ class _PostsProfileState extends State<PostsProfile> {
             builder: (context, followingSnap) {
               return InkWell(
                 child: _statItem(
-                  statText: 'Following',
+                  statText: 'following'.tr(),
                   statValue: followingSnap.hasData
                       ? followingSnap.data!.docs.length.toString()
                       : "0",
@@ -469,7 +470,7 @@ class _PostsProfileState extends State<PostsProfile> {
                           child: Container(
                             padding: const EdgeInsets.only(left: 6.0),
                             child: Text(
-                              'Website',
+                              'website'.tr(),
                               textAlign: TextAlign.center,
                               style: semiBoldTextStyle(
                                   fontSize: 10.sp,

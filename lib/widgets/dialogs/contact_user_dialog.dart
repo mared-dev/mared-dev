@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:mared_social/constants/colors.dart';
 import 'package:mared_social/constants/text_styles.dart';
@@ -12,7 +13,7 @@ Future showContactDialog({required String phoneNumber, required context}) {
           mainAxisSize: MainAxisSize.min,
           children: [
             _contactItem(
-                displayText: 'Contact user',
+                displayText: 'contact_user'.tr(),
                 iconData: Icons.call,
                 paddingValues: EdgeInsets.only(top: 4, bottom: 8),
                 callback: () {
@@ -21,7 +22,7 @@ Future showContactDialog({required String phoneNumber, required context}) {
             Divider(),
             _contactItem(
                 paddingValues: EdgeInsets.only(top: 8, bottom: 4),
-                displayText: 'Send a whatsapp message',
+                displayText: 'send_a_whatsapp_message'.tr(),
                 iconData: Icons.whatsapp,
                 callback: () {
                   UrlLauncherUtils.openWhatsapp(phoneNumber);

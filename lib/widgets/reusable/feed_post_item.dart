@@ -1,5 +1,6 @@
 import 'package:cool_alert/cool_alert.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
@@ -58,8 +59,9 @@ class _FeedPostItemState extends State<FeedPostItem> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    _editPostOptions =
-        widget.isInPostDetails ? ['Edit post'] : ['Edit post', 'Delete post'];
+    _editPostOptions = widget.isInPostDetails
+        ? ['edit_post'.tr()]
+        : ['edit_post'.tr(), "delete_post".tr()];
   }
 
   @override
@@ -243,8 +245,8 @@ class _FeedPostItemState extends State<FeedPostItem> {
                   textAlign: TextAlign.start,
                   trimLines: 2,
                   trimMode: TrimMode.Line,
-                  trimCollapsedText: 'Show more',
-                  trimExpandedText: 'Show less',
+                  trimCollapsedText: 'show_more'.tr(),
+                  trimExpandedText: 'show_less'.tr(),
                   style: regularTextStyle(
                     textColor: AppColors.commentButtonColor,
                     fontSize: 11.sp,
@@ -303,10 +305,10 @@ class _FeedPostItemState extends State<FeedPostItem> {
             CoolAlert.show(
               context: context,
               type: CoolAlertType.warning,
-              confirmBtnText: "Delete",
-              cancelBtnText: "Keep Post",
+              confirmBtnText: "delete".tr(),
+              cancelBtnText: "keep_post".tr(),
               showCancelBtn: true,
-              title: "Delete this post?",
+              title: "delete_this_post".tr(),
               onConfirmBtnTap: () async {
                 Navigator.of(context, rootNavigator: true).pop();
 

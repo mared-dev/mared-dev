@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:extended_nested_scroll_view/extended_nested_scroll_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -70,7 +71,7 @@ class _FeedBodyState extends State<FeedBody> {
           Expanded(
             child: Center(
               child: Text(
-                'No posts to show',
+                'no_posts_to_show'.tr(),
                 style: regularTextStyle(
                     fontSize: 14, textColor: AppColors.commentButtonColor),
               ),

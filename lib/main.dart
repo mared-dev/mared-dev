@@ -30,20 +30,14 @@ void main() async {
 
   runApp(Provider<AppleSignInAvailable>.value(
     value: appleSignInAvailable,
-    child: const MyApp(),
+    child: EasyLocalization(
+        supportedLocales: [Locale('en'), Locale('ar')],
+        path: 'assets/translations',
+        fallbackLocale: const Locale(
+          'en',
+        ),
+        child: const MyApp()),
   ));
-
-  ///TODO: start working on localization
-  // runApp(Provider<AppleSignInAvailable>.value(
-  //   value: appleSignInAvailable,
-  //   child: EasyLocalization(
-  //       supportedLocales: [Locale('en'), Locale('ar')],
-  //       path: 'assets/translations',
-  //       fallbackLocale: const Locale(
-  //         'en',
-  //       ),
-  //       child: const MyApp()),
-  // ));
 }
 
 class MyApp extends StatelessWidget {
@@ -70,6 +64,9 @@ class MyApp extends StatelessWidget {
             fontFamily: "Poppins",
             canvasColor: Colors.transparent,
           ),
+          locale: context.locale,
+          supportedLocales: context.supportedLocales,
+          localizationsDelegates: context.localizationDelegates,
         ),
         providers: [
           ChangeNotifierProvider(create: (_) => PromotePostHelper()),

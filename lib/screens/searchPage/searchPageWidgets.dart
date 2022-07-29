@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:card_swiper/card_swiper.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:mared_social/constants/Constantcolors.dart';
@@ -212,7 +213,7 @@ class NoSearchText extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Text("Use the search bar above to get what you desire",
+          child: Text("use_the_search_bar_above_you_desire".tr(),
               maxLines: 2,
               textAlign: TextAlign.center,
               style: regularTextStyle(

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
@@ -33,7 +34,7 @@ Future selectAvatarOptionsSheet(
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("Select Profile Picture",
+                    Text("select_profile_picture".tr(),
                         style: lightTextStyle(
                             fontSize: 18, textColor: Colors.white)),
                   ],
@@ -46,7 +47,7 @@ Future selectAvatarOptionsSheet(
                   children: [
                     _optionButton(
                         context: context,
-                        buttonText: 'Gallery',
+                        buttonText: 'gallery'.tr(),
                         callback: () async {
                           XFile pickedFile = await _pickUserAvatar(
                               context, ImageSource.gallery);
@@ -60,7 +61,7 @@ Future selectAvatarOptionsSheet(
                         }),
                     _optionButton(
                         context: context,
-                        buttonText: 'Camera',
+                        buttonText: 'camera'.tr(),
                         callback: () async {
                           XFile pickedFile = await _pickUserAvatar(
                               context, ImageSource.camera);

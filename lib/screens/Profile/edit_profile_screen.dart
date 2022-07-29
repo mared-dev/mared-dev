@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -62,7 +63,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     return Scaffold(
       backgroundColor: AppColors.backGroundColor,
       appBar: homeAppBar(context,
-          title: 'EDIT PROFILE',
+          title: 'edit_profile'.tr(),
           leadingIcon: SvgPicture.asset(
             'assets/icons/back_icon.svg',
             fit: BoxFit.fill,
@@ -126,7 +127,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
                 TextFormField(
                   controller: _usernameController,
-                  decoration: getAuthInputDecoration(hintText: 'Username'),
+                  decoration: getAuthInputDecoration(hintText: 'username'.tr()),
                   keyboardType: TextInputType.emailAddress,
                 ),
                 SizedBox(
@@ -140,10 +141,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   maxLengthEnforcement: MaxLengthEnforcement.enforced,
                   minLines: 3,
                   decoration: getAuthInputDecoration(
-                      hintText: 'Bio', verticalContentPadding: 11.h),
+                      hintText: 'bio'.tr(), verticalContentPadding: 11.h),
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return "Bio can't be empty";
+                      return "bio_cant_be_empty".tr();
                     }
                     return null;
                   },
@@ -153,14 +154,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
                 TextFormField(
                   controller: _websiteController,
-                  decoration: getAuthInputDecoration(hintText: 'Website'),
+                  decoration: getAuthInputDecoration(hintText: 'website'.tr()),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value!.isNotEmpty) {
                       bool validURL =
                           Uri.parse(value).host == '' ? false : true;
                       if (!validURL) {
-                        return 'Please enter a valid URL';
+                        return 'please_enter_a_valid_url'.tr();
                       }
                     }
                     return null;
@@ -171,13 +172,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
                 TextFormField(
                   controller: _phoneNumberController,
-                  decoration: getAuthInputDecoration(hintText: 'Phone number'),
+                  decoration:
+                      getAuthInputDecoration(hintText: 'phone_number'.tr()),
                   keyboardType: TextInputType.phone,
                   validator: (value) {
                     if (value!.isNotEmpty) {
                       //TODO:add phone number validation
                       if (!GeneralFirebaseHelpers.validateMobile(value)) {
-                        return 'Please enter a valid phone number';
+                        return 'please_enter_a_valid_phone_number'.tr();
                       }
                     }
 
@@ -195,7 +197,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       selectedLat = lat;
                       selectedLng = lng;
                     },
-                    buttonText: 'Set your location'),
+                    buttonText: 'set_your_location'.tr()),
                 SizedBox(
                   height: 33.h,
                 ),
@@ -203,12 +205,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
                       LoadingHelper.startLoading();
-                      print('!!!!!!!!!!!!!!');
-                      print(_uploadedImageLink);
-                      print(_websiteController.text);
-                      print(_bioController.text);
-                      print(_usernameController.text);
-
                       await Provider.of<FirebaseOperations>(context,
                               listen: false)
                           .updateUserProfile(
@@ -237,7 +233,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         borderRadius: BorderRadius.all(Radius.circular(6)),
                       ),
                       primary: AppColors.widgetsBackground),
-                  child: Text('Save changes'),
+                  child: Text('save_changes'.tr()),
                 ),
               ],
             ),

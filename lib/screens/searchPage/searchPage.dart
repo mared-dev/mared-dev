@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -28,7 +29,7 @@ class _SearchPageState extends State<SearchPage> {
       resizeToAvoidBottomInset: false,
       backgroundColor: AppColors.backGroundColor,
       appBar: simpleAppBarWithBack(context,
-          title: 'Search',
+          title: 'search'.tr(),
           leadingIcon: SvgPicture.asset(
             'assets/icons/back_icon.svg',
             fit: BoxFit.fill,
@@ -57,7 +58,7 @@ class _SearchPageState extends State<SearchPage> {
                       EdgeInsets.symmetric(vertical: 17.h, horizontal: 20.w),
                   filled: true,
                   fillColor: AppColors.backGroundColor,
-                  hintText: "Search here...",
+                  hintText: "search_here".tr(),
                   hintStyle: regularTextStyle(
                       fontSize: 12, textColor: AppColors.commentButtonColor),
                   border: OutlineInputBorder(

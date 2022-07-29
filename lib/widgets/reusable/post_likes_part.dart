@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:eva_icons_flutter/eva_icons_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -62,7 +63,7 @@ class PostLikesPart extends StatelessWidget {
             },
             child: Padding(
               padding: EdgeInsets.only(left: 8.w, top: 10.h, bottom: 10.h),
-              child: Text('likes',
+              child: Text('likes'.tr(),
                   style: regularTextStyle(
                       fontSize: 11, textColor: AppColors.likeFilledColor)),
             ),

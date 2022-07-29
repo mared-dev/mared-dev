@@ -18,8 +18,8 @@ import 'package:mared_social/screens/authentication/signup_screen.dart';
 import 'package:mared_social/widgets/reusable/landing_auth_button.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
-
 import '../HomePage/homepage.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class LandingPage extends StatefulWidget {
   LandingPage({Key? key}) : super(key: key);
@@ -133,7 +133,7 @@ class _LandingPageState extends State<LandingPage> {
                   Container(
                     width: screenSize.width,
                     child: Text(
-                      'CONNECTING BUSINESSES',
+                      'connecting_businesses'.tr(),
                       textAlign: TextAlign.center,
                       style: TextStyle(
                           fontSize: 31.sp,
@@ -147,7 +147,7 @@ class _LandingPageState extends State<LandingPage> {
                   Wrap(
                     children: [
                       LandingAuthButton(
-                          buttonText: 'Sign in',
+                          buttonText: 'sign_in'.tr(),
                           callback: () {
                             Navigator.push(
                                 context,
@@ -159,7 +159,7 @@ class _LandingPageState extends State<LandingPage> {
                         width: screenUtilObject.setWidth(23),
                       ),
                       LandingAuthButton(
-                          buttonText: 'Sign up',
+                          buttonText: 'sign_up'.tr(),
                           callback: () {
                             Navigator.push(
                                 context,
@@ -171,7 +171,7 @@ class _LandingPageState extends State<LandingPage> {
                         width: screenUtilObject.setWidth(23),
                       ),
                       LandingAuthButton(
-                          buttonText: 'Guest',
+                          buttonText: 'guest'.tr(),
                           callback: () async {
                             LoadingHelper.startLoading();
                             bool success =
